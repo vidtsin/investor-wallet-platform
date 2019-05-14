@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="view_partner_form_investor_wallet_platform" model="ir.ui.view">
+	    <field name="name">res.partner.form.easy_my_coop</field>
+	    <field name="model">res.partner</field>
+	    <field name="inherit_id" ref="easy_my_coop.view_partner_form_easy_my_coop"/>
+	    <field name="arch" type="xml">
+	    	<field name="representative" position="before">
+	    		<field name="is_plateform_structure"/>
+	    		<field name="stucture_type" attrs="{'invisible': [('is_plateform_structure', '=', False)]}"/>
+	    	</field>
+	    </field>
+	</record>
+</odoo>
