@@ -8,17 +8,22 @@
 	    		<field name="is_plateform_structure"/>
 	    		<field name="stucture_type" attrs="{'invisible': [('is_plateform_structure', '=', False)]}"/>
 	    	</field>
-	    </field>
-	</record>
-	
-	<record id="view_partner_form_wallet_platform" model="ir.ui.view">
-	    <field name="name">res.partner.form.wallet_platform</field>
-	    <field name="model">res.partner</field>
-	    <field name="inherit_id" ref="easy_my_coop.view_partner_form_easy_my_coop"/>
-	    <field name="arch" type="xml">
 	    	<xpath expr="//page[@name='share']/field[@name='share_ids']/tree/field[@name='effective_date']" position="before">
 	    		<field name="structure"/>
 	    	</xpath>
+	    	<page name="share_subscription" position="after">
+	    		<page name="structure_info" string="Structure info" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
+	    			<button name="generate_sequence" type="object" string ="Initialize" attrs="{'invisible': [('initialized', '=', True)]}"/>
+	    			<field name="initialized" invisible="True"/>
+	    			<group>
+						<group>
+							<field name="account_journal"/>
+				    		<field name="register_sequence"/>
+				    		<field name="operation_sequence"/>
+						</group>
+	    			</group>
+	    		</page>
+	    	</page>
 	    </field>
 	</record>
 </odoo>

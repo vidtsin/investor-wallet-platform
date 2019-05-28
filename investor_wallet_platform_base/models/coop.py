@@ -24,3 +24,11 @@ class SubscriptionRegister(models.Model):
     structure = fields.Many2one('res.partner',
                                 string="Platform Structure",
                                 domain=[('is_plateform_structure', '=', True)])
+
+
+class OperationRequest(models.Model):
+    _inherit = 'operation.request'
+
+    structure = fields.Many2one('res.partner',
+                                string="Platform Structure",
+                                domain=[('is_plateform_structure', '=', True)])
