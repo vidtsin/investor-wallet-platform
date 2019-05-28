@@ -13,7 +13,7 @@
 	    	</xpath>
 	    	<page name="share_subscription" position="after">
 	    		<page name="structure_info" string="Structure info" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
-	    			<button name="generate_sequence" type="object" string ="Initialize" attrs="{'invisible': [('initialized', '=', True)]}"/>
+	    			<button name="generate_sequence" type="object" string ="Initialize" attrs="{'invisible': [('initialized', '=', True)]}" groups="investor_wallet_platform_base.group_plateform_manager"/>
 	    			<field name="initialized" invisible="True"/>
 	    			<group>
 						<group>
