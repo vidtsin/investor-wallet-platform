@@ -1,5 +1,5 @@
-from odoo import api, fields, models, _
-from odoo.exceptions import UserError, ValidationError
+from odoo import fields, models, _
+from odoo.exceptions import ValidationError
 
 
 class SubscriptionRequest(models.Model):
@@ -8,6 +8,17 @@ class SubscriptionRequest(models.Model):
     structure = fields.Many2one('res.partner',
                                 string="Platform Structure",
                                 domain=[('is_plateform_structure', '=', True)])
+
+    def get_journal(self):
+        if self.structure:
+            if self.structure.account_journal:
+                return self.structure.account_journal
+            else:
+                raise ValidationError(_('There is no journal defined for this '
+                                        'structure.'))
+        else:
+            raise ValidationError(_('There is no structure defined on this '
+                                    'subscription request.'))
 
 
 class ShareLine(models.Model):
