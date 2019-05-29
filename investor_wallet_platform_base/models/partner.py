@@ -46,6 +46,7 @@ class ResPartner(models.Model):
         sequence_vals = {
             'name': 'Account Default Subscription Journal ' + self.name,
             'padding': 3,
+            'use_date_range': True,
             'prefix': 'SUBJ/%(year)s/',
             }
         journal_sequence = ir_sequence_obj.create(sequence_vals)
@@ -54,7 +55,6 @@ class ResPartner(models.Model):
             'name': 'Subscription Journal ' + self.name,
             'code': 'SUBJ_' + self.name.replace(" ", "_"),
             'type': 'sale',
-            'use_date_range': True,
             'sequence_id': journal_sequence.id,
             }
         account_journal = journal_obj.create(journal_vals)
