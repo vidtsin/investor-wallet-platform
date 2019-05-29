@@ -54,6 +54,7 @@ class ResPartner(models.Model):
             'name': 'Subscription Journal ' + self.name,
             'code': 'SUBJ_' + self.name.replace(" ", "_"),
             'type': 'sale',
+            'use_date_range': True,
             'sequence_id': journal_sequence.id,
             }
         account_journal = journal_obj.create(journal_vals)
