@@ -1,6 +1,5 @@
 from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
-from setuptools.dist import sequence
 
 
 class ResPartner(models.Model):
