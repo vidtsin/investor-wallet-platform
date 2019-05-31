@@ -1,11 +1,13 @@
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError
 
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     is_plateform_structure = fields.Boolean(string="Is a Platform Structure")
+    coop_membership = fields.One2many('coop.membership',
+                                      'partner_id',
+                                      string="Cooperative membership")
     initialized = fields.Boolean(string="Sequence initialized")
     stucture_type = fields.Selection([('cooperative', 'Cooperative'),
                                       ('association', 'Association')],

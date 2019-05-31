@@ -12,6 +12,15 @@
 	    		<field name="structure"/>
 	    	</xpath>
 	    	<page name="share_subscription" position="after">
+	    		<page name="coop_membership" string="Cooperator membership">
+	    			<field name="coop_membership">
+	    				<field name="structure"/>
+	    				<field name="member"/>
+	    				<field name="cooperator_number"/>
+	    				<field name="coop_candidate"/>
+	    				<field name="old_member"/>
+	    			</field>
+	    		</page>
 	    		<page name="structure_info" string="Structure info" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
 	    			<button name="generate_sequence" type="object" string ="Initialize" attrs="{'invisible': [('initialized', '=', True)]}" groups="investor_wallet_platform_base.group_plateform_manager"/>
 	    			<field name="initialized" invisible="True"/>
