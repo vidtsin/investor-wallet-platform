@@ -20,6 +20,11 @@ class SubscriptionRequest(models.Model):
             raise ValidationError(_('There is no structure defined on this '
                                     'subscription request.'))
 
+    def get_invoice_vals(self, partner):
+        vals = super(SubscriptionRequest, self).get_invoice_vals(partner)
+        vals['structure'] = self.structure.id
+        
+        return vals
 
 class ShareLine(models.Model):
     _inherit = 'share.line'
