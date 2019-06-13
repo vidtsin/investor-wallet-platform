@@ -1,4 +1,4 @@
-from odoo import api, fields, models, _
+from odoo import fields, models, _
 from odoo.exceptions import ValidationError
 
 
@@ -24,7 +24,7 @@ class AccountInvoice(models.Model):
         return self.structure.operation_sequence
 
     def get_refund_domain(self, invoice):
-        refund_domain = super(self, AccountInvoice).get_refund_domain(invoice)
+        refund_domain = super(AccountInvoice, self).get_refund_domain(invoice)
         refund_domain['structure'] = invoice.structure
 
         return refund_domain
