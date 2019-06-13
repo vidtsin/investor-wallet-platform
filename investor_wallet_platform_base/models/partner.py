@@ -64,3 +64,7 @@ class ResPartner(models.Model):
         self.account_journal = account_journal
 
         return True
+
+    def get_membership(self, structure):
+        return self.coop_membership().filtered(
+                        lambda record: record.structure == structure.id)
