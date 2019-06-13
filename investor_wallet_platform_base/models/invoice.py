@@ -25,6 +25,6 @@ class AccountInvoice(models.Model):
 
     def get_refund_domain(self, invoice):
         refund_domain = super(AccountInvoice, self).get_refund_domain(invoice)
-        refund_domain['structure'] = invoice.structure
+        refund_domain.append(('structure', '=', invoice.structure.id))
 
         return refund_domain
