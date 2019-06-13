@@ -27,8 +27,7 @@ class SubscriptionRequest(models.Model):
         return vals
 
     def is_member(self, vals, cooperator):
-        membership = cooperator.coop_membership().filtered(
-                        lambda record: record.structure == self.structure.id)
+        membership = cooperator.get_membership(self.structure)
 
         if membership and membership.member:
             vals['type'] = 'increase'
