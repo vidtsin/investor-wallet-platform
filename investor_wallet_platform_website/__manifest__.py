@@ -10,9 +10,11 @@
     'author': "Coop IT Easy SCRLfs",
     'website': "https://coopiteasy.be",
     'depends': [
-        'auth_signup'
+        'auth_signup',
+        'investor_wallet_platform_base',
     ],
     'data': [
         'templates/auth_signup_investor.xml',
+        'templates/portal_my_wallet.xml',
     ],
 }

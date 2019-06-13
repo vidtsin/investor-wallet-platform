@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019-     Coop IT Easy SCRLfs <http://coopiteasy.be>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+
+    <template id="portal_my_wallet_menu_breadcrumb"
+        name="Portal layout : wallet menu entries"
+        inherit_id="portal.portal_breadcrumbs"
+        priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'wallet'"
+                t-attf-class="breadcrumb-item active">
+                Wallet
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_wallet" name="My Wallet">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Wallet</t>
+            </t>
+            <t t-if="not finproducts">
+                <p>There are currently no finacial product for your account.</p>
+            </t>
+            <t t-if="finproducts" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Structure</th>
+                        <th class="text-right">Date</th>
+                        <th class="text-right">Name</th>
+                        <th class="text-right">Number</th>
+                        <th class="text-right">Amount</th>
+                        <th class="text-right">Total Amount</th>
+                    </tr>
+                </thead>
+                <t t-foreach="finproducts" t-as="finprod">
+                    <tr>
+                        <td><t t-esc="finprod.structure.name"/></td>
+                        <td class="text-right">
+                            <span t-field="finprod.effective_date"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="finprod.share_product_id.name"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="finprod.share_number"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="finprod.share_unit_price"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="finprod.total_amount_line"/>
+                        </td>
+                    </tr>
+                </t>
+                <thead>
+                    <tr class="active">
+                        <th>Grand Total</th>
+                        <th class="text-right"/>
+                        <th class="text-right"/>
+                        <th class="text-right"/>
+                        <th class="text-right"/>
+                        <th class="text-right">
+                            <span t-esc="grand_total"/>
+                        </th>
+                    </tr>
+                </thead>
+            </t>
+        </t>
+    </template>
+
+</odoo>
