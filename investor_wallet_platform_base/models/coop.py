@@ -26,6 +26,15 @@ class SubscriptionRequest(models.Model):
 
         return vals
 
+    def is_member(self, vals, cooperator):
+        membership = cooperator.coop_membership().filtered(
+                        lambda record: record.structure == self.structure.id)
+
+        if membership and membership.member:
+            vals['type'] = 'increase'
+            vals['already_cooperator'] = True
+        return vals
+
 
 class ShareLine(models.Model):
     _inherit = 'share.line'
