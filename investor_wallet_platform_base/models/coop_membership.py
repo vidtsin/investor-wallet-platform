@@ -25,15 +25,17 @@ class CoopMembership(models.Model):
     @api.multi
     @api.depends('subscription_request_ids.state')
     def _compute_coop_candidate(self):
-        for coop_membership in self:
-            if coop_membership.member:
+        for membership in self:
+            if membership.member:
                 is_candidate = False
             else:
-                sub_request = coop_membership.subscription_request_ids.filtered(
-                                lambda record: record.structure == self.structure.id)
-                if len(sub_request.filtered(lambda record: record.state == 'done')) > 0:
+                sub_request = membership.subscription_request_ids.filtered(
+                                lambda record:
+                                record.structure == self.structure.id)
+                if len(sub_request.filtered(lambda record:
+                                            record.state == 'done')) > 0:
                     is_candidate = True
                 else:
                     is_candidate = False
 
-            coop_membership.coop_candidate = is_candidate
+            membership.coop_candidate = is_candidate
