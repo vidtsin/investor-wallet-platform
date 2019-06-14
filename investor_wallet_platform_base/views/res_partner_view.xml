@@ -6,7 +6,7 @@
 	    <field name="arch" type="xml">
 	    	<field name="representative" position="before">
 	    		<field name="is_plateform_structure"/>
-	    		<field name="stucture_type" attrs="{'invisible': [('is_plateform_structure', '=', False)]}"/>
+	    		<field name="structure_type" attrs="{'invisible': [('is_plateform_structure', '=', False)]}"/>
 	    	</field>
 	    	<xpath expr="//page[@name='share']/field[@name='share_ids']/tree/field[@name='effective_date']" position="before">
 	    		<field name="structure"/>

@@ -9,9 +9,9 @@ class ResPartner(models.Model):
                                       'partner_id',
                                       string="Cooperative membership")
     initialized = fields.Boolean(string="Sequence initialized")
-    stucture_type = fields.Selection([('cooperative', 'Cooperative'),
-                                      ('association', 'Association')],
-                                     string="Structure type")
+    structure_type = fields.Selection([('cooperative', 'Cooperative'),
+                                       ('association', 'Association')],
+                                      string="Structure type")
     structure = fields.Many2one('res.partner',
                                 string="Platform Structure",
                                 domain=[('is_plateform_structure', '=', True)])
