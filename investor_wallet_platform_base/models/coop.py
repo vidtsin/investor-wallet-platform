@@ -34,6 +34,16 @@ class SubscriptionRequest(models.Model):
             vals['already_cooperator'] = True
         return vals
 
+    def set_membership(self):
+        member_obj = self.env['coop.membership']
+        membership = self.partner.get_membership(self.structure)
+        if not membership:
+            vals = {'structure': self.structure.id,
+                    'partner_id': self.partner_id.id
+                    }
+        member_obj.create(vals)
+        return True
+
 
 class ShareLine(models.Model):
     _inherit = 'share.line'

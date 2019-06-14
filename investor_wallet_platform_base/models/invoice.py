@@ -29,9 +29,37 @@ class AccountInvoice(models.Model):
 
         return refund_domain
 
-    def get_subscription_register(self, line, effective_date):
+    def get_subscription_register_vals(self, line, effective_date):
         vals = super(AccountInvoice,
-                     self).get_subscription_register(line, effective_date)
+                     self).get_subscription_register_vals(line, effective_date)
         vals['structure'] = self.structure
 
         return vals
+
+    def get_share_line_vals(self, line, effective_date):
+        vals = super(AccountInvoice, self).get_share_line_vals(line,
+                                                               effective_date)
+        vals['structure'] = self.structure
+
+    def get_membership_vals(self):
+        membership = self.partner_id.get_membership(self.structure)
+
+        if membership.member is False \
+                and membership.old_member is False:
+            sequence_id = self.get_sequence_register()
+            sub_reg_num = sequence_id.next_by_id()
+            vals = {'member': True, 'old_member': False,
+                    'cooperator_register_number': int(sub_reg_num)
+                    }
+        elif membership.old_member:
+            vals = {'member': True, 'old_member': False}
+
+        return vals
+
+    def set_membership(self):
+        vals = self.get_membership_vals()
+        membership = self.partner_id.get_membership(self.structure)
+
+        membership.write(vals)
+
+        return True
