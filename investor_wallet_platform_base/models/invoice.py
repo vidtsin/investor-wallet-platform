@@ -28,3 +28,10 @@ class AccountInvoice(models.Model):
         refund_domain.append(('structure', '=', invoice.structure.id))
 
         return refund_domain
+
+    def get_subscription_register(self, line, effective_date):
+        vals = super(AccountInvoice,
+                     self).get_subscription_register(line, effective_date)
+        vals['structure'] = self.structure
+
+        return vals
