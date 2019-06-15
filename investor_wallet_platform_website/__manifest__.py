@@ -16,5 +16,6 @@
     'data': [
         'templates/auth_signup_investor.xml',
         'templates/portal_my_wallet.xml',
+        'templates/subscription_request.xml',
     ],
 }
