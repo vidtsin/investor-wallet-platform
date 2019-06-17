@@ -14,11 +14,13 @@
 	    	<page name="share_subscription" position="after">
 	    		<page name="coop_membership" string="Cooperator membership">
 	    			<field name="coop_membership">
-	    				<field name="structure"/>
-	    				<field name="member"/>
-	    				<field name="cooperator_number"/>
-	    				<field name="coop_candidate"/>
-	    				<field name="old_member"/>
+	    				<tree>
+		    				<field name="structure"/>
+		    				<field name="cooperator_number"/>
+		    				<field name="member"/>
+		    				<field name="coop_candidate"/>
+		    				<field name="old_member"/>
+		    			</tree>
 	    			</field>
 	    		</page>
 	    		<page name="structure_info" string="Structure info" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
