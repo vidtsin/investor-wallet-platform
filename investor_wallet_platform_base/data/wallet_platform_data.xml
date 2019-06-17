@@ -73,5 +73,17 @@
 	        <field name="groups" eval="[(4, ref('group_platform_wallet_user'))]"/>
 	        <field name="domain_force">[(1,'=',1)]</field>
 	    </record>
+	    <record id="product_structure_rule" model="ir.rule">
+	        <field name="name">Product</field>
+	        <field name="model_id" ref="product.model_product_template"/>
+	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user')),(4, ref('easy_my_coop.group_easy_my_coop_manager')),(4, ref('easy_my_coop.group_easy_my_coop_super_manager'))]"/>
+	        <field name="domain_force">[('structure','=',user.structure.id)]</field>
+	    </record>
+	    <record id="product_structure_rule_wallet_platform" model="ir.rule">
+	        <field name="name">Product</field>
+	        <field name="model_id" ref="product.model_product_template"/>
+	        <field name="groups" eval="[(4, ref('group_platform_wallet_user'))]"/>
+	        <field name="domain_force">[(1,'=',1)]</field>
+	    </record>
     </data>
 </odoo>
