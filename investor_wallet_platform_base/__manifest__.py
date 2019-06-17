@@ -23,6 +23,7 @@
         'views/subscription_request_view.xml',
         'views/invoice_view.xml',
         'views/res_users_view.xml',
+        'views/product_view.xml',
         ],
     'installable': True,
     'application': True,
