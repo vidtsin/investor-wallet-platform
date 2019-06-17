@@ -15,9 +15,8 @@ from odoo.tools.translate import _
 
 class AuthSignupInvestor(AuthSignupHome):
 
-    @http.route('/web/investor/signup', type='http', auth='public',
-                website=True, sitemap=False)
-    def web_auth_signup_investor(self, *args, **kw):
+    @http.route(['/web/signup', '/web/investor/signup'])
+    def web_auth_signup(self, *args, **kw):
         # Prepare the form
         self.normalize_form_data()
         self.validate_form()
