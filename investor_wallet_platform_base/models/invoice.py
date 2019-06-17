@@ -39,7 +39,7 @@ class AccountInvoice(models.Model):
     def get_share_line_vals(self, line, effective_date):
         vals = super(AccountInvoice, self).get_share_line_vals(line,
                                                                effective_date)
-        vals['structure'] = self.structure
+        vals['structure'] = self.structure.id
         return vals
 
     def get_membership_vals(self):
