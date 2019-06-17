@@ -36,7 +36,7 @@ class SubscriptionRequest(models.Model):
 
     def set_membership(self):
         member_obj = self.env['coop.membership']
-        membership = self.partner.get_membership(self.structure)
+        membership = self.partner_id.get_membership(self.structure)
         if not membership:
             vals = {'structure': self.structure.id,
                     'partner_id': self.partner_id.id
