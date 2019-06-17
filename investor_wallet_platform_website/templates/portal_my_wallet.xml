@@ -3,6 +3,18 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
 <odoo>
 
+    <template id="portal_my_wallet_menu"
+        name="Portal My Wallet : share product entries"
+        inherit_id="portal.portal_my_home" priority="20">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-if="finproduct_count" t-call="portal.portal_docs_entry">
+                <t t-set="title">Financial Products</t>
+                <t t-set="url" t-value="'/my/wallet'"/>
+                <t t-set="count" t-value="finproduct_count"/>
+            </t>
+        </xpath>
+    </template>
+
     <template id="portal_my_wallet_menu_breadcrumb"
         name="Portal layout : wallet menu entries"
         inherit_id="portal.portal_breadcrumbs"

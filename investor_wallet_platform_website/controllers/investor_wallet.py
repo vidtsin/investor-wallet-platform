@@ -16,12 +16,9 @@ class InvestorWallet(CustomerPortal):
     def portal_my_wallet(self, page=1, date_begin=None, date_end=None,
                          sortby=None, **kw):
         values = self._prepare_portal_layout_values()
-        partner = request.env.user.partner_id
         shareline_mgr = request.env['share.line']
 
-        domain = [
-            ('partner_id', 'child_of', [partner.commercial_partner_id.id]),
-        ]
+        domain = self.get_shareline_domain()
 
         searchbar_sortings = {
             # FIXME: Should be ordered by the name of the structure not
@@ -85,3 +82,20 @@ class InvestorWallet(CustomerPortal):
             'investor_wallet_platform_website.portal_my_wallet',
             values
         )
+
+    def _prepare_portal_layout_values(self):
+        values = super()._prepare_portal_layout_values()
+        shareline_mgr = request.env['share.line']
+        shareline_count = (shareline_mgr.sudo()
+                           .search_count(self.get_shareline_domain()))
+        values.update({
+            'finproduct_count': shareline_count,
+        })
+        return values
+
+    def get_shareline_domain(self):
+        partner = request.env.user.partner_id
+        domain = [
+            ('partner_id', 'child_of', [partner.commercial_partner_id.id]),
+        ]
+        return domain
