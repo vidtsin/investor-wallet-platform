@@ -50,7 +50,7 @@ class AccountInvoice(models.Model):
             sequence_id = self.get_sequence_register()
             sub_reg_num = sequence_id.next_by_id()
             vals = {'member': True, 'old_member': False,
-                    'cooperator_register_number': int(sub_reg_num)
+                    'cooperator_number': int(sub_reg_num)
                     }
         elif membership.old_member:
             vals = {'member': True, 'old_member': False}
