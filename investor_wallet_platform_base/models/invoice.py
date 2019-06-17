@@ -32,7 +32,7 @@ class AccountInvoice(models.Model):
     def get_subscription_register_vals(self, line, effective_date):
         vals = super(AccountInvoice,
                      self).get_subscription_register_vals(line, effective_date)
-        vals['structure'] = self.structure
+        vals['structure'] = self.structure.id
 
         return vals
 
@@ -40,6 +40,7 @@ class AccountInvoice(models.Model):
         vals = super(AccountInvoice, self).get_share_line_vals(line,
                                                                effective_date)
         vals['structure'] = self.structure
+        return vals
 
     def get_membership_vals(self):
         membership = self.partner_id.get_membership(self.structure)
