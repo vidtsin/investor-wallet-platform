@@ -18,7 +18,6 @@ class WebsiteSubscriptionRequest(http.Controller):
     @http.route(['/struct/<int:struct_id>/subscription'], type='http',
                 auth='user', website=True)
     def subscribe_to_structure(self, struct_id=None, **post):
-        import pdb; pdb.set_trace()
         # Get structure and perform access check
         struct = request.env['res.partner'].sudo().browse(struct_id)
         if not struct:
