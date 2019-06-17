@@ -31,7 +31,7 @@ class CoopMembership(models.Model):
             else:
                 sub_request = membership.subscription_request_ids.filtered(
                                 lambda record:
-                                record.structure == self.structure.id)
+                                record.structure == self.structure)
                 if len(sub_request.filtered(lambda record:
                                             record.state == 'done')) > 0:
                     is_candidate = True
