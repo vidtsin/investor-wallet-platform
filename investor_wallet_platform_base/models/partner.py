@@ -67,4 +67,4 @@ class ResPartner(models.Model):
 
     def get_membership(self, structure):
         return self.coop_membership.filtered(
-                        lambda record: record.structure == structure.id)
+                        lambda record: record.structure == structure)
