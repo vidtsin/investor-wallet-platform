@@ -24,7 +24,7 @@ class WebsiteSubscriptionRequest(http.Controller):
             raise NotFound
         if not struct.is_plateform_structure:
             raise NotFound
-        self.init_form_data(qcontext=post)
+        self.init_form_data(struct_id, qcontext=post)
         self.set_form_defaults(qcontext=post)
         self.normalize_form_data(qcontext=post)
         if post and request.httprequest.method == 'POST':
@@ -117,7 +117,7 @@ class WebsiteSubscriptionRequest(http.Controller):
             return qcontext
         return qcontext
 
-    def init_form_data(self, qcontext=None):
+    def init_form_data(self, struct_id, qcontext=None):
         """
         Populate qcontext if given, else populate request.params with
         defalut data needed to render the form.
@@ -126,6 +126,8 @@ class WebsiteSubscriptionRequest(http.Controller):
             qcontext = request.params
         # Share products
         domain = self.get_share_product_domain()
+        if struct_id:
+            domain.append(('structure', '=', struct_id))
         share_products = request.env['product.template'].sudo().search(
            domain
         )
