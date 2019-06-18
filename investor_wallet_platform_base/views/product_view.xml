@@ -1,5 +1,5 @@
 <odoo>
-	<record id="view_partner_form_wallet_platform" model="ir.ui.view">
+	<record id="view_product_form_wallet_platform" model="ir.ui.view">
 	    <field name="name">product.template.share.form</field>
            <field name="model">product.template</field>
            <field name="inherit_id" ref="easy_my_coop.product_template_share_form_view"/>
