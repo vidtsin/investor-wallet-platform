@@ -84,4 +84,51 @@
         </t>
     </template>
 
+    <template id="structures" name="Structures">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Structures</t>
+            </t>
+            <t t-if="not structures">
+                <p>There are currently no structures.</p>
+            </t>
+            <t t-if="structures" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Name</th>
+                        <th class="text-right">Structure Type</th>
+                        <th class="text-right">Subscribe</th>
+                    </tr>
+                </thead>
+                <t t-foreach="structures" t-as="struct">
+                    <tr>
+                        <td><t t-esc="struct.name"/></td>
+                        <td class="text-right">
+                            <span t-field="struct.structure_type"/>
+                        </td>
+                        <td class="text-right">
+                            <a t-attf-href="/struct/{{ struct.id }}/subscription"
+                                class="btn btn-primary btn-sm">
+                                Subscribe
+                            </a>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="structure_menu"
+        name="Structures"
+        inherit_id="portal.portal_my_home">
+        <xpath expr="//div[hasclass('o_portal_my_home')]" position="after">
+            <a href="/struct" class="btn btn-primary mt-2">
+                Subscribe to a structure
+            </a>
+        </xpath>
+    </template>
+
+
 </odoo>

@@ -83,6 +83,54 @@ class InvestorWallet(CustomerPortal):
             values
         )
 
+    @http.route('/struct', type='http', auth="public", website=True)
+    def structure(self, page=1, sortby=None, **kw):
+        values = self._prepare_portal_layout_values()
+        struct_mgr = request.env['res.partner']
+
+        searchbar_sortings = {
+            'name': {'label': _('Name'), 'order': 'name'},
+            'type': {'label': _('Type'), 'order': 'structure_type'},
+        }
+
+        # default sortby order
+        if not sortby:
+            sortby = 'name'
+        sort_order = searchbar_sortings[sortby]['order']
+
+        # count for pager
+        struct_count = struct_mgr.sudo().search_count(self.structure_domain)
+        # make pager
+        pager = portal_pager(
+            url='/struct',
+            url_args={
+                'sortby': sortby
+            },
+            total=struct_count,
+            page=page,
+            step=self._items_per_page
+        )
+        # search the count to display, according to the pager data
+        structures = struct_mgr.sudo().search(
+            self.structure_domain,
+            order=sort_order,
+            limit=self._items_per_page,
+            offset=pager['offset']
+        )
+
+        values.update({
+            'structures': structures.sudo(),
+            'page_name': 'structures',
+            'pager': pager,
+            'default_url': '/struct',
+            'searchbar_sortings': searchbar_sortings,
+            'sortby': sortby,
+        })
+        return request.render(
+            'investor_wallet_platform_website.structures',
+            values
+        )
+
     def _prepare_portal_layout_values(self):
         values = super()._prepare_portal_layout_values()
         shareline_mgr = request.env['share.line']
@@ -97,5 +145,12 @@ class InvestorWallet(CustomerPortal):
         partner = request.env.user.partner_id
         domain = [
             ('partner_id', 'child_of', [partner.commercial_partner_id.id]),
+        ]
+        return domain
+
+    @property
+    def structure_domain(self):
+        domain = [
+            ('is_plateform_structure', '=', True)
         ]
         return domain
