@@ -1,16 +1,18 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_subscription_request wallet manager,subscription.request,model_subscription_request,group_plateform_manager,1,1,1,0
-access_res_partner wallet user,res.partner,model_res_partner,group_plateform_manager,1,1,0,0
-access_res_partner wallet manager,res.partner,model_res_partner,group_plateform_manager,1,1,1,0
+access_subscription_request wallet manager,subscription.request,model_subscription_request,group_platform_manager,1,1,1,0
+access_res_partner wallet user,res.partner,model_res_partner,group_platform_manager,1,1,0,0
+access_res_partner wallet manager,res.partner,model_res_partner,group_platform_manager,1,1,1,0
 coop_membership base user,coop.membership,model_coop_membership,base.group_user,1,0,0,0
-coop_membership base wallet manager,coop.membership,model_coop_membership,group_platform_wallet_user,1,1,0,0
-coop_membership base wallet user,coop.membership,model_coop_membership,group_plateform_manager,1,1,1,0
-access_share_line wallet manager,share.line,model_share_line,group_plateform_manager,1,1,1,0
-access_account_invoice wallet manager,account.invoice,model_account_invoice,group_plateform_manager,1,1,1,0
-access_subscription_register wallet manager,subscription_register,model_subscription_register,group_plateform_manager,1,1,1,0
-access_operation_request wallet manager,operation.request,model_operation_request,group_plateform_manager,1,1,1,0
-access_product_product  wallet user,product.product,product.model_product_product,group_plateform_manager,1,1,0,0
-access_product_product wallet manager,product.product,product.model_product_product,group_plateform_manager,1,1,1,0
-access_product_template wallet user,product.template,product.model_product_template,group_plateform_manager,1,1,0,0
-access_product_template wallet manager,product.template,product.model_product_template,group_plateform_manager,1,1,1,0
+coop_membership base easy_my_coop user,coop.membership,model_coop_membership,easy_my_coop.group_easy_my_coop_user,1,1,1,0
+coop_membership base easy_my_coop manager,coop.membership,model_coop_membership,easy_my_coop.group_easy_my_coop_manager,1,1,1,0
+coop_membership base wallet user,coop.membership,model_coop_membership,group_platform_wallet_user,1,1,1,0
+coop_membership base wallet manager,coop.membership,model_coop_membership,group_platform_manager,1,1,1,0
+access_share_line wallet manager,share.line,model_share_line,group_platform_manager,1,1,1,0
+access_account_invoice wallet manager,account.invoice,model_account_invoice,group_platform_manager,1,1,1,0
+access_subscription_register wallet manager,subscription_register,model_subscription_register,group_platform_manager,1,1,1,0
+access_operation_request wallet manager,operation.request,model_operation_request,group_platform_manager,1,1,1,0
+access_product_product  wallet user,product.product,product.model_product_product,group_platform_manager,1,1,0,0
+access_product_product wallet manager,product.product,product.model_product_product,group_platform_manager,1,1,1,0
+access_product_template wallet user,product.template,product.model_product_template,group_platform_manager,1,1,0,0
+access_product_template wallet manager,product.template,product.model_product_template,group_platform_manager,1,1,1,0
 "",,,,,,,
