@@ -18,7 +18,7 @@ class InvestorWallet(CustomerPortal):
         values = self._prepare_portal_layout_values()
         shareline_mgr = request.env['share.line']
 
-        domain = self.get_shareline_domain()
+        domain = self.shareline_domain
 
         searchbar_sortings = {
             # FIXME: Should be ordered by the name of the structure not
@@ -135,13 +135,14 @@ class InvestorWallet(CustomerPortal):
         values = super()._prepare_portal_layout_values()
         shareline_mgr = request.env['share.line']
         shareline_count = (shareline_mgr.sudo()
-                           .search_count(self.get_shareline_domain()))
+                           .search_count(self.shareline_domain))
         values.update({
             'finproduct_count': shareline_count,
         })
         return values
 
-    def get_shareline_domain(self):
+    @property
+    def shareline_domain(self):
         partner = request.env.user.partner_id
         domain = [
             ('partner_id', 'child_of', [partner.commercial_partner_id.id]),
