@@ -1,5 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_subscription_request wallet manager,subscription.request,model_subscription_request,group_plateform_manager,1,1,1,0
+access_res_partner wallet user,res.partner,model_res_partner,group_plateform_manager,1,1,0,0
 access_res_partner wallet manager,res.partner,model_res_partner,group_plateform_manager,1,1,1,0
 coop_membership base user,coop.membership,model_coop_membership,base.group_user,1,0,0,0
 coop_membership base wallet manager,coop.membership,model_coop_membership,group_platform_wallet_user,1,1,0,0
