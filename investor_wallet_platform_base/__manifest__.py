@@ -5,8 +5,9 @@
 {
     "name": "Investor Wallet Platform Base",
     "version": "12.0.1.2.0",
-    "depends": ["easy_my_coop",
-                ],
+    "depends": [
+            "easy_my_coop",
+        ],
     "author": "Houssine BAKKALI <houssine@coopiteasy.be>",
     "category": "Cooperative management",
     "website": "www.coopiteasy.be",
