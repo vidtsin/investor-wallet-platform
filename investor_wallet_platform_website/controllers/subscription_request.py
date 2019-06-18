@@ -56,6 +56,7 @@ class WebsiteSubscriptionRequest(http.Controller):
         # TODO: can be improved, because there is to many fields that
         # needs to be excepted.
         excepted_fields = set([
+            'type',
             'company_type',
             'company_id',
             'company_name',
@@ -124,8 +125,9 @@ class WebsiteSubscriptionRequest(http.Controller):
         if qcontext is None:
             qcontext = request.params
         # Share products
-        share_products = request.env['product.product'].sudo().search(
-            self.get_share_product_domain(),
+        domain = self.get_share_product_domain()
+        share_products = request.env['product.template'].sudo().search(
+           domain
         )
         qcontext.update({
             'share_products': share_products,
