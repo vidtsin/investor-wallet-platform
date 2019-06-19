@@ -15,4 +15,4 @@ access_product_product  wallet user,product.product,product.model_product_produc
 access_product_product wallet manager,product.product,product.model_product_product,group_platform_manager,1,1,1,0
 access_product_template wallet user,product.template,product.model_product_template,group_platform_manager,1,1,0,0
 access_product_template wallet manager,product.template,product.model_product_template,group_platform_manager,1,1,1,0
-"",,,,,,,
+access_ir_sequence wallet manager,ir.sequence,base.model_ir_sequence,group_platform_manager,1,1,1,
