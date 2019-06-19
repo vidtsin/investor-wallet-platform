@@ -8,9 +8,19 @@
 	    		<field name="is_plateform_structure"/>
 	    		<field name="structure_type" attrs="{'invisible': [('is_plateform_structure', '=', False)]}"/>
 	    	</field>
+
+	    	<field name="cooperator_register_number" position="replace"/>
+	    	<field name="coop_candidate" position="replace"/>
+	    	<field name="member" position="replace"/>
+			<field name="cooperator_type" position="replace"/>
+			<field name="effective_date" position="replace"/>
+
 	    	<xpath expr="//page[@name='share']/field[@name='share_ids']/tree/field[@name='effective_date']" position="before">
 	    		<field name="structure"/>
 	    	</xpath>
+	    	<page name="share" position="attributes">
+	    		<attribute name="attrs">{'invisible':False}</attribute>
+	    	</page>
 	    	<page name="share_subscription" position="after">
 	    		<page name="coop_membership" string="Cooperator membership">
 	    			<field name="coop_membership">
