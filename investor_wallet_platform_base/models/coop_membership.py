@@ -11,7 +11,7 @@ class CoopMembership(models.Model):
         for membership in self:
             share_ids = membership.partner_id.share_ids.filtered(
                             lambda record:
-                            record.structure == self.structure)
+                            record.structure == membership.structure)
             if share_ids:
                 membership.effective_date = share_ids[0].effective_date
 
@@ -24,7 +24,7 @@ class CoopMembership(models.Model):
             else:
                 sub_request = membership.subscription_request_ids.filtered(
                                 lambda record:
-                                record.structure == self.structure)
+                                record.structure == membership.structure)
                 if len(sub_request.filtered(lambda record:
                                             record.state == 'done')) > 0:
                     is_candidate = True
