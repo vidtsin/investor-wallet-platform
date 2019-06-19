@@ -41,7 +41,7 @@ class SubscriptionRequest(models.Model):
             vals = {'structure': self.structure.id,
                     'partner_id': self.partner_id.id
                     }
-        member_obj.create(vals)
+            member_obj.create(vals)
         return True
 
 
