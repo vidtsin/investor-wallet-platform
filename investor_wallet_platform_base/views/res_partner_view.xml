@@ -26,6 +26,7 @@
 	    			<field name="coop_membership">
 	    				<tree>
 		    				<field name="structure"/>
+		    				<field name="effective_date"/>
 		    				<field name="cooperator_number"/>
 		    				<field name="member"/>
 		    				<field name="coop_candidate"/>
