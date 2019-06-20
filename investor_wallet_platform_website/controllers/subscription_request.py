@@ -96,17 +96,19 @@ class WebsiteSubscriptionRequest(http.Controller):
         """
         if qcontext is None:
             qcontext = request.params
-        share_products = request.env['product.product'].sudo().search(
+        product_obj = request.env['product.template'].sudo().search(
             self.get_share_product_domain(),
         )
-        shareproduct = share_products.browse(qcontext.get('shareproduct', 0))
-        if not shareproduct:
+
+        selected_share = qcontext.get('shareproduct', 0)
+        if not selected_share:
             qcontext['error'] = _("You must select a financial product.")
             return qcontext
         if qcontext.get('number', 0) < 1:
             qcontext['error'] = _("You must order at least 1 financial"
                                   " product.")
             return qcontext
+        shareproduct = product_obj.sudo().browse(selected_share)
         # Check maximum amount
         max_amount = (request.env['res.company']
                       ._company_default_get().subscription_maximum_amount)
