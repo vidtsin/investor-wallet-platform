@@ -15,9 +15,16 @@ from odoo.tools.translate import _
 
 class WebsiteSubscriptionRequest(http.Controller):
 
-    @http.route(['/struct/<int:struct_id>/subscription'], type='http',
-                auth='user', website=True)
-    def subscribe_to_structure(self, struct_id=None, **post):
+    @http.route(
+        [
+            '/struct/<int:struct_id>/subscription',
+            '/struct/<int:struct_id>/finprod/<int:finprod_id>/subscription'
+        ],
+        type='http',
+        auth='user',
+        website=True,
+    )
+    def subscribe_to_structure(self, struct_id=None, finprod_id=None, **post):
         # self.reqargs contains request arguments but only if they pass
         # checks.
         self.reqargs = {}
@@ -28,6 +35,18 @@ class WebsiteSubscriptionRequest(http.Controller):
         if not struct.is_plateform_structure:
             raise NotFound
         self.reqargs['struct'] = struct
+        # Get findproduct if given
+        finprod = (
+            request.env['product.template']
+            .sudo()
+            .browse(finprod_id)
+        )
+        if finprod:
+            if finprod.structure != struct:
+                raise NotFound
+            self.reqargs['finprod'] = finprod
+        else:
+            finprod = None
         self.init_form_data(qcontext=post)
         self.set_form_defaults(qcontext=post)
         self.normalize_form_data(qcontext=post)
@@ -155,6 +174,10 @@ class WebsiteSubscriptionRequest(http.Controller):
             qcontext['number'] = 0
         if 'total_amount' not in qcontext or force:
             qcontext['total_amount'] = 0
+        if (
+            'shareproduct' not in qcontext or force
+        ) and 'finprod' in self.reqargs:
+            qcontext['shareproduct'] = self.reqargs['finprod'].id
         return qcontext
 
     def normalize_form_data(self, qcontext=None):
