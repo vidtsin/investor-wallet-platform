@@ -120,7 +120,7 @@ class WebsiteSubscriptionRequest(http.Controller):
         if qcontext is None:
             qcontext = request.params
         product_obj = request.env['product.template'].sudo().search(
-            self.get_share_product_domain,
+            self.share_product_domain,
         )
         selected_share = qcontext.get('shareproduct', 0)
         shareproduct = product_obj.sudo().browse(selected_share)
