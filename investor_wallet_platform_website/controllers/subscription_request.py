@@ -2,13 +2,9 @@
 #     - Rémy Taymans <remy@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from werkzeug.exceptions import Forbidden
 from werkzeug.exceptions import NotFound
 
 from odoo import http
-from odoo import tools
-from odoo.addons.portal.controllers.portal import CustomerPortal
-from odoo.addons.portal.controllers.portal import pager as portal_pager
 from odoo.http import request
 from odoo.tools.translate import _
 
