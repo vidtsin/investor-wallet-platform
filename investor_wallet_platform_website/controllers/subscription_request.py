@@ -11,16 +11,39 @@ from odoo.tools.translate import _
 
 class WebsiteSubscriptionRequest(http.Controller):
 
-    @http.route(['/struct/<int:struct_id>/subscription'], type='http',
-                auth='user', website=True)
-    def subscribe_to_structure(self, struct_id=None, **post):
+    @http.route(
+        [
+            '/struct/<int:struct_id>/subscription',
+            '/struct/<int:struct_id>/finprod/<int:finprod_id>/subscription'
+        ],
+        type='http',
+        auth='user',
+        website=True,
+    )
+    def subscribe_to_structure(self, struct_id=None, finprod_id=None, **post):
+        # self.reqargs contains request arguments but only if they pass
+        # checks.
+        self.reqargs = {}
         # Get structure and perform access check
         struct = request.env['res.partner'].sudo().browse(struct_id)
         if not struct:
             raise NotFound
         if not struct.is_plateform_structure:
             raise NotFound
-        self.init_form_data(struct_id, qcontext=post)
+        self.reqargs['struct'] = struct
+        # Get findproduct if given
+        finprod = (
+            request.env['product.template']
+            .sudo()
+            .browse(finprod_id)
+        )
+        if finprod:
+            if finprod.structure != struct:
+                raise NotFound
+            self.reqargs['finprod'] = finprod
+        else:
+            finprod = None
+        self.init_form_data(qcontext=post)
         self.set_form_defaults(qcontext=post)
         self.normalize_form_data(qcontext=post)
         if post and request.httprequest.method == 'POST':
@@ -93,18 +116,17 @@ class WebsiteSubscriptionRequest(http.Controller):
         if qcontext is None:
             qcontext = request.params
         product_obj = request.env['product.template'].sudo().search(
-            self.get_share_product_domain(),
+            self.share_product_domain,
         )
-
         selected_share = qcontext.get('shareproduct', 0)
-        if not selected_share:
+        shareproduct = product_obj.sudo().browse(selected_share)
+        if not shareproduct:
             qcontext['error'] = _("You must select a financial product.")
             return qcontext
         if qcontext.get('number', 0) < 1:
             qcontext['error'] = _("You must order at least 1 financial"
                                   " product.")
             return qcontext
-        shareproduct = product_obj.sudo().browse(selected_share)
         # Check maximum amount
         max_amount = (request.env['res.company']
                       ._company_default_get().subscription_maximum_amount)
@@ -115,7 +137,7 @@ class WebsiteSubscriptionRequest(http.Controller):
             return qcontext
         return qcontext
 
-    def init_form_data(self, struct_id, qcontext=None):
+    def init_form_data(self, qcontext=None):
         """
         Populate qcontext if given, else populate request.params with
         defalut data needed to render the form.
@@ -123,15 +145,18 @@ class WebsiteSubscriptionRequest(http.Controller):
         if qcontext is None:
             qcontext = request.params
         # Share products
-        domain = self.get_share_product_domain()
-        if struct_id:
-            domain.append(('structure', '=', struct_id))
-        share_products = request.env['product.template'].sudo().search(
-           domain
+        share_products = (
+            request.env['product.template']
+            .sudo()
+            .search(self.share_product_domain)
         )
         qcontext.update({
             'share_products': share_products,
         })
+        cmp = request.env['res.company']._company_default_get()
+        # TODO: take shares held by the user into account to adjust the
+        # maximum amount
+        qcontext['total_amount_max'] = cmp.subscription_maximum_amount
         return qcontext
 
     def set_form_defaults(self, qcontext=None, force=False):
@@ -145,10 +170,10 @@ class WebsiteSubscriptionRequest(http.Controller):
             qcontext['number'] = 0
         if 'total_amount' not in qcontext or force:
             qcontext['total_amount'] = 0
-        cmp = request.env['res.company']._company_default_get()
-        # TODO: take shares held by the user into account to adjust the
-        # maximum amount
-        qcontext['total_amount_max'] = cmp.subscription_maximum_amount
+        if (
+            'shareproduct' not in qcontext or force
+        ) and 'finprod' in self.reqargs:
+            qcontext['shareproduct'] = self.reqargs['finprod'].id
         return qcontext
 
     def normalize_form_data(self, qcontext=None):
@@ -164,11 +189,15 @@ class WebsiteSubscriptionRequest(http.Controller):
             qcontext['shareproduct'] = int(qcontext['shareproduct'])
         return qcontext
 
-    @staticmethod
-    def get_share_product_domain():
+    @property
+    def share_product_domain(self):
         share_product_domain = [
             ('is_share', '=', True),
             ('sale_ok', '=', True),
             ('display_on_website', '=', True)
         ]
+        if 'struct' in self.reqargs:
+            share_product_domain.append(
+                ('structure', '=', self.reqargs['struct'].id)
+            )
         return share_product_domain
