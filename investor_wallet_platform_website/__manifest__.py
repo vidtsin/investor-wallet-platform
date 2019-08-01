@@ -5,17 +5,19 @@
     'name': "Investor Wallet Platform Website",
     'summary': """
         Website element for Investor Wallet Platform""",
-    'version': '12.0.0.3.0',
+    'version': '12.0.0.4.0',
     'license': 'AGPL-3',
     'author': "Coop IT Easy SCRLfs",
     'website': "https://coopiteasy.be",
     'depends': [
         'auth_signup',
+        'portal',
         'investor_wallet_platform_base',
     ],
     'data': [
         'templates/auth_signup_investor.xml',
         'templates/portal_my_wallet.xml',
+        'templates/investor_portal.xml',
         'templates/subscription_request.xml',
     ],
 }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019-     Coop IT Easy SCRLfs <http://coopiteasy.be>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+
+    <template id="investor_details"
+            name="Investor Details"
+            inherit_id="portal.portal_my_details"
+            primary="True">
+
+        <xpath expr="//h3" position="replace">
+            <h3>Your Investor Details</h3>
+        </xpath>
+        <xpath expr="//input[@name='email']" position="attributes">
+            <attribute name="readonly">readonly</attribute>
+        </xpath>
+        <xpath expr="//input[@name='phone']/.." position="after">
+            <div t-attf-class="form-group #{error.get('gender') and 'o_has_error' or ''} col-xl-6">
+                <label class="col-form-label" for="gender">Gender</label>
+                <select id="gender"
+                    t-attf-class="form-control #{error.get('phone') and 'is-invalid' or ''}"
+                    name="gender"
+                    required="required">
+                    <option t-foreach="genders or []" t-as="gndr"
+                        t-att-selected="'selected' if gndr[0] == (gender or partner.gender) else None"
+                        t-att-value="gndr[0]">
+                        <t t-esc="gndr[1]"/>
+                    </option>
+                </select>
+            </div>
+            <div t-attf-class="form-group #{error.get('birthdate_date') and 'o_has_error' or ''} col-xl-6">
+                <label class="col-form-label" for="birthdate_date">Birthday</label>
+                <input id="birthdate_date"
+                    t-attf-class="form-control #{error.get('birthdate_date') and 'is-invalid' or ''}"
+                    type="date"
+                    name="birthdate_date"
+                    t-att-value="birthdate_date or partner.birthdate_date"
+                    required="required"/>
+            </div>
+            <div t-attf-class="form-group #{error.get('lang') and 'o_has_error' or ''} col-xl-6">
+                <label class="col-form-label" for="lang">Language</label>
+                <select id="lang"
+                    t-attf-class="form-control #{error.get('lang') and 'is-invalid' or ''}"
+                    name="lang"
+                    required="required">
+                    <option t-foreach="langs or []" t-as="language"
+                        t-att-selected="'selected' if language.code == (lang or partner.lang) else None"
+                        t-att-value="language.code">
+                        <t t-esc="language.name"/>
+                    </option>
+                </select>
+            </div>
+        </xpath>
+
+    </template>
+
+</odoo>

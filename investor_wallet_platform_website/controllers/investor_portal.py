@@ -10,7 +10,7 @@ from odoo.http import request
 from odoo.tools.translate import _
 
 
-class InvestorWallet(CustomerPortal):
+class InvestorPortal(CustomerPortal):
 
     @http.route(['/my/wallet'], type='http', auth="user", website=True)
     def portal_my_wallet(self, page=1, date_begin=None, date_end=None,
@@ -130,6 +130,44 @@ class InvestorWallet(CustomerPortal):
             'investor_wallet_platform_website.structures',
             values
         )
+
+    @http.route()
+    def account(self, redirect=None, **post):
+        self.MANDATORY_BILLING_FIELDS = [
+            "name",
+            "phone",
+            "gender",
+            "birthdate_date",
+            "lang",
+            "street",
+            "city",
+            "zipcode",
+            "country_id",
+        ]
+        self.OPTIONAL_BILLING_FIELDS = [
+            "state_id",
+            "email",
+            "company_name",
+            "vat",
+        ]
+        # Genders
+        sub_req_mgr = request.env['subscription.request']
+        gender_field = sub_req_mgr.sudo().fields_get(['gender'])['gender']
+
+        response = super().account(redirect=redirect, **post)
+        res_qcontext = response.qcontext
+        res_qcontext.update({
+            'genders': gender_field['selection'],
+            'countries': request.env['res.country'].sudo().search([]),
+            'langs': request.env['res.lang'].sudo().search([]),
+        })
+
+        if response.template == 'portal.portal_my_details':
+            return request.render(
+                'investor_wallet_platform_website.investor_details',
+                res_qcontext
+            )
+        return response
 
     def _prepare_portal_layout_values(self):
         values = super()._prepare_portal_layout_values()
