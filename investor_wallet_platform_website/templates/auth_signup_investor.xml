@@ -15,6 +15,18 @@
                 required="required"/>
         </div>
 
+        <div class="form-group field-confirm-login">
+            <label for="confirm_login">Confirm email</label>
+            <input id="confirm_login"
+                class="form-control form-control-sm"
+                type="email"
+                name="confirm_login"
+                t-att-value="login"
+                autofocus="autofocus"
+                autocapitalize="off"
+                required="required"/>
+        </div>
+
         <div class="form-group field-firstname">
             <label for="firstname">Firstname</label>
             <input id="firstname"

@@ -88,6 +88,10 @@ class AuthSignupInvestor(AuthSignupHome):
             if not tools.single_email_re.match(qcontext.get('login', '')):
                 qcontext['error'] = _("That does not seem to be an email"
                                       " address.")
+        if qcontext.get('login') != qcontext.get('confirm_login'):
+            qcontext['error'] = _(
+                "The email and confirmation email must be the same."
+            )
         if qcontext.get('iban', False):
             try:
                 res_partner_bank.validate_iban(qcontext.get("iban"))
