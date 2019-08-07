@@ -69,16 +69,6 @@
                 t-att-value="phone"/>
         </div>
 
-        <div class="form-group field-national_register_number">
-            <label for="national_register_number">National Register Number</label>
-            <input id="national_register_number"
-                class="form-control form-control-sm"
-                type="text"
-                name="national_register_number"
-                t-att-value="national_register_number"
-                required="required"/>
-        </div>
-
         <div class="form-group field-iban">
             <label for="iban">Bank Account Number</label>
             <input id="iban"

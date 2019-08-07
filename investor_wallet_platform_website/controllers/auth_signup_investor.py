@@ -68,7 +68,6 @@ class AuthSignupInvestor(AuthSignupHome):
             'firstname',
             'lastname',
             'gender',
-            'national_register_number',
             'phone',
             'street',
             'city',
