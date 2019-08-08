@@ -1,0 +1,41 @@
+<odoo>
+	<record id="view_structure_project_wallet_platform" model="ir.ui.view">
+	    <field name="name">structure.project.form</field>
+	    <field name="model">structure.project</field>
+	    <field name="arch" type="xml">
+	    	<form string="Structure Project">
+                <group>
+	                <group>
+		                <field name="name"/>
+	          			<field name="structure_id"/>
+          			</group>
+          			<group>
+	          			<field name="description"/>
+	          			<field name="url" widget="url"/>
+          			</group>
+          		</group>
+            </form>
+	    </field>
+	</record>
+	
+	<record id="view_structure_project_tree" model="ir.ui.view">
+	    <field name="name">structure.project.tree</field>
+	    <field name="model">structure.project</field>
+	    <field name="arch" type="xml">
+	    	<tree string="Structure Projects">
+	        	<field name="name"/>
+	   			<field name="structure_id"/>
+            </tree>
+	    </field>
+	</record>
+
+	<record id="action_wallet_plateform_structure_project" model="ir.actions.act_window">
+	    <field name="name">Structure projects</field>
+	    <field name="type">ir.actions.act_window</field>
+	    <field name="res_model">structure.project</field>
+	    <field name="view_type">form</field>
+	    <field name="view_mode">tree,form</field>
+	</record>
+	
+	<menuitem id="menu_wallet_plateform_structure_project" name="Structure projects" parent="easy_my_coop.menu_easy_my_coop_main_coop" action="action_wallet_plateform_structure_project" sequence="110"/>
+</odoo>

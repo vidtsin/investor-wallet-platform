@@ -38,6 +38,16 @@
 	    			<button name="generate_sequence" type="object" string ="Initialize" attrs="{'invisible': [('initialized', '=', True)]}" groups="investor_wallet_platform_base.group_platform_manager"/>
 	    			<field name="initialized" invisible="True"/>
 	    			<group>
+	    				<group>
+	    					<field name="cover_image" widget='image' options='{"preview_image": "image_medium"}'/>
+	    					<field name="display_on_website"/>
+	    					<field name="renewable_energy"/>
+	    					<field name="description"/>
+	    					<field name="about_us"/>
+	    					<field name="social_economy"/>
+	    					<field name="social_impact"/>
+	    					<field name="governance"/>
+	    				</group>
 						<group>
 							<field name="account_journal"/>
 				    		<field name="register_sequence"/>
@@ -45,28 +55,40 @@
 						</group>
 	    			</group>
 	    		</page>
+	    		<page name="structure_projects" string="Structure projects" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
+	    			<group colspan="4">
+	    				<group colspan="4">
+	    					<field name="structure_project_ids">
+	    						<tree>
+	    							<field name="name"/>
+	    							<field name="structure_id"/>
+	    						</tree>
+	    					</field>
+	    				</group>
+	    			</group>
+	    		</page>
 	    	</page>
 	    </field>
 	</record>
 	
-	        <record id="action_wallet_plateform_structure_form" model="ir.actions.act_window">
-            <field name="name">Platform structures</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">res.partner</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">kanban,tree,form</field>
-            <field name="domain">[('is_plateform_structure','=',True)]</field>
-            <field name="context">{'default_is_plateform_structure':1}</field>
-            <field name="help" type="html">
-              <p class="oe_view_nocontent_create">
-                Click to add a contact in your address book.
-              </p><p>
-                OpenERP helps you easily track all activities related to
-                a cooperator: discussions, history of business opportunities,
-                documents, etc.
-              </p>
-            </field>
-        </record>
+	<record id="action_wallet_plateform_structure_form" model="ir.actions.act_window">
+	    <field name="name">Platform structures</field>
+	    <field name="type">ir.actions.act_window</field>
+	    <field name="res_model">res.partner</field>
+	    <field name="view_type">form</field>
+	    <field name="view_mode">kanban,tree,form</field>
+	    <field name="domain">[('is_plateform_structure','=',True)]</field>
+	    <field name="context">{'default_is_plateform_structure':1}</field>
+	    <field name="help" type="html">
+	      <p class="oe_view_nocontent_create">
+	        Click to add a contact in your address book.
+	      </p><p>
+	        OpenERP helps you easily track all activities related to
+	        a cooperator: discussions, history of business opportunities,
+	        documents, etc.
+	      </p>
+	    </field>
+	</record>
         
-        <menuitem id="menu_wallet_plateform_structure" name="Structures" parent="easy_my_coop.menu_easy_my_coop_main_coop" action="action_wallet_plateform_structure_form" sequence="100"/>
+    <menuitem id="menu_wallet_plateform_structure" name="Structures" parent="easy_my_coop.menu_easy_my_coop_main_coop" action="action_wallet_plateform_structure_form" sequence="100"/>
 </odoo>

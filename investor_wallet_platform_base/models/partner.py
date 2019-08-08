@@ -25,6 +25,18 @@ class ResPartner(models.Model):
                                          string="Operation Register",
                                          readonly=True)
 
+    display_on_website = fields.Boolean(string="display on website")
+    renewable_energy = fields.Boolean(string="Renewable energy")
+    description = fields.Html(string="Description")
+    about_us = fields.Html(string="About us")
+    social_economy = fields.Html(string="Social Economy")
+    social_impact = fields.Html(string="Social impact")
+    governance = fields.Html(string="Governance")
+    cover_image = fields.Binary(string="Cover image")
+    structure_project_ids = fields.One2many('structure.project',
+                                            'structure_id',
+                                            string="Structure projects")
+
     @api.multi
     def generate_sequence(self):
         self.ensure_one()
