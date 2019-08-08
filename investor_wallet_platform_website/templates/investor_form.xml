@@ -91,13 +91,13 @@
             </select>
         </div>
 
-        <div t-attf-class="field-birthday {{field_class}}">
-            <label for="birthday">Birthday</label>
-            <input id="birthday"
+        <div t-attf-class="field-birthdate_date {{field_class}}">
+            <label for="birthdate_date">Birthday</label>
+            <input id="birthdate_date"
                 t-att-class="input_class"
                 type="date"
-                name="birthday"
-                t-att-value="birthday"
+                name="birthdate_date"
+                t-att-value="birthdate_date"
                 required="required"/>
         </div>
 
@@ -316,13 +316,13 @@
             </select>
         </div>
 
-        <div t-attf-class="field-rep-birthday {{field_class}}">
-            <label for="rep_birthday">Birthday</label>
-            <input id="rep_birthday"
+        <div t-attf-class="field-rep-birthdate_date {{field_class}}">
+            <label for="rep_birthdate_date">Birthday</label>
+            <input id="rep_birthdate_date"
                 t-att-class="input_class"
                 type="date"
-                name="rep_birthday"
-                t-att-value="rep_birthday"
+                name="rep_birthdate_date"
+                t-att-value="rep_birthdate_date"
                 required="required"/>
         </div>
 

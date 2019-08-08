@@ -15,7 +15,6 @@ from odoo.http import request
 from odoo.tools.translate import _
 
 
-
 class AuthSignupInvestor(AuthSignupHome):
 
     @http.route(['/web/signup', '/web/investor/signup'])
@@ -47,7 +46,7 @@ class AuthSignupInvestor(AuthSignupHome):
             else:
                 values = {key: request.params[key]
                           for key in request.params
-                          if key in self.get_user_fields()}
+                          if key in form.user_fields}
                 n_user.sudo().write(values)
                 request.env['res.partner.bank'].sudo().create({
                     'partner_id': n_user.partner_id.id,
@@ -99,8 +98,11 @@ class AuthSignupInvestor(AuthSignupHome):
                 values = {
                     key: request.params[key]
                     for key in request.params
-                    if key in self.get_company_fields()
+                    if key in form.company_fields
                 }
+                values.update({
+                    'company_type': 'company',
+                })
                 n_user.sudo().write(values)
                 request.env['res.partner.bank'].sudo().create({
                     'partner_id': n_user.partner_id.id,
@@ -109,13 +111,14 @@ class AuthSignupInvestor(AuthSignupHome):
                 request.cr.commit()
                 # Create representative
                 rep_values = {
-                    key: request.params[key]
+                    key[4:]: request.params[key]
                     for key in request.params
-                    if key in self.get_representative_fields()
+                    if key in form.representative_fields
                 }
                 rep_values.update({
                     'type': 'representative',
-                    'partner_id': n_user.partner_id,
+                    'parent_id': n_user.partner_id.id,
+                    'lang': n_user.lang.id,
                 })
                 request.env['res.partner'].sudo().create(rep_values)
         # Render the response
@@ -125,60 +128,6 @@ class AuthSignupInvestor(AuthSignupHome):
                 res_qcontext
             )
         return response
-
-    @staticmethod
-    def get_user_fields():
-        """
-        Return names of the fields of a res_user object that are in the
-        form.  It does not return fields that are already used in the
-        `do_signup()` method from parent class.
-        """
-        return [
-            'firstname',
-            'lastname',
-            'gender',
-            'phone',
-            'street',
-            'city',
-            'zip',
-            'country_id',
-            'lang',
-        ]
-
-    @staticmethod
-    def get_company_fields():
-        """
-        Return names of the fields of a res_user object that are in the
-        form.  It does not return fields that are already used in the
-        `do_signup()` method from parent class.
-        """
-        return [
-            'phone',
-            'street',
-            'city',
-            'zip',
-            'country_id',
-            'lang',
-        ]
-
-    @staticmethod
-    def get_representative_fields():
-        """
-        Return names of the fields of a res_user object that are in the
-        form.  It does not return fields that are already used in the
-        `do_signup()` method from parent class.
-        """
-        return [
-            'rep_firstname',
-            'rep_lastname',
-            'rep_function',
-            'rep_gender',
-            'rep_phone',
-            'rep_street',
-            'rep_city',
-            'rep_zip',
-            'rep_country_id',
-        ]
 
     def get_auth_signup_config(self):
         """

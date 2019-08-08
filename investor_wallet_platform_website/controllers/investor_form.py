@@ -45,27 +45,43 @@ class InvestorForm():
         })
         return qcontext
 
-    @staticmethod
-    def set_form_defaults(qcontext=None, force=False):
+    def set_form_defaults(self, qcontext=None, user=None, force=False):
         """
         Populate the given qcontext or request.parms if empty with the
         default value for the form.
         """
         if not qcontext:
             qcontext = request.params
-        if 'country_id' not in qcontext or force:
-            qcontext['country_id'] = (request.env['res.country'].sudo()
-                                      .search([('code', '=', 'BE')]).id)
-        if 'gender' not in qcontext or force:
-            qcontext['gender'] = 'other'
-        if 'lang' not in qcontext or force:
-            lang_mgr = request.env['res.lang']
-            supported_langs = [
-                lang['code']
-                for lang in lang_mgr.sudo().search_read([], ['code'])
-            ]
-            if request.lang in supported_langs:
-                qcontext['lang'] = request.lang
+        if user:
+            if 'country_id' not in qcontext or force:
+                qcontext['country_id'] = user.country_id.id
+            for key in self.user_fields:
+                if key not in qcontext or force:
+                    qcontext[key] = getattr(user, key)
+            qcontext['zip_code'] = qcontext['zip']
+            if 'iban' not in qcontext or force:
+                qcontext['iban'] = (
+                    request.env['res.partner.bank']
+                    .sudo()
+                    .search(
+                        [('partner_id', '=', user.partner_id.id)]
+                    )
+                    .acc_number
+                )
+        else:
+            if 'country_id' not in qcontext or force:
+                qcontext['country_id'] = (request.env['res.country'].sudo()
+                                          .search([('code', '=', 'BE')]).id)
+            if 'gender' not in qcontext or force:
+                qcontext['gender'] = 'other'
+            if 'lang' not in qcontext or force:
+                lang_mgr = request.env['res.lang']
+                supported_langs = [
+                    lang['code']
+                    for lang in lang_mgr.sudo().search_read([], ['code'])
+                ]
+                if request.lang in supported_langs:
+                    qcontext['lang'] = request.lang
         return qcontext
 
     @staticmethod
@@ -97,6 +113,24 @@ class InvestorForm():
         """
         return ("%s %s" % (firstname, lastname)).strip()
 
+    @property
+    def user_fields(self):
+        """
+        Return names of the fields of a res_user object that are in the
+        form.
+        """
+        return [
+            'firstname',
+            'lastname',
+            'gender',
+            'phone',
+            'street',
+            'city',
+            'zip',
+            'country_id',
+            'lang',
+        ]
+
 
 class InvestorCompanyForm(InvestorForm):
 
@@ -124,20 +158,48 @@ class InvestorCompanyForm(InvestorForm):
         qcontext = InvestorForm.init_form_data(qcontext=qcontext)
         return qcontext
 
-    @staticmethod
-    def set_form_defaults(qcontext=None, force=False):
+    def set_form_defaults(self, qcontext=None, user=None, force=False):
         """
         Populate the given qcontext or request.parms if empty with the
         default value for the form.
         """
         if not qcontext:
             qcontext = request.params
-        qcontext = InvestorForm.set_form_defaults(qcontext=qcontext)
-        if 'rep_country_id' not in qcontext or force:
-            qcontext['rep_country_id'] = (request.env['res.country'].sudo()
-                                          .search([('code', '=', 'BE')]).id)
-        if 'rep_gender' not in qcontext or force:
-            qcontext['rep_gender'] = 'other'
+        if user:
+            if 'country_id' not in qcontext or force:
+                qcontext['country_id'] = user.country_id.id
+            for key in self.company_fields:
+                if key not in qcontext or force:
+                    qcontext[key] = getattr(user, key)
+            qcontext['zip_code'] = user.zip
+            qcontext['name'] = user.name
+            if 'iban' not in qcontext or force:
+                qcontext['iban'] = (
+                    request.env['res.partner.bank']
+                    .sudo()
+                    .search(
+                        [('partner_id', '=', user.partner_id.id)]
+                    )
+                    .acc_number
+                )
+            if 'rep_country_id' not in qcontext or force:
+                qcontext['rep_country_id'] = user.child_ids.country_id.id
+            for key in self.representative_fields:
+                if key not in qcontext or force:
+                    qcontext[key] = getattr(user.child_ids, key[4:])
+            qcontext['rep_zip_code'] = qcontext['rep_zip']
+        else:
+            qcontext = InvestorForm.set_form_defaults(
+                self, qcontext=qcontext, force=force
+            )
+            if 'rep_country_id' not in qcontext or force:
+                qcontext['rep_country_id'] = (
+                    request.env['res.country']
+                    .sudo()
+                    .search([('code', '=', 'BE')]).id
+                )
+            if 'rep_gender' not in qcontext or force:
+                qcontext['rep_gender'] = 'other'
         return qcontext
 
     @staticmethod
@@ -157,6 +219,40 @@ class InvestorCompanyForm(InvestorForm):
         if 'rep_country_id' in qcontext:
             qcontext['rep_country_id'] = int(qcontext['rep_country_id'])
         return qcontext
+
+    @property
+    def company_fields(self):
+        """
+        Return names of the fields of a res_user company object that are
+        in the form.
+        """
+        return [
+            'phone',
+            'street',
+            'city',
+            'zip',
+            'country_id',
+            'lang',
+        ]
+
+    @property
+    def representative_fields(self):
+        """
+        Return names of the fields of a representative of a res_user
+        company object that are in the form.
+        """
+        return [
+            'rep_firstname',
+            'rep_lastname',
+            'rep_function',
+            'rep_gender',
+            'rep_phone',
+            'rep_birthdate_date',
+            'rep_street',
+            'rep_city',
+            'rep_zip',
+            'rep_country_id',
+        ]
 
 
 class SignupForm():
@@ -189,8 +285,7 @@ class SignupForm():
         """
         return qcontext
 
-    @staticmethod
-    def set_form_defaults(qcontext=None, force=False):
+    def set_form_defaults(self, qcontext=None, force=False):
         """
         Populate the given qcontext or request.parms if empty with the
         default value for the form.
@@ -226,14 +321,13 @@ class InvestorSignupForm(InvestorForm, SignupForm):
         qcontext = SignupForm.init_form_data(qcontext=qcontext)
         return qcontext
 
-    @staticmethod
-    def set_form_defaults(qcontext=None, force=False):
+    def set_form_defaults(self, qcontext=None, force=False):
         """
         Populate the given qcontext or request.parms if empty with the
         default value for the form.
         """
-        qcontext = InvestorForm.set_form_defaults(qcontext=qcontext)
-        qcontext = SignupForm.set_form_defaults(qcontext=qcontext)
+        qcontext = InvestorForm.set_form_defaults(self, qcontext=qcontext)
+        qcontext = SignupForm.set_form_defaults(self, qcontext=qcontext)
         return qcontext
 
     @staticmethod
@@ -265,14 +359,15 @@ class InvestorCompanySignupForm(InvestorCompanyForm, SignupForm):
         qcontext = SignupForm.init_form_data(qcontext=qcontext)
         return qcontext
 
-    @staticmethod
-    def set_form_defaults(qcontext=None, force=False):
+    def set_form_defaults(self, qcontext=None, force=False):
         """
         Populate the given qcontext or request.parms if empty with the
         default value for the form.
         """
-        qcontext = InvestorCompanyForm.set_form_defaults(qcontext=qcontext)
-        qcontext = SignupForm.set_form_defaults(qcontext=qcontext)
+        qcontext = InvestorCompanyForm.set_form_defaults(
+            self, qcontext=qcontext
+        )
+        qcontext = SignupForm.set_form_defaults(self, qcontext=qcontext)
         return qcontext
 
     @staticmethod

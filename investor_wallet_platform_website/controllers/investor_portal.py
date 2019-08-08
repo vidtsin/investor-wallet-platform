@@ -6,6 +6,8 @@
 from odoo import http
 from odoo.addons.portal.controllers.portal import CustomerPortal
 from odoo.addons.portal.controllers.portal import pager as portal_pager
+from odoo.addons.investor_wallet_platform_website.controllers.investor_form import InvestorForm
+from odoo.addons.investor_wallet_platform_website.controllers.investor_form import InvestorCompanyForm
 from odoo.http import request
 from odoo.tools.translate import _
 
@@ -133,41 +135,61 @@ class InvestorPortal(CustomerPortal):
 
     @http.route()
     def account(self, redirect=None, **post):
-        self.MANDATORY_BILLING_FIELDS = [
-            "name",
-            "phone",
-            "gender",
-            "birthdate_date",
-            "lang",
-            "street",
-            "city",
-            "zipcode",
-            "country_id",
-        ]
-        self.OPTIONAL_BILLING_FIELDS = [
-            "state_id",
-            "email",
-            "company_name",
-            "vat",
-        ]
-        # Genders
-        sub_req_mgr = request.env['subscription.request']
-        gender_field = sub_req_mgr.sudo().fields_get(['gender'])['gender']
-
-        response = super().account(redirect=redirect, **post)
-        res_qcontext = response.qcontext
-        res_qcontext.update({
-            'genders': gender_field['selection'],
-            'countries': request.env['res.country'].sudo().search([]),
-            'langs': request.env['res.lang'].sudo().search([]),
-        })
-
-        if response.template == 'portal.portal_my_details':
-            return request.render(
-                'investor_wallet_platform_website.investor_details',
-                res_qcontext
+        user = request.env.user
+        if user.is_company:
+            form = InvestorCompanyForm()
+        else:
+            form = InvestorForm()
+        # Prepare the form
+        form.normalize_form_data(request.params)
+        form.validate_form(request.params)
+        form.init_form_data(request.params)
+        form.set_form_defaults(request.params, user=user)
+        if 'firstname' in request.params or 'lastname' in request.params:
+            request.params['name'] = form.generate_name_field(
+                request.params.get('firstname', ''),
+                request.params.get('lastname', ''),
             )
-        return response
+        # Process the form
+        if ('error' not in request.params
+                and request.httprequest.method == 'POST'):
+            if user.is_company:
+                # company
+                values = {
+                    key: request.params[key]
+                    for key in request.params
+                    if key in form.company_fields
+                }
+                user.write(values)
+                # representative
+                values = {
+                    key[4:]: request.params[key]
+                    for key in request.params
+                    if key in form.representative_fields
+                }
+                representative = user.child_ids[0]
+                representative.write(values)
+            else:
+                values = {
+                    key: request.params[key]
+                    for key in request.params
+                    if key in form.user_fields
+                }
+                user.write(values)
+
+        qcontext = request.params
+        qcontext.update({
+            'page_name': 'my_details',
+        })
+        if user.partner_id.is_company:
+            return request.render(
+                'investor_wallet_platform_website.investor_company_details',
+                qcontext
+            )
+        return request.render(
+            'investor_wallet_platform_website.investor_details',
+            qcontext
+        )
 
     def _prepare_portal_layout_values(self):
         values = super()._prepare_portal_layout_values()
