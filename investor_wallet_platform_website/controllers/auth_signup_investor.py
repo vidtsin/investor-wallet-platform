@@ -7,23 +7,28 @@ from odoo import tools
 from odoo.addons.auth_signup.controllers.main import AuthSignupHome
 from odoo.addons.auth_signup.models.res_partner import SignupError
 from odoo.addons.base_iban.models import res_partner_bank
+from odoo.addons.investor_wallet_platform_website.controllers.investor_form import InvestorSignupForm
+from odoo.addons.investor_wallet_platform_website.controllers.investor_form import InvestorCompanySignupForm
 from odoo.exceptions import ValidationError
 from odoo.exceptions import UserError
 from odoo.http import request
 from odoo.tools.translate import _
 
 
+
 class AuthSignupInvestor(AuthSignupHome):
 
     @http.route(['/web/signup', '/web/investor/signup'])
     def web_auth_signup(self, *args, **kw):
+        """Signup for a investor (individual)"""
+        form = InvestorSignupForm()
         # Prepare the form
-        self.normalize_form_data()
-        self.validate_form()
-        self.init_form_data()
-        self.set_form_defaults()
+        form.normalize_form_data(request.params)
+        form.validate_form(request.params)
+        form.init_form_data(request.params)
+        form.set_form_defaults(request.params)
         if 'firstname' in request.params or 'lastname' in request.params:
-            request.params['name'] = self.generate_name_field(
+            request.params['name'] = form.generate_name_field(
                 request.params.get('firstname', ''),
                 request.params.get('lastname', ''),
             )
@@ -76,94 +81,40 @@ class AuthSignupInvestor(AuthSignupHome):
             'lang',
         ]
 
-    def validate_form(self, qcontext=None):
+    @staticmethod
+    def get_company_fields():
         """
-        Populate request.parms with errors if the params from the form
-        are not correct. If a qcontext is given, this function works on
-        this qcontext.
+        Return names of the fields of a res_user object that are in the
+        form.  It does not return fields that are already used in the
+        `do_signup()` method from parent class.
         """
-        if not qcontext:
-            qcontext = request.params
-        if qcontext.get('login', False):
-            if not tools.single_email_re.match(qcontext.get('login', '')):
-                qcontext['error'] = _("That does not seem to be an email"
-                                      " address.")
-        if qcontext.get('login') != qcontext.get('confirm_login'):
-            qcontext['error'] = _(
-                "The email and confirmation email must be the same."
-            )
-        if qcontext.get('iban', False):
-            try:
-                res_partner_bank.validate_iban(qcontext.get("iban"))
-            except ValidationError:
-                qcontext['error'] = _("Please give a correct IBAN number.")
-        return qcontext
-
-    def init_form_data(self, qcontext=None):
-        """
-        Populate qcontext if given, else populate request.params with
-        defalut data needed to render the form.
-        """
-        if not qcontext:
-            qcontext = request.params
-        sub_req_mgr = request.env['subscription.request']
-        gender_field = sub_req_mgr.sudo().fields_get(['gender'])['gender']
-        qcontext.update({
-            'genders': gender_field['selection'],
-            'countries': request.env['res.country'].sudo().search([]),
-            'langs': request.env['res.lang'].sudo().search([]),
-        })
-        return qcontext
-
-    def set_form_defaults(self, qcontext=None, force=False):
-        """
-        Populate the given qcontext or request.parms if empty with the
-        default value for the form.
-        """
-        if not qcontext:
-            qcontext = request.params
-        if 'country_id' not in qcontext or force:
-            qcontext['country_id'] = (request.env['res.country'].sudo()
-                                      .search([('code', '=', 'BE')]).id)
-        if 'gender' not in qcontext or force:
-            qcontext['gender'] = 'other'
-        if 'lang' not in qcontext or force:
-            lang_mgr = request.env['res.lang']
-            supported_langs = [
-                lang['code']
-                for lang in lang_mgr.sudo().search_read([], ['code'])
-            ]
-            if request.lang in supported_langs:
-                qcontext['lang'] = request.lang
-        return qcontext
-
-    def normalize_form_data(self, qcontext=None):
-        """
-        Normalize data encoded by the user.
-        """
-        if not qcontext:
-            qcontext = request.params
-        # The keyword zip is overwrite in the template by the zip
-        # standard class of python. So we converted it into 'zip_code'
-        # As this happens only in template, we can continue to use 'zip'
-        # in the controller.
-        if 'zip_code' in qcontext:
-            qcontext['zip'] = qcontext['zip_code']
-        # Strip all str values
-        for key, val in qcontext.items():
-            if isinstance(val, str):
-                qcontext[key] = val.strip()
-        # Convert to int when needed
-        if 'country_id' in qcontext:
-            qcontext['country_id'] = int(qcontext['country_id'])
-        return qcontext
+        return [
+            'phone',
+            'street',
+            'city',
+            'zip',
+            'country_id',
+            'lang',
+        ]
 
     @staticmethod
-    def generate_name_field(firstname, lastname):
+    def get_representative_fields():
         """
-        Generate a name based on firstname and lastname.
+        Return names of the fields of a res_user object that are in the
+        form.  It does not return fields that are already used in the
+        `do_signup()` method from parent class.
         """
-        return ("%s %s" % (firstname, lastname)).strip()
+        return [
+            'rep_firstname',
+            'rep_lastname',
+            'rep_function',
+            'rep_gender',
+            'rep_phone',
+            'rep_street',
+            'rep_city',
+            'rep_zip',
+            'rep_country_id',
+        ]
 
     def get_auth_signup_config(self):
         """

@@ -1,171 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <template id="auth_signup_investor_fields" name="Auth Signup Investor form fields">
+    <template id="signup_investor" name="Sign up login for investor">
+        <t t-call="web.login_layout">
+            <t t-set="disable_footer" t-value="True"/>
+            <form class="oe_signup_form" role="form" method="post" t-if="not message">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <p class="alert alert-danger" t-if="error" role="alert">
+                    <t t-esc="error"/>
+                </p>
 
-        <div class="form-group field-login">
-            <label for="login">Email</label>
-            <input id="login"
-                class="form-control form-control-sm"
-                type="email"
-                name="login"
-                t-att-value="login"
-                autofocus="autofocus"
-                autocapitalize="off"
-                required="required"/>
-        </div>
+                <t t-call="investor_wallet_platform_website.investor_signup_fields"/>
+                <t t-call="investor_wallet_platform_website.investor_fields"/>
 
-        <div class="form-group field-confirm-login">
-            <label for="confirm_login">Confirm email</label>
-            <input id="confirm_login"
-                class="form-control form-control-sm"
-                type="email"
-                name="confirm_login"
-                t-att-value="login"
-                autofocus="autofocus"
-                autocapitalize="off"
-                required="required"/>
-        </div>
-
-        <div class="form-group field-firstname">
-            <label for="firstname">Firstname</label>
-            <input id="firstname"
-                class="form-control form-control-sm"
-                type="text"
-                name="firstname"
-                t-att-value="firstname"
-                autocapitalize="off"
-                required="required"/>
-        </div>
-
-        <div class="form-group field-lastname">
-            <label for="lastname">Lastname</label>
-            <input id="lastname"
-                class="form-control form-control-sm"
-                type="text"
-                name="lastname"
-                t-att-value="lastname"
-                required="required"/>
-        </div>
-
-        <div class="form-group field-gender">
-            <label for="gender">Gender</label>
-            <select id="gender"
-                class="form-control form-control-sm"
-                name="gender"
-                required="required">
-                <option t-foreach="genders or []" t-as="gndr"
-                    t-att-selected="'selected' if gndr[0] == gender else None"
-                    t-att-value="gndr[0]">
-                    <t t-esc="gndr[1]"/>
-                </option>
-            </select>
-        </div>
-
-        <div class="form-group field-birthday">
-            <label for="birthday">Birthday</label>
-            <input id="birthday"
-                class="form-control form-control-sm"
-                type="date"
-                name="birthday"
-                t-att-value="birthday"
-                required="required"/>
-        </div>
-
-        <div class="form-group field-phone">
-            <label for="phone">Phone</label>
-            <input id="phone"
-                class="form-control form-control-sm"
-                type="text"
-                name="phone"
-                t-att-value="phone"/>
-        </div>
-
-        <div class="form-group field-iban">
-            <label for="iban">Bank Account Number</label>
-            <input id="iban"
-                class="form-control form-control-sm"
-                type="text"
-                name="iban"
-                t-att-value="iban"
-                required="required"/>
-        </div>
-
-        <div class="form-group field-lang">
-            <label for="lang">Language</label>
-            <select id="lang"
-                class="form-control form-control-sm"
-                name="lang"
-                required="required">
-                <option t-foreach="langs or []" t-as="language"
-                    t-att-selected="'selected' if language.code == lang else None"
-                    t-att-value="language.code">
-                    <t t-esc="language.name"/>
-                </option>
-            </select>
-        </div>
-
-        <div class="form-group field-street">
-            <label for="street">Address</label>
-            <input id="street"
-                class="form-control form-control-sm"
-                type="text"
-                name="street"
-                t-att-value="street"
-                required="required"/>
-        </div>
-
-        <div class="form-group field-zip_code">
-            <label for="zip_code">Zip / Postal Code</label>
-            <input id="zip_code"
-                class="form-control form-control-sm"
-                type="text"
-                name="zip_code"
-                t-att-value="zip_code"
-                required="required"/>
-        </div>
-
-        <div class="form-group field-city">
-            <label for="city">City</label>
-            <input id="city"
-                class="form-control form-control-sm"
-                type="text"
-                name="city"
-                t-att-value="city"
-                required="required"/>
-        </div>
-
-        <div class="form-group field-country_id">
-            <label for="country_id">Country</label>
-            <select id="country_id"
-                class="form-control form-control-sm"
-                name="country_id"
-                required="required">
-                <option t-foreach="countries or []" t-as="country"
-                    t-att-selected="'selected' if country.id == country_id else None"
-                    t-att-value="country.id">
-                    <t t-esc="country.name"/>
-                </option>
-            </select>
-        </div>
-
-        <div class="form-group field-password pt-2">
-            <label for="password">Password</label>
-            <input id="password"
-                class="form-control form-control-sm"
-                type="password"
-                name="password"
-                required="required"/>
-        </div>
-
-        <div class="form-group field-confirm_password">
-            <label for="confirm_password">Confirm Password</label>
-            <input id="confirm_password"
-                class="form-control form-control-sm"
-                type="password"
-                name="confirm_password"
-                required="required"/>
-        </div>
+                <p class="alert alert-danger" t-if="error" role="alert">
+                    <t t-esc="error"/>
+                </p>
+                <input type="hidden" name="redirect" t-att-value="redirect"/>
+                <input type="hidden" name="token" t-att-value="token"/>
+                <div class="text-center oe_login_buttons pt-3">
+                    <button type="submit" class="btn btn-primary btn-block"> Sign up</button>
+                    <a t-attf-href="/web/login?{{ keep_query() }}" class="btn btn-link btn-sm" role="button">Already have an account?</a>
+                    <div class="o_login_auth"/>
+                </div>
+            </form>
+        </t>
     </template>
 
 
