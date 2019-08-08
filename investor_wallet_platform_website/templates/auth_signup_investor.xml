@@ -28,7 +28,7 @@
     </template>
 
 
-    <template id="signup_investor" name="Sign up login for investor">
+    <template id="signup_investor_company" name="Sign up login for company investor">
         <t t-call="web.login_layout">
             <t t-set="disable_footer" t-value="True"/>
             <form class="oe_signup_form" role="form" method="post" t-if="not message">
@@ -37,7 +37,11 @@
                     <t t-esc="error"/>
                 </p>
 
-                <t t-call="investor_wallet_platform_website.auth_signup_investor_fields"/>
+                <t t-call="investor_wallet_platform_website.investor_signup_fields"/>
+                <h3>Company</h3>
+                <t t-call="investor_wallet_platform_website.investor_company_fields"/>
+                <h3>Representative</h3>
+                <t t-call="investor_wallet_platform_website.investor_company_representative_fields"/>
 
                 <p class="alert alert-danger" t-if="error" role="alert">
                     <t t-esc="error"/>

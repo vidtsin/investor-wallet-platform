@@ -62,6 +62,70 @@ class AuthSignupInvestor(AuthSignupHome):
             )
         return response
 
+    @http.route(
+        '/web/investor/company/signup',
+        type='http',
+        auth='public',
+        website=True,
+        sitemap=False
+    )
+    def web_auth_signup_investor_company(self, *args, **kw):
+        """Signup for an investor company"""
+        form = InvestorCompanySignupForm()
+        # Prepare the form
+        form.normalize_form_data(request.params)
+        form.validate_form(request.params)
+        form.init_form_data(request.params)
+        form.set_form_defaults(request.params)
+        if ('rep_firstname' in request.params
+                or 'rep_lastname' in request.params):
+            request.params['rep_name'] = form.generate_name_field(
+                request.params.get('rep_firstname', ''),
+                request.params.get('rep_lastname', ''),
+            )
+        # Process the form
+        response = super().web_auth_signup(*args, **kw)
+        res_qcontext = response.qcontext
+        if ('error' not in res_qcontext
+                and request.httprequest.method == 'POST'):
+            # Finish filling special fields
+            n_user = None
+            if 'login' in request.params:
+                n_user = (request.env['res.users']
+                          .search([('login', '=', request.params['login'])]))
+            if not n_user:
+                res_qcontext['error'] = _("The new user cannot be found.")
+            else:
+                values = {
+                    key: request.params[key]
+                    for key in request.params
+                    if key in self.get_company_fields()
+                }
+                n_user.sudo().write(values)
+                request.env['res.partner.bank'].sudo().create({
+                    'partner_id': n_user.partner_id.id,
+                    'acc_number': request.params['iban'],
+                })
+                request.cr.commit()
+                # Create representative
+                rep_values = {
+                    key: request.params[key]
+                    for key in request.params
+                    if key in self.get_representative_fields()
+                }
+                rep_values.update({
+                    'type': 'representative',
+                    'partner_id': n_user.partner_id,
+                })
+                request.env['res.partner'].sudo().create(rep_values)
+        # Render the response
+        if response.template == 'auth_signup.signup':
+            return request.render(
+                'investor_wallet_platform_website.signup_investor_company',
+                res_qcontext
+            )
+        return response
+
     @staticmethod
     def get_user_fields():
         """
