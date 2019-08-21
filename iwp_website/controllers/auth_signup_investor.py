@@ -122,7 +122,7 @@ class AuthSignupInvestor(AuthSignupHome):
                 rep_values.update({
                     'type': 'representative',
                     'parent_id': n_user.partner_id.id,
-                    'lang': n_user.lang.id,
+                    'lang': n_user.lang,
                 })
                 request.env['res.partner'].sudo().create(rep_values)
         # Render the response
