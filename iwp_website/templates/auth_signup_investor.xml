@@ -10,8 +10,8 @@
                     <t t-esc="error"/>
                 </p>
 
-                <t t-call="investor_wallet_platform_website.investor_signup_fields"/>
-                <t t-call="investor_wallet_platform_website.investor_fields"/>
+                <t t-call="iwp_website.investor_signup_fields"/>
+                <t t-call="iwp_website.investor_fields"/>
 
                 <p class="alert alert-danger" t-if="error" role="alert">
                     <t t-esc="error"/>
@@ -37,11 +37,11 @@
                     <t t-esc="error"/>
                 </p>
 
-                <t t-call="investor_wallet_platform_website.investor_signup_fields"/>
+                <t t-call="iwp_website.investor_signup_fields"/>
                 <h3>Company</h3>
-                <t t-call="investor_wallet_platform_website.investor_company_fields"/>
+                <t t-call="iwp_website.investor_company_fields"/>
                 <h3>Representative</h3>
-                <t t-call="investor_wallet_platform_website.investor_company_representative_fields"/>
+                <t t-call="iwp_website.investor_company_representative_fields"/>
 
                 <p class="alert alert-danger" t-if="error" role="alert">
                     <t t-esc="error"/>

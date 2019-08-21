@@ -69,7 +69,7 @@ function compute_total_amount() {
                     <form t-if="not success" t-att-action="request.httprequest.path" method="post">
                         <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
-                        <t t-call="investor_wallet_platform_website.subscription_fields"/>
+                        <t t-call="iwp_website.subscription_fields"/>
 
                         <p class="alert alert-danger" t-if="error" role="alert">
                             <t t-esc="error"/>

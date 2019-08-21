@@ -6,8 +6,8 @@
 from odoo import http
 from odoo.addons.portal.controllers.portal import CustomerPortal
 from odoo.addons.portal.controllers.portal import pager as portal_pager
-from odoo.addons.investor_wallet_platform_website.controllers.investor_form import InvestorForm
-from odoo.addons.investor_wallet_platform_website.controllers.investor_form import InvestorCompanyForm
+from odoo.addons.iwp_website.controllers.investor_form import InvestorForm
+from odoo.addons.iwp_website.controllers.investor_form import InvestorCompanyForm
 from odoo.http import request
 from odoo.tools.translate import _
 
@@ -81,7 +81,7 @@ class InvestorPortal(CustomerPortal):
             'sortby': sortby,
         })
         return request.render(
-            'investor_wallet_platform_website.portal_my_wallet',
+            'iwp_website.portal_my_wallet',
             values
         )
 
@@ -129,7 +129,7 @@ class InvestorPortal(CustomerPortal):
             'sortby': sortby,
         })
         return request.render(
-            'investor_wallet_platform_website.structures',
+            'iwp_website.structures',
             values
         )
 
@@ -183,11 +183,11 @@ class InvestorPortal(CustomerPortal):
         })
         if user.partner_id.is_company:
             return request.render(
-                'investor_wallet_platform_website.investor_company_details',
+                'iwp_website.investor_company_details',
                 qcontext
             )
         return request.render(
-            'investor_wallet_platform_website.investor_details',
+            'iwp_website.investor_details',
             qcontext
         )
 

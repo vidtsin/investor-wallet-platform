@@ -9,7 +9,7 @@
             <h3>Investor Details</h3>
             <form method="post" class="row">
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                <t t-call="investor_wallet_platform_website.investor_fields">
+                <t t-call="iwp_website.investor_fields">
                     <t t-set="field_class" t-value="'form-group col-lg-6'"/>
                 </t>
 
@@ -35,14 +35,14 @@
 
                 <h3>Company</h3>
                 <div class="row">
-                    <t t-call="investor_wallet_platform_website.investor_company_fields">
+                    <t t-call="iwp_website.investor_company_fields">
                         <t t-set="field_class" t-value="'form-group col-lg-6'"/>
                     </t>
                 </div>
 
                 <h3>Representative</h3>
                 <div class="row">
-                    <t t-call="investor_wallet_platform_website.investor_company_representative_fields">
+                    <t t-call="iwp_website.investor_company_representative_fields">
                         <t t-set="field_class" t-value="'form-group col-lg-6'"/>
                     </t>
                 </div>

@@ -59,7 +59,7 @@ class WebsiteSubscriptionRequest(http.Controller):
         }
         qcontext.update(post)
         return request.render(
-            'investor_wallet_platform_website.subscribe_to_structure',
+            'iwp_website.subscribe_to_structure',
             qcontext
         )
 

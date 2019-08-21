@@ -7,8 +7,12 @@ from odoo import tools
 from odoo.addons.auth_signup.controllers.main import AuthSignupHome
 from odoo.addons.auth_signup.models.res_partner import SignupError
 from odoo.addons.base_iban.models import res_partner_bank
-from odoo.addons.investor_wallet_platform_website.controllers.investor_form import InvestorSignupForm
-from odoo.addons.investor_wallet_platform_website.controllers.investor_form import InvestorCompanySignupForm
+from odoo.addons.iwp_website.controllers.investor_form import (
+    InvestorSignupForm
+)
+from odoo.addons.iwp_website.controllers.investor_form import (
+    InvestorCompanySignupForm
+)
 from odoo.exceptions import ValidationError
 from odoo.exceptions import UserError
 from odoo.http import request
@@ -56,7 +60,7 @@ class AuthSignupInvestor(AuthSignupHome):
         # Render the response
         if response.template == 'auth_signup.signup':
             return request.render(
-                'investor_wallet_platform_website.signup_investor',
+                'iwp_website.signup_investor',
                 res_qcontext
             )
         return response
@@ -124,7 +128,7 @@ class AuthSignupInvestor(AuthSignupHome):
         # Render the response
         if response.template == 'auth_signup.signup':
             return request.render(
-                'investor_wallet_platform_website.signup_investor_company',
+                'iwp_website.signup_investor_company',
                 res_qcontext
             )
         return response
