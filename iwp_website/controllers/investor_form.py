@@ -124,6 +124,7 @@ class InvestorForm():
             'lastname',
             'gender',
             'phone',
+            'birthdate_date',
             'street',
             'city',
             'zip',

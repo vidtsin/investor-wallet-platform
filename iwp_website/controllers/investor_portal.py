@@ -176,6 +176,7 @@ class InvestorPortal(CustomerPortal):
                     if key in form.user_fields
                 }
                 user.write(values)
+            return request.redirect('/my/home')
 
         qcontext = request.params
         qcontext.update({
