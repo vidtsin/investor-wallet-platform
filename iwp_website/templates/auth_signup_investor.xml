@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <template id="iwp_website.login" inherit_id="auth_signup.login" name="Login: Sign up - Reset Password">
+        <xpath expr="//button[@type='submit']/following-sibling::div" position="replace">
+            <div id="signup_title" class="text-center mt-4">
+                Don't have an account ?
+            </div>
+            <div id="signup_container" class="text-center mt-2 mb-2">
+                <a id="signup_indi" class="btn btn-secondary mt-2"
+                    t-if="signup_enabled"
+                    t-attf-href="/web/investor/signup?{{ keep_query() }}">
+                    Sign up for individual
+                </a>
+                <a id="signup_comp" class="btn btn-secondary mt-2"
+                    t-if="signup_enabled"
+                    t-attf-href="/web/investor/company/signup?{{ keep_query() }}">
+                    Sign up for company
+                </a>
+            </div>
+            <div id="reset_container" class="text-center mt-4 mb-4 small">
+                <a t-if="reset_password_enabled" t-attf-href="/web/reset_password?{{ keep_query() }}">Reset Password</a>
+            </div>
+        </xpath>
+    </template>
+
+
     <template id="signup_investor" name="Sign up login for investor">
         <t t-call="web.login_layout">
             <t t-set="disable_footer" t-value="True"/>
