@@ -20,52 +20,16 @@ class InvestorPortal(CustomerPortal):
         """Wallet of financial product for the connected user."""
         values = self._prepare_portal_layout_values()
         shareline_mgr = request.env['share.line']
+        # loanlines_mgr = request.env['loan.issue.line']
 
         domain = self.shareline_domain
 
-        searchbar_sortings = {
-            # FIXME: Should be ordered by the name of the structure not
-            # his id.
-            # 'structure': {'label': _('Structure'), 'order': 'structure'},
-            'date': {'label': _('Date'), 'order': 'effective_date asc'},
-            # FIXME: total_amount_line is a computed field that cannot
-            # be ordered
-            # 'amount': {'label': _('Amount'), 'order': 'total_amount_line'},
-        }
-
-        # default sortby order
-        if not sortby:
-            sortby = 'date'
-        sort_order = searchbar_sortings[sortby]['order']
-
-        # FIXME: _get_archive_groups do no use sudo
-        # archive_groups = self._get_archive_groups('share.line', domain)
-        # if date_begin and date_end:
-        #     domain += [('effective_date', '>', date_begin),
-        #                ('effective_date', '<=', date_end)]
-
-        # count for pager
-        shareline_count = shareline_mgr.sudo().search_count(domain)
-        # make pager
-        pager = portal_pager(
-            url="/my/wallet",
-            url_args={
-                'date_begin': date_begin,
-                'date_end': date_end,
-                'sortby': sortby
-            },
-            total=shareline_count,
-            page=page,
-            step=self._items_per_page
-        )
         # search the count to display, according to the pager data
         sharelines = shareline_mgr.sudo().search(
             domain,
-            order=sort_order,
-            limit=self._items_per_page,
-            offset=pager['offset']
+            order='effective_date',
+            limit=self._items_per_page
         )
-        request.session['my_sharelines_history'] = sharelines.ids[:100]
 
         # Grand Amount Total
         grand_total = sum([sl.total_amount_line for sl in sharelines])
@@ -75,11 +39,7 @@ class InvestorPortal(CustomerPortal):
             'finproducts': sharelines.sudo(),
             'grand_total': grand_total,
             'page_name': 'wallet',
-            'pager': pager,
-            # 'archive_groups': archive_groups,
             'default_url': '/my/wallet',
-            'searchbar_sortings': searchbar_sortings,
-            'sortby': sortby,
         })
         return request.render(
             'iwp_website.portal_my_wallet',
