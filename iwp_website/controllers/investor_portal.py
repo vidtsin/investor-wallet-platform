@@ -15,8 +15,9 @@ from odoo.tools.translate import _
 class InvestorPortal(CustomerPortal):
 
     @http.route(['/my/wallet'], type='http', auth="user", website=True)
-    def portal_my_wallet(self, page=1, date_begin=None, date_end=None,
-                         sortby=None, **kw):
+    def my_wallet(self, page=1, date_begin=None, date_end=None,
+                  sortby=None, **kw):
+        """Wallet of financial product for the connected user."""
         values = self._prepare_portal_layout_values()
         shareline_mgr = request.env['share.line']
 
@@ -86,7 +87,7 @@ class InvestorPortal(CustomerPortal):
         )
 
     @http.route('/struct', type='http', auth="public", website=True)
-    def structure(self, page=1, sortby=None, **kw):
+    def structures(self, page=1, sortby=None, **kw):
         values = self._prepare_portal_layout_values()
         struct_mgr = request.env['res.partner']
 
@@ -135,6 +136,7 @@ class InvestorPortal(CustomerPortal):
 
     @http.route()
     def account(self, redirect=None, **post):
+        """Form processing to edit user details"""
         user = request.env.user
         if user.is_company:
             form = InvestorCompanyForm()
