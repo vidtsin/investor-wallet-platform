@@ -136,11 +136,15 @@ class WebsiteSubscriptionRequest(http.Controller):
             qcontext['error'] = _("You must order at least 1 financial"
                                   " product.")
             return qcontext
+
         # Check maximum amount
-        max_amount = (request.env['res.company']
-                      ._company_default_get().subscription_maximum_amount)
+        max_amount = shareproduct.structure.subscription_maximum_amount
         total_amount = qcontext['number'] * shareproduct.list_price
-        if max_amount <= total_amount:
+        if not max_amount:
+            qcontext['error'] = _("This structure has not set the allowed "
+                                  "number of share. Please contact system "
+                                  "administrator. ")
+        elif max_amount <= total_amount:
             qcontext['error'] = _("You cannot order more than %s."
                                   % max_amount)
             return qcontext

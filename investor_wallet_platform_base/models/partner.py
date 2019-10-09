@@ -37,6 +37,8 @@ class ResPartner(models.Model):
     structure_project_ids = fields.One2many('structure.project',
                                             'structure_id',
                                             string="Structure projects")
+    subscription_maximum_amount = fields.Float(
+        string="Maximum authorised subscription amount")
 
     @api.multi
     def generate_sequence(self):
