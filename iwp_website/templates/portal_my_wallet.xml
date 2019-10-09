@@ -3,31 +3,37 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
 <odoo>
 
-    <template id="portal_my_wallet_menu"
+    <template id="portal_menu"
         name="Portal My Wallet : share product entries"
         inherit_id="portal.portal_my_home" priority="20">
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-            <t t-if="finproduct_count" t-call="portal.portal_docs_entry">
-                <t t-set="title">Financial Products</t>
-                <t t-set="url" t-value="'/my/wallet'"/>
-                <t t-set="count" t-value="finproduct_count"/>
+            <t t-if="share_count" t-call="portal.portal_docs_entry">
+                <t t-set="title">Share Wallet</t>
+                <t t-set="url" t-value="'/my/wallet/share'"/>
+                <t t-set="count" t-value="share_count"/>
             </t>
         </xpath>
     </template>
 
-    <template id="portal_my_wallet_menu_breadcrumb"
+
+    <template id="portal_menu_breadcrumb"
         name="Portal layout : wallet menu entries"
         inherit_id="portal.portal_breadcrumbs"
         priority="20">
         <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
-            <li t-if="page_name == 'wallet'"
+            <li t-if="page_name == 'share_wallet'"
                 t-attf-class="breadcrumb-item active">
-                Wallet
+                Share Wallet
+            </li>
+            <li t-if="page_name == 'share_history'"
+                t-attf-class="breadcrumb-item active">
+                Share History
             </li>
         </xpath>
     </template>
 
-    <template id="portal_my_wallet" name="My Wallet">
+
+    <template id="portal_my_wallet_share" name="My Wallet">
         <t t-call="portal.portal_layout">
             <t t-set="breadcrumbs_searchbar" t-value="False"/>
 
@@ -36,25 +42,63 @@
                     There are currently no finacial product for your account.
                 </p>
             </t>
-            <t t-if="finproducts" t-call="portal.portal_table">
+            <t t-if="finproducts">
+                <t t-foreach="finproducts" t-as="elem"
+                    t-call="iwp_website.share_wallet_content"/>
+            </t>
+        </t>
+    </template>
+
+
+    <template id="share_wallet_content" name="Share Wallet Content">
+        <div class="shareline_head d-flex bg-white rounded mt-4">
+            <div class="head_content flex-grow-1 px-3 py-2">
+                <span class="struct_name" t-esc="elem['structure'].name"/>
+                <div class="share_actions mx-2 btn-group" role="group"
+                    aria-label="Share Actions">
+                    <a t-att-href="elem['buy_url']"
+                        class="btn btn-sm btn-secondary">
+                        Subscribe
+                    </a>
+                    <a t-att-href="elem['sell_url']"
+                        class="btn btn-sm btn-secondary">
+                        Sell Back
+                    </a>
+                </div>
+                <span class="amount float-right">
+                    <t t-esc="elem['total_amount']"/> €
+                </span>
+            </div>
+            <div class="head_button">
+                <a class="toggle-collapse px-3 d-flex align-items-center btn-primary"
+                    role="button"
+                    data-toggle="collapse"
+                    t-attf-href="#sharelist-{{elem['structure'].id}}"
+                    aria-expanded="false"
+                    t-attf-aria-controls="sharelist-{{elem['structure'].id}}">
+                    <span class="text-expanded fa fa-angle-up"/>
+                    <span class="text-collapsed fa fa-angle-down"/>
+                </a>
+            </div>
+        </div>
+        <div t-attf-id="sharelist-{{elem['structure'].id}}" class="collapse">
+            <t t-call="portal.portal_table">
                 <thead>
                     <tr class="active">
-                        <th>Structure</th>
+                        <th>Name</th>
                         <th class="text-right">Date</th>
-                        <th class="text-right">Name</th>
                         <th class="text-right">Number</th>
                         <th class="text-right">Amount</th>
                         <th class="text-right">Total Amount</th>
                     </tr>
                 </thead>
-                <t t-foreach="finproducts" t-as="finprod">
+                <t t-foreach="elem['lines']" t-as="finprod">
                     <tr>
-                        <td><t t-esc="finprod.structure.name"/></td>
-                        <td class="text-right">
-                            <span t-field="finprod.effective_date"/>
+                        <td>
+                            <span t-field="finprod.share_product_id.name"/>
                         </td>
                         <td class="text-right">
-                            <span t-field="finprod.share_product_id.name"/>
+                            <span t-field="finprod.effective_date"/>
                         </td>
                         <td class="text-right">
                             <span t-field="finprod.share_number"/>
@@ -67,20 +111,8 @@
                         </td>
                     </tr>
                 </t>
-                <thead>
-                    <tr class="active">
-                        <th>Grand Total</th>
-                        <th class="text-right"/>
-                        <th class="text-right"/>
-                        <th class="text-right"/>
-                        <th class="text-right"/>
-                        <th class="text-right">
-                            <span t-esc="grand_total"/>
-                        </th>
-                    </tr>
-                </thead>
             </t>
-        </t>
+        </div>
     </template>
 
     <template id="structures" name="Structures">

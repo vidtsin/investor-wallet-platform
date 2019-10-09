@@ -3,6 +3,8 @@
 #     - Rémy Taymans <remy@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from itertools import groupby
+
 from odoo import http
 from odoo.addons.portal.controllers.portal import CustomerPortal
 from odoo.addons.portal.controllers.portal import pager as portal_pager
@@ -11,38 +13,61 @@ from odoo.addons.iwp_website.controllers.investor_form import InvestorCompanyFor
 from odoo.http import request
 from odoo.tools.translate import _
 
+# TODO: Try to not give sudo object to a view.
+
 
 class InvestorPortal(CustomerPortal):
 
-    @http.route(['/my/wallet'], type='http', auth="user", website=True)
-    def my_wallet(self, page=1, date_begin=None, date_end=None,
-                  sortby=None, **kw):
-        """Wallet of financial product for the connected user."""
+    @http.route(['/my/wallet/share'], type='http', auth="user", website=True)
+    def my_wallet_share(self, **kw):
+        """Wallet of share owned by the connected user."""
         values = self._prepare_portal_layout_values()
         shareline_mgr = request.env['share.line']
-        # loanlines_mgr = request.env['loan.issue.line']
 
-        domain = self.shareline_domain
+        # Share lines owned by an investor
+        sharelines = shareline_mgr.sudo().search(self.shareline_domain)
 
-        # search the count to display, according to the pager data
-        sharelines = shareline_mgr.sudo().search(
-            domain,
-            order='effective_date',
-            limit=self._items_per_page
-        )
-
-        # Grand Amount Total
-        grand_total = sum([sl.total_amount_line for sl in sharelines])
+        # Data structure
+        # [
+        #    {
+        #         'structure': structure_id,
+        #         'buy_url': "/struct/xx/subscription"
+        #         'sell_url': ""
+        #         'total_amount': sum_of_total_amount_line,
+        #         'lines': recordset('share.line'),
+        #     },
+        #     {
+        #         ...
+        #     },
+        # ]
+        data = []
+        # Create data structure
+        sharelines = sharelines.sorted(key=lambda r: r.structure.name)
+        grouped_sl = groupby(sharelines, lambda r: r.structure)
+        for (structure, shares) in grouped_sl:
+            item = {}
+            item['structure'] = structure
+            item['lines'] = shareline_mgr  # New empty recordset
+            item['buy_url'] = "/struct/%d/subscription" % (structure.id,)
+            item['sell_url'] = ""  # TODO: url does not exist yet.
+            item['total_amount'] = 0
+            for share in shares:
+                item['total_amount'] += share.total_amount_line
+                item['lines'] += share
+            item['lines'] = item['lines'].sorted(
+                key=lambda r: r.sudo().effective_date,
+                reverse=True,
+            )
+            item['lines'] = item['lines'].sudo()
+            data.append(item)
 
         values.update({
-            'date': date_begin,
-            'finproducts': sharelines.sudo(),
-            'grand_total': grand_total,
-            'page_name': 'wallet',
-            'default_url': '/my/wallet',
+            'finproducts': data,
+            'page_name': 'share_wallet',
+            'default_url': '/my/wallet/share',
         })
         return request.render(
-            'iwp_website.portal_my_wallet',
+            'iwp_website.portal_my_wallet_share',
             values
         )
 
@@ -160,7 +185,7 @@ class InvestorPortal(CustomerPortal):
         shareline_count = (shareline_mgr.sudo()
                            .search_count(self.shareline_domain))
         values.update({
-            'finproduct_count': shareline_count,
+            'share_count': shareline_count,
         })
         return values
 
