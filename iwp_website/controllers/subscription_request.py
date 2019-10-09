@@ -7,6 +7,10 @@ from werkzeug.exceptions import NotFound
 from odoo import http
 from odoo.http import request
 from odoo.tools.translate import _
+import logging
+
+
+_logger = logging.getLogger(__name__)
 
 
 class WebsiteSubscriptionRequest(http.Controller):
@@ -93,12 +97,17 @@ class WebsiteSubscriptionRequest(http.Controller):
             for key in partner_fields & sub_req_fields - excepted_fields
         })
         # Special fields
+        try:
+            iban = partner.bank_ids[0].acc_number
+        except IndexError:
+            _logger.error('no account set for partner %s' % partner)
+
         values.update({
             'country_id': partner.country_id.id,
             'address': partner.street,
             'zip_code': partner.zip,
             'no_registre': partner.national_register_number,
-            'iban': partner.bank_ids[0].acc_number,
+            'iban': iban,
             'source': 'website',
             'partner_id': partner.id,
             'share_product_id': qcontext['shareproduct'],
