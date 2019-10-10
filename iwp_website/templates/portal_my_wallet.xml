@@ -12,6 +12,11 @@
                 <t t-set="url" t-value="'/my/wallet/share'"/>
                 <t t-set="count" t-value="share_count"/>
             </t>
+            <t t-if="share_history_count" t-call="portal.portal_docs_entry">
+                <t t-set="title">Share History</t>
+                <t t-set="url" t-value="'/my/history/share'"/>
+                <t t-set="count" t-value="share_history_count"/>
+            </t>
         </xpath>
     </template>
 
@@ -114,6 +119,60 @@
             </t>
         </div>
     </template>
+
+
+    <template id="portal_my_history_share" name="Share History">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Share History</t>
+            </t>
+            <t t-if="not subregs">
+                <p>You currently owns no shares.</p>
+            </t>
+            <t t-if="subregs" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Structure Name</th>
+                        <th class="text-right">Date</th>
+                        <th class="text-right">Operation</th>
+                        <th class="text-right">Share Name</th>
+                        <th class="text-right">Quantity</th>
+                        <th class="text-right">Amount</th>
+                        <th class="text-right">Total Amount</th>
+                    </tr>
+                </thead>
+                <t t-foreach="subregs" t-as="subreg">
+                    <tr>
+                        <td><t t-esc="subreg.structure.name"/></td>
+                        <td class="text-right">
+                            <span t-field="subreg.date"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="subreg.type"/>
+                            <span t-if="subreg.type == 'transfer'">
+                                to <t t-esc="subreg.partner_id_to.name"/>
+                            </span>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="subreg.share_product_id.name"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="subreg.quantity"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="subreg.share_unit_price"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="subreg.total_amount_line"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+
 
     <template id="structures" name="Structures">
         <t t-call="portal.portal_layout">

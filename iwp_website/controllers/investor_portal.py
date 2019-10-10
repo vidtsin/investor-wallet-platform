@@ -71,6 +71,45 @@ class InvestorPortal(CustomerPortal):
             values
         )
 
+    @http.route('/my/history/share', type='http', auth="public", website=True)
+    def my_history_share(self, sortby=None, **kw):
+        values = self._prepare_portal_layout_values()
+        sub_reg_mgr = request.env['subscription.register']
+
+        searchbar_sortings = {
+            'name': {'label': _('Structure Name'), 'order': ''},
+            'date': {'label': _('Date'), 'order': 'date'},
+        }
+
+        # default sortby order
+        # Order by name is done after the query
+        if not sortby:
+            sortby = 'date'
+        sort_order = 'date desc'  # Always order by date
+
+        # search the count to display, according to the pager data
+        subregs = sub_reg_mgr.sudo().search(
+            self.subscription_register_domain,
+            order=sort_order,
+        )
+
+        if sortby == 'name':
+            subregs = subregs.sorted(
+                key=lambda r: r.structure.name if r.structure.name else ''
+            )
+
+        values.update({
+            'subregs': subregs.sudo(),
+            'page_name': 'share_history',
+            'default_url': '/my/history/share',
+            'searchbar_sortings': searchbar_sortings,
+            'sortby': sortby,
+        })
+        return request.render(
+            'iwp_website.portal_my_history_share',
+            values
+        )
+
     @http.route('/struct', type='http', auth="public", website=True)
     def structures(self, page=1, sortby=None, **kw):
         values = self._prepare_portal_layout_values()
@@ -182,10 +221,16 @@ class InvestorPortal(CustomerPortal):
     def _prepare_portal_layout_values(self):
         values = super()._prepare_portal_layout_values()
         shareline_mgr = request.env['share.line']
+        sub_reg_mgr = request.env['subscription.register']
         shareline_count = (shareline_mgr.sudo()
                            .search_count(self.shareline_domain))
+        subreg_count = (
+            sub_reg_mgr.sudo()
+            .search_count(self.subscription_register_domain)
+        )
         values.update({
             'share_count': shareline_count,
+            'share_history_count': subreg_count
         })
         return values
 
@@ -201,5 +246,15 @@ class InvestorPortal(CustomerPortal):
     def structure_domain(self):
         domain = [
             ('is_plateform_structure', '=', True)
+        ]
+        return domain
+
+    @property
+    def subscription_register_domain(self):
+        partner = request.env.user.partner_id
+        domain = [
+            '|',
+            ('partner_id', 'child_of', [partner.commercial_partner_id.id]),
+            ('partner_id_to', 'child_of', [partner.commercial_partner_id.id]),
         ]
         return domain
