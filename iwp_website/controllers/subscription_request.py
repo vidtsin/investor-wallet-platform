@@ -88,6 +88,7 @@ class WebsiteSubscriptionRequest(http.Controller):
             'create_date',
             'create_uid',
             'write_date',
+            'write_uid',
             '__last_update',
             'user_id',
         ])
