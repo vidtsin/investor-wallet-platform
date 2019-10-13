@@ -32,7 +32,7 @@ class InvestorPortal(CustomerPortal):
         #    {
         #         'structure': structure_id,
         #         'buy_url': "/struct/xx/subscription"
-        #         'sell_url': ""
+        #         'sell_url': "/struct/xx/sell"
         #         'total_amount': sum_of_total_amount_line,
         #         'lines': recordset('share.line'),
         #     },
@@ -49,7 +49,7 @@ class InvestorPortal(CustomerPortal):
             item['structure'] = structure
             item['lines'] = shareline_mgr  # New empty recordset
             item['buy_url'] = "/struct/%d/subscription" % (structure.id,)
-            item['sell_url'] = ""  # TODO: url does not exist yet.
+            item['sell_url'] = "/struct/%d/sell" % (structure.id,)
             item['total_amount'] = 0
             for share in shares:
                 item['total_amount'] += share.total_amount_line

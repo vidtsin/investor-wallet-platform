@@ -5,7 +5,7 @@
     'name': "Investor Wallet Platform Website",
     'summary': """
         Website element for Investor Wallet Platform""",
-    'version': '12.0.0.9.0',
+    'version': '12.0.0.10.0',
     'license': 'AGPL-3',
     'author': "Coop IT Easy SCRLfs",
     'website': "https://coopiteasy.be",
@@ -21,6 +21,7 @@
         'templates/investor_portal.xml',
         'templates/investor_form.xml',
         'templates/subscription_request.xml',
+        'templates/operation_request.xml',
     ],
     'demo': [
         'demo/users.xml',
