@@ -34,6 +34,7 @@ class WebsiteSubscriptionRequest(http.Controller):
             raise NotFound
         if not struct.is_plateform_structure:
             raise NotFound
+        post['struct'] = struct
         self.reqargs['struct'] = struct
         # Get findproduct if given
         finprod = (
@@ -41,16 +42,11 @@ class WebsiteSubscriptionRequest(http.Controller):
             .sudo()
             .browse(finprod_id)
         )
-        if finprod:
-            if finprod.structure != struct:
-                raise NotFound
-            self.reqargs['finprod'] = finprod
-        else:
-            finprod = None
         self.init_form_data(qcontext=post)
         self.set_form_defaults(qcontext=post)
         self.normalize_form_data(qcontext=post)
         if post and request.httprequest.method == 'POST':
+            self.reqargs['finprod'] = finprod
             self.validate_form(qcontext=post)
             if 'error' not in post:
                 values = self.prepare_subscription_request_value(struct,
@@ -58,10 +54,8 @@ class WebsiteSubscriptionRequest(http.Controller):
                 request.env['subscription.request'].sudo().create(values)
                 post['success'] = True
         # Populate template value
-        qcontext = {
-            'struct': struct,
-        }
-        qcontext.update(post)
+
+        qcontext = post.copy()
         return request.render(
             'iwp_website.subscribe_to_structure',
             qcontext
@@ -102,6 +96,7 @@ class WebsiteSubscriptionRequest(http.Controller):
             iban = partner.bank_ids[0].acc_number
         except IndexError:
             _logger.error('no account set for partner %s' % partner)
+            raise ValueError(_('no account set for partner %s' % partner))
 
         values.update({
             'country_id': partner.country_id.id,
@@ -127,15 +122,21 @@ class WebsiteSubscriptionRequest(http.Controller):
         product_obj = request.env['product.template'].sudo().search(
             self.share_product_domain,
         )
-        selected_share = qcontext.get('shareproduct', 0)
-        shareproduct = product_obj.sudo().browse(selected_share)
-        if not shareproduct:
+        selected_share = qcontext.get('shareproduct', None)
+        if not selected_share:
             qcontext['error'] = _("You must select a financial product.")
             return qcontext
         if qcontext.get('number', 0) < 1:
             qcontext['error'] = _("You must order at least 1 financial"
                                   " product.")
             return qcontext
+
+        shareproduct = product_obj.sudo().browse(selected_share)
+        if shareproduct.structure != qcontext['struct']:
+            qcontext['error'] = _("Selected share is not available to the "
+                                  "structure.")
+            return qcontext
+
 
         # Check maximum amount
         max_amount = shareproduct.structure.subscription_maximum_amount
