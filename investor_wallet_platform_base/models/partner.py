@@ -24,18 +24,28 @@ class ResPartner(models.Model):
     operation_sequence = fields.Many2one('ir.sequence',
                                          string="Operation Register",
                                          readonly=True)
-
-    display_on_website = fields.Boolean(string="display on website")
-    renewable_energy = fields.Boolean(string="Renewable energy")
-    description = fields.Html(string="Description")
-    about_us = fields.Html(string="About us")
-    social_economy = fields.Html(string="Social Economy")
-    social_impact = fields.Html(string="Social impact")
-    governance = fields.Html(string="Governance")
-    cover_image = fields.Binary(string="Cover image")
     structure_project_ids = fields.One2many('structure.project',
                                             'structure_id',
                                             string="Structure projects")
+    display_on_website = fields.Boolean(string="display on website")
+    # Move to another module ?
+    is_renewable_energy = fields.Boolean(string="is renewable energy")
+    renewable_energy = fields.Html(string="Renewable energy")
+    description = fields.Html(string="Description")
+    about_us = fields.Html(string="About us")
+    governance = fields.Html(string="Governance")
+    cover_image = fields.Binary(string="Cover image")
+    labour_on_capital = fields.Html(string="Labour on capital")
+    autonomy_of_management = fields.Html(string="Autonomy of management")
+    purpose_service = fields.Html(string="Purpose of service to members")
+    sustainable_development = fields.Html(string="Sustainable development")
+    key_numbers = fields.Html(string="Key Numbers")
+    related_risk = fields.Html(string="Risk related to the financial products")
+    operational_risk = fields.Html(string="Operational & commercial risk")
+    governance_risk = fields.Html(string="Governance risk")
+    equity = fields.Html(string="Equity")
+    solvency_ratio = fields.Html(string="Solvency ratio")
+    cash_risk = fields.Html(string="Cash risk")
 
     @api.multi
     def generate_sequence(self):

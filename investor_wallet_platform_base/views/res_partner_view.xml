@@ -35,23 +35,28 @@
 	    			</field>
 	    		</page>
 	    		<page name="structure_info" string="Structure info" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
-	    			<button name="generate_sequence" type="object" string ="Initialize" attrs="{'invisible': [('initialized', '=', True)]}" groups="investor_wallet_platform_base.group_platform_manager"/>
-	    			<field name="initialized" invisible="True"/>
 	    			<group>
 	    				<group>
 	    					<field name="cover_image" widget='image' options='{"preview_image": "image_medium"}'/>
 	    					<field name="display_on_website"/>
+	    					<field name="is_renewable_energy"/>
 	    					<field name="renewable_energy"/>
 	    					<field name="description"/>
 	    					<field name="about_us"/>
-	    					<field name="social_economy"/>
-	    					<field name="social_impact"/>
 	    					<field name="governance"/>
 	    				</group>
 						<group>
-							<field name="account_journal"/>
-				    		<field name="register_sequence"/>
-				    		<field name="operation_sequence"/>
+							<field name="labour_on_capital"/>
+							<field name="autonomy_of_management"/>
+							<field name="purpose_service"/>
+							<field name="sustainable_development"/>
+							<field name="key_numbers"/>
+							<field name="related_risk"/>
+							<field name="operational_risk"/>
+							<field name="governance_risk"/>
+							<field name="equity"/>
+							<field name="solvency_ratio"/>
+							<field name="cash_risk"/>
 						</group>
 	    			</group>
 	    		</page>
@@ -66,6 +71,17 @@
 	    					</field>
 	    				</group>
 	    			</group>
+	    		</page>
+	    		<page  name="structure_config" string="Structure configuration" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
+	    			<button name="generate_sequence" type="object" string ="Initialize" attrs="{'invisible': [('initialized', '=', True)]}" groups="investor_wallet_platform_base.group_platform_manager"/>
+	    			<field name="initialized" invisible="True"/>
+	    				<group>
+	    					<group>
+	    						<field name="account_journal"/>
+				    			<field name="register_sequence"/>
+				    			<field name="operation_sequence"/>
+	    					</group>
+	    				</group>
 	    		</page>
 	    	</page>
 	    </field>
