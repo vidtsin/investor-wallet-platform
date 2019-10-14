@@ -56,7 +56,7 @@ class AuthSignupInvestor(AuthSignupHome):
                     'partner_id': n_user.partner_id.id,
                     'acc_number': request.params['iban'],
                 })
-                request.cr.commit()
+                # request.cr.commit()  # fixme remove or can't test univoquely
         # Render the response
         if response.template == 'auth_signup.signup':
             return request.render(
@@ -112,7 +112,7 @@ class AuthSignupInvestor(AuthSignupHome):
                     'partner_id': n_user.partner_id.id,
                     'acc_number': request.params['iban'],
                 })
-                request.cr.commit()
+                # request.cr.commit()
                 # Create representative
                 rep_values = {
                     key[4:]: request.params[key]

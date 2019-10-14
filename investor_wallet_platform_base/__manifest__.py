@@ -2,6 +2,8 @@
 # Copyright 2018-Coop IT Easy SCRLfs (<http://www.coopiteasy.be>)
 # - Houssine BAKKALI - <houssine@coopiteasy.be>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).#
+
+
 {
     "name": "Investor Wallet Platform Base",
     "version": "12.0.1.2.0",
@@ -27,6 +29,10 @@
         'views/product_view.xml',
         'views/structure_project_view.xml'
         ],
+    'demo': [
+        'demo/structure.xml',
+        'demo/coop.xml',
+    ],
     'installable': True,
     'application': True,
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright 2019 Coop IT Easy
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="easy_my_coop.product_template_share_type_1_demo" model="product.template">
+        <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
+    </record>
+
+    <record id="easy_my_coop.product_template_share_type_2_demo" model="product.template">
+        <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
+    </record>
+
+    <record id="easy_my_coop.subscription_request_1_demo" model="subscription.request">
+        <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
+    </record>
+
+    <record id="easy_my_coop.share_line_1_demo" model="share.line">
+        <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
+    </record>
+
+    <record id="easy_my_coop.share_line_2_demo" model="share.line">
+        <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
+    </record>
+
+    <record id="coop_membership_share_line_1_demo" model="coop.membership">
+        <field name="partner_id" ref="easy_my_coop.res_partner_cooperator_1_demo"/>
+        <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
+        <field name="cooperator_number">1</field>
+        <field name="member" eval="True"/>
+    </record>
+
+    <record id="coop_membership_share_line_2_demo" model="coop.membership">
+        <field name="partner_id" ref="easy_my_coop.res_partner_cooperator_2_demo"/>
+        <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
+        <field name="cooperator_number">2</field>
+        <field name="member" eval="True"/>
+    </record>
+
+</odoo>

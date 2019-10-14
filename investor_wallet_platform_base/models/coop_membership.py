@@ -3,6 +3,7 @@ from odoo import api, fields, models
 
 class CoopMembership(models.Model):
     _name = 'coop.membership'
+    _description = 'Cooperative Membership'
 
     @api.multi
     @api.depends('partner_id.share_ids')
