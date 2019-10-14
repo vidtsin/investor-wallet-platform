@@ -107,7 +107,6 @@ class WebsiteSubscriptionRequest(http.Controller):
             'country_id': partner.country_id.id,
             'address': partner.street,
             'zip_code': partner.zip,
-            'no_registre': partner.national_register_number,
             'iban': iban,
             'source': 'website',
             'partner_id': partner.id,
