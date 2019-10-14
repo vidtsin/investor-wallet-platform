@@ -38,4 +38,22 @@
         <field name="member" eval="True"/>
     </record>
 
+    <record id="product_template_share_type_coopcity_1_demo" model="product.template">
+        <field name="name">Part A - Sympathizer</field>
+        <field name="short_name">Part A</field>
+        <field name="is_share" eval="True"/>
+        <field name="default_share_product" eval="True"/>
+        <field name="force_min_qty" eval="True"/>
+        <field name="minimum_quantity">2</field>
+        <field name="by_individual" eval="True"/>
+        <field name="by_company" eval="False"/>
+        <field name="list_price">30</field>
+        <field name="display_on_website" eval="True"/>
+        <field name="structure" ref="res_partner_structure_coopcity_demo"/>
+    </record>
+
+    <record id="product_product_share_type_coopcity_1_demo" model="product.product">
+        <field name="product_tmpl_id" ref="product_template_share_type_coopcity_1_demo"/>
+    </record>
+
 </odoo>
