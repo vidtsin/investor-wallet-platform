@@ -3,6 +3,7 @@ from odoo import fields, models
 
 class StructureProject(models.Model):
     _name = 'structure.project'
+    _description = 'Structure Project'
 
     name = fields.Char(string="Name")
     description = fields.Html(string="Description")

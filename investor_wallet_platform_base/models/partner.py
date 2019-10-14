@@ -4,6 +4,7 @@ from odoo import api, fields, models
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
+    # todo rename
     is_plateform_structure = fields.Boolean(string="Is a Platform Structure")
     coop_membership = fields.One2many('coop.membership',
                                       'partner_id',
@@ -46,6 +47,8 @@ class ResPartner(models.Model):
     equity = fields.Html(string="Equity")
     solvency_ratio = fields.Html(string="Solvency ratio")
     cash_risk = fields.Html(string="Cash risk")
+    subscription_maximum_amount = fields.Float(
+        string="Maximum authorised subscription amount")
 
     @api.multi
     def generate_sequence(self):
@@ -84,7 +87,7 @@ class ResPartner(models.Model):
         self.register_sequence = register_sequence
         self.operation_sequence = operation_sequence
         self.account_journal = account_journal
-
+        self.initialized = True
         return True
 
     def get_membership(self, structure):

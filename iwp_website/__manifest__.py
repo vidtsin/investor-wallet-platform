@@ -21,4 +21,7 @@
         'templates/investor_form.xml',
         'templates/subscription_request.xml',
     ],
+    'demo': [
+        'demo/users.xml',
+    ],
 }

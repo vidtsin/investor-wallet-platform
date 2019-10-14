@@ -7,6 +7,10 @@ from werkzeug.exceptions import NotFound
 from odoo import http
 from odoo.http import request
 from odoo.tools.translate import _
+import logging
+
+
+_logger = logging.getLogger(__name__)
 
 
 class WebsiteSubscriptionRequest(http.Controller):
@@ -84,6 +88,7 @@ class WebsiteSubscriptionRequest(http.Controller):
             'create_date',
             'create_uid',
             'write_date',
+            'write_uid',
             '__last_update',
             'user_id',
         ])
@@ -93,12 +98,16 @@ class WebsiteSubscriptionRequest(http.Controller):
             for key in partner_fields & sub_req_fields - excepted_fields
         })
         # Special fields
+        try:
+            iban = partner.bank_ids[0].acc_number
+        except IndexError:
+            _logger.error('no account set for partner %s' % partner)
+
         values.update({
             'country_id': partner.country_id.id,
             'address': partner.street,
             'zip_code': partner.zip,
-            'no_registre': partner.national_register_number,
-            'iban': partner.bank_ids[0].acc_number,
+            'iban': iban,
             'source': 'website',
             'partner_id': partner.id,
             'share_product_id': qcontext['shareproduct'],
@@ -127,11 +136,15 @@ class WebsiteSubscriptionRequest(http.Controller):
             qcontext['error'] = _("You must order at least 1 financial"
                                   " product.")
             return qcontext
+
         # Check maximum amount
-        max_amount = (request.env['res.company']
-                      ._company_default_get().subscription_maximum_amount)
+        max_amount = shareproduct.structure.subscription_maximum_amount
         total_amount = qcontext['number'] * shareproduct.list_price
-        if max_amount <= total_amount:
+        if not max_amount:
+            qcontext['error'] = _("This structure has not set the allowed "
+                                  "number of share. Please contact system "
+                                  "administrator. ")
+        elif max_amount <= total_amount:
             qcontext['error'] = _("You cannot order more than %s."
                                   % max_amount)
             return qcontext

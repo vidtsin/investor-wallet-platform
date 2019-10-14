@@ -15,6 +15,10 @@
 			<field name="cooperator_type" position="replace"/>
 			<field name="effective_date" position="replace"/>
 
+			<field name="company_register_number" position="after">
+				<field name="subscription_maximum_amount" attrs="{'invisible':[('is_plateform_structure','=',False)]}"/>
+			</field>
+
 	    	<xpath expr="//page[@name='share']/field[@name='share_ids']/tree/field[@name='effective_date']" position="before">
 	    		<field name="structure"/>
 	    	</xpath>
