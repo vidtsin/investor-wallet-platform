@@ -43,6 +43,7 @@ class TestIWPBase(HttpCase):
         res = self.http_get(url)
         doc = self.html_doc(res)
         token = doc.xpath("//input[@name='csrf_token']")[0].get("value")
+        # todo check login success
         return self.http_post(
             url=url,
             data={"login": login, "password": password, "csrf_token": token},
@@ -57,3 +58,30 @@ class TestIWPBase(HttpCase):
         if url.startswith("/"):
             url = "http://%s:%s%s" % (HOST, PORT, url)
         return self.session.post(url, data=data)
+
+    def assert_success(self, res):
+        doc = self.html_doc(res)
+        alert_success = doc.xpath("//p[contains(@class, 'alert-success')]")
+        alert_danger = doc.xpath("//p[contains(@class, 'alert-danger')]")
+
+        if alert_success:
+            _logger.info(alert_success[0].text.strip())
+
+        if alert_danger:
+            _logger.error(alert_danger[0].text.strip())
+
+        self.assertTrue(len(alert_success) > 0)
+        self.assertTrue(len(alert_danger) == 0)
+
+    def assert_danger(self, res):
+        doc = self.html_doc(res)
+        alert_success = doc.xpath("//p[contains(@class, 'alert-success')]")
+        alert_danger = doc.xpath("//p[contains(@class, 'alert-danger')]")
+
+        if alert_success:
+            _logger.error(alert_success[0].text.strip())
+        if alert_danger:
+            _logger.info(alert_danger[0].text.strip())
+
+        self.assertTrue(len(alert_success) == 0)
+        self.assertTrue(len(alert_danger) > 0)
