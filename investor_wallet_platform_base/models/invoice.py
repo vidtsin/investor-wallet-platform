@@ -45,6 +45,7 @@ class AccountInvoice(models.Model):
     def get_membership_vals(self):
         membership = self.partner_id.get_membership(self.structure)
 
+        vals = {}
         if membership.member is False \
                 and membership.old_member is False:
             sequence_id = self.get_sequence_register()
@@ -59,8 +60,7 @@ class AccountInvoice(models.Model):
 
     def set_membership(self):
         vals = self.get_membership_vals()
-        membership = self.partner_id.get_membership(self.structure)
 
-        membership.write(vals)
-
-        return True
+        if vals:
+            membership = self.partner_id.get_membership(self.structure)
+            membership.write(vals)
