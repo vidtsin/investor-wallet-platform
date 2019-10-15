@@ -33,7 +33,7 @@ class WebsiteOperationRequest(http.Controller):
         self.reqargs['struct'] = struct
         # Get findproduct if given
         finprod = (
-            request.env['product.template']
+            request.env['product.product']
             .sudo()
             .browse(finprod_id)
         )
@@ -87,15 +87,16 @@ class WebsiteOperationRequest(http.Controller):
         """
         if qcontext is None:
             qcontext = request.params
-        product_obj = request.env['product.template']
+        product_obj = request.env['product.product']
         selected_share = qcontext.get('shareproduct', 0)
         shareproduct = product_obj.sudo().browse(selected_share)
         if not shareproduct:
-            qcontext['error'] = _("You must select a financial product.")
+            qcontext['error'] = _("You must select a share.")
             return qcontext
         if qcontext.get('number', 0) < 1:
-            qcontext['error'] = _("You must order at least 1 financial"
-                                  " product.")
+            qcontext['error'] = _(
+                "You must sell at least 1 share."
+            )
             return qcontext
         # Check that share can be sold
         share_line = request.env.user.share_ids.filtered(
@@ -104,11 +105,29 @@ class WebsiteOperationRequest(http.Controller):
         if not share_line:
             qcontext['error'] = _("You cannot sell this share.")
             return qcontext
+        # Check minimum quantity of share that can be sold
+        if shareproduct.force_min_qty:
+            owned_nb_share = sum(share_line.mapped('share_number'))
+            remaining_share_qty = owned_nb_share - qcontext['number']
+            if (
+                remaining_share_qty < shareproduct.minimum_quantity
+                and remaining_share_qty > 0
+            ):
+                qcontext['error'] = _(
+                    "You own %d share(s) and you must own at least %d "
+                    "share(s). You can not sell %d share(s)."
+                    % (
+                        owned_nb_share,
+                        shareproduct.minimum_quantity,
+                        qcontext['number'],
+                    )
+                )
         # Check maximum quantity of sold share
         max_quantity = sum(share_line.mapped('share_number'))
-        if qcontext['number'] >= max_quantity:
-            qcontext['error'] = _("You cannot sell more than %s shares."
-                                  % max_quantity)
+        if qcontext['number'] > max_quantity:
+            qcontext['error'] = _(
+                "You cannot sell more than %s shares." % max_quantity
+            )
             return qcontext
         return qcontext
 
