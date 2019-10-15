@@ -26,10 +26,10 @@
 	    		<field name="structure"/>
 	    	</xpath>
 	    	<page name="share" position="attributes">
-	    		<attribute name="attrs">{'invisible':False}</attribute>
+	    		<attribute name="attrs">{'invisible': [('is_plateform_structure', '=', True)]}</attribute>
 	    	</page>
 	    	<page name="share_subscription" position="after">
-	    		<page name="coop_membership" string="Cooperator membership">
+	    		<page name="coop_membership" string="Cooperator membership" attrs="{'invisible': [('is_plateform_structure', '=', True)]}">
 	    			<field name="coop_membership">
 	    				<tree>
 		    				<field name="structure"/>
