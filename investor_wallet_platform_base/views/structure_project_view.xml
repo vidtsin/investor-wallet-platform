@@ -8,10 +8,10 @@
 	                <group>
 		                <field name="name"/>
 	          			<field name="structure_id"/>
+	          			<field name="url" widget="url"/>
           			</group>
           			<group>
 	          			<field name="description"/>
-	          			<field name="url" widget="url"/>
           			</group>
           		</group>
             </form>

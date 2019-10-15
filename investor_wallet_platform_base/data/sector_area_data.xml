@@ -1,0 +1,44 @@
+<odoo>
+	<data noupdate="1">
+		<record id="res_partner_industry_iwp_A" model="res.partner.industry">
+	        <field name="name">Agriculture</field>
+	        <field name="full_name">Agriculture</field>
+	    </record>
+	    <record id="res_partner_industry_iwp_B" model="res.partner.industry">
+	        <field name="name">Alimentation biologique</field>
+	        <field name="full_name">Alimentation biologique</field>
+	    </record>
+	    <record id="res_partner_industry_iwp_C" model="res.partner.industry">
+	        <field name="name">Autres services</field>
+	        <field name="full_name">Autres services</field>
+	    </record>
+	    <record id="res_partner_industry_iwp_D" model="res.partner.industry">
+	        <field name="name">Commerce et artisanat</field>
+	        <field name="full_name">Commerce et artisanat</field>
+	    </record>
+	    <record id="res_partner_industry_iwp_E" model="res.partner.industry">
+	        <field name="name">Culture et média</field>
+	        <field name="full_name">Culture et média</field>
+	    </record>
+	    <record id="res_partner_industry_iwp_F" model="res.partner.industry">
+	        <field name="name">Energies renouvelables</field>
+	        <field name="full_name">Energies renouvelables</field>
+	    </record>
+	    <record id="res_partner_industry_iwp_G" model="res.partner.industry">
+	        <field name="name">Finance responsable et solidaire</field>
+	        <field name="full_name">Finance responsable et solidaire</field>
+	    </record>
+	    <record id="res_partner_industry_iwp_H" model="res.partner.industry">
+	        <field name="name">Immobilier social</field>
+	        <field name="full_name">Immobilier social</field>
+	    </record>
+	    <record id="res_partner_industry_iwp_I" model="res.partner.industry">
+	        <field name="name">Mobilité</field>
+	        <field name="full_name">Mobilité</field>
+	    </record>
+	    <record id="res_partner_industry_iwp_J" model="res.partner.industry">
+	        <field name="name">Santé</field>
+	        <field name="full_name">Santé</field>
+	    </record>
+    </data>
+</odoo>

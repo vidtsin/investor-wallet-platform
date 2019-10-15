@@ -17,5 +17,8 @@ access_product_template wallet user,product.template,product.model_product_templ
 access_product_template wallet manager,product.template,product.model_product_template,group_platform_manager,1,1,1,0
 access_ir_sequence wallet manager,ir.sequence,base.model_ir_sequence,group_platform_manager,1,1,1,
 access_structure_project wallet user,structure.project,model_structure_project,group_platform_wallet_user,1,1,1,0
-access_structure_project wallet manager,structure.project,model_structure_project,group_platform_manager,1,1,1,0
+access_structure_project wallet manager,structure.project,model_structure_project,group_platform_manager,1,1,1,1
 access_structure_project easymycoop user,structure.project,model_structure_project,easy_my_coop.group_easy_my_coop_user,1,1,1,0
+access_activity_area wallet user,activity.area,model_activity_area,group_platform_wallet_user,1,1,1,0
+access_activity_area wallet manager,activity.area,model_activity_area,group_platform_manager,1,1,1,1
+access_activity_area easymycoop user,activity.area,model_activity_area,easy_my_coop.group_easy_my_coop_user,1,0,0,0

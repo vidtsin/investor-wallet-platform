@@ -1,10 +1,13 @@
 <odoo>
+	<menuitem action="base.res_partner_industry_action" id="partner_industry_config" parent="easy_my_coop.menu_easy_my_coop_config" sequence="30" />
+		
 	<record id="view_partner_form_wallet_platform" model="ir.ui.view">
 	    <field name="name">res.partner.form.easy_my_coop</field>
 	    <field name="model">res.partner</field>
 	    <field name="inherit_id" ref="easy_my_coop.view_partner_form_easy_my_coop"/>
 	    <field name="arch" type="xml">
 	    	<field name="representative" position="before">
+	    		<field name="cover_image" widget='image' options='{"preview_image": "image_medium"}'/>
 	    		<field name="is_plateform_structure"/>
 	    		<field name="structure_type" attrs="{'invisible': [('is_plateform_structure', '=', False)]}"/>
 	    	</field>
@@ -14,7 +17,7 @@
 	    	<field name="member" position="replace"/>
 			<field name="cooperator_type" position="replace"/>
 			<field name="effective_date" position="replace"/>
-
+			<field name="industry_id" position="replace"/>
 			<field name="company_register_number" position="after">
 				<field name="subscription_maximum_amount" attrs="{'invisible':[('is_plateform_structure','=',False)]}"/>
 			</field>
@@ -41,42 +44,65 @@
 	    		<page name="structure_info" string="Structure info" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
 	    			<group>
 	    				<group>
-	    					<field name="cover_image" widget='image' options='{"preview_image": "image_medium"}'/>
 	    					<field name="display_on_website"/>
-	    					<field name="is_renewable_energy"/>
-	    					<field name="renewable_energy"/>
+	    					<field name="employee_number"/>
+	    					<field name="industry_id" attrs="{'invisible': [('is_company', '=', False)]}" options="{'no_create': True}"/>
 	    					<field name="description"/>
 	    					<field name="about_us"/>
-	    					<field name="governance"/>
 	    				</group>
 						<group>
-							<field name="labour_on_capital"/>
-							<field name="autonomy_of_management"/>
+	    					<field name="activity_areas" widget="many2many_tags" options="{'no_create': True}"/>
+	    					<field name="approval"/>
+	    					<field name="is_renewable_energy"/>
+	    					<field name="renewable_energy" attrs="{'invisible': [('is_renewable_energy', '=', False)]}"/>
 							<field name="purpose_service"/>
 							<field name="sustainable_development"/>
-							<field name="key_numbers"/>
-							<field name="related_risk"/>
-							<field name="operational_risk"/>
-							<field name="governance_risk"/>
-							<field name="equity"/>
-							<field name="solvency_ratio"/>
-							<field name="cash_risk"/>
 						</group>
 	    			</group>
 	    		</page>
-	    		<page name="structure_projects" string="Structure projects" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
-	    			<group colspan="4">
-	    				<group colspan="4">
-	    					<field name="structure_project_ids">
-	    						<tree>
-	    							<field name="name"/>
-	    							<field name="structure_id"/>
-	    						</tree>
-	    					</field>
-	    				</group>
-	    			</group>
+	    		<page name="structure_gov_info" string="Governance info" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
+	    			<group>
+						<group>
+	    					<field name="governance"/>
+							<field name="governance_risk"/>
+						</group>
+						<group>
+							<field name="labour_on_capital"/>
+							<field name="autonomy_of_management"/>
+						</group>
+					</group>
 	    		</page>
-	    		<page  name="structure_config" string="Structure configuration" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
+	    		<page name="structure_fin_info" string="Financial info" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
+					<group>
+						<group>
+						 	<field name="statute_link"/>
+    						<field name="break_even_date"/>
+    						<field name="last_dividend"/>
+							<field name="total_bs"/>
+							<field name="key_numbers"/>
+							<field name="related_risk"/>
+							<field name="operational_risk"/>
+						</group>
+						<group>
+							<field name="annual_report_link"/>
+    						<field name="last_result"/>
+							<field name="equity"/>
+							<field name="liquidity_ratio"/>
+							<field name="solvency_ratio"/>
+							<field name="cash_risk"/>
+							<field name="susbidies_risk"/>
+						</group>
+					</group>	    		
+	    		</page>
+	    		<page name="structure_projects" string="Structure projects" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
+   					<field name="structure_project_ids">
+   						<tree>
+   							<field name="name"/>
+   							<field name="structure_id"/>
+   						</tree>
+   					</field>
+	    		</page>
+	    		<page  name="structure_config" string="Structure configuration" attrs="{'invisible': [('is_plateform_structure', '=', False)]}" groups="investor_wallet_platform_base.group_platform_manager">
 	    			<button name="generate_sequence" type="object" string ="Initialize" attrs="{'invisible': [('initialized', '=', True)]}" groups="investor_wallet_platform_base.group_platform_manager"/>
 	    			<field name="initialized" invisible="True"/>
 	    				<group>
