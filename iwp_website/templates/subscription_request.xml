@@ -16,6 +16,7 @@
                 <option t-foreach="share_products or []" t-as="sp"
                     t-att-selected="'selected' if sp.id == shareproduct else None"
                     t-att-data-amount="sp.list_price"
+                    t-att-data-min_qty="sp.minimum_quantity if sp.force_min_qty else 1"
                     t-att-value="sp.id">
                     <t t-esc="sp.name"/> - <t t-esc="sp.list_price"/>
                 </option>
@@ -28,8 +29,6 @@
                 class="form-control form-control-sm"
                 type="number"
                 name="number"
-                min="1"
-                t-att-max="50"
                 t-att-value="number"
                 onchange="compute_total_amount()"
                 required="required"/>
@@ -54,6 +53,8 @@ function compute_total_amount() {
     var amount = sp_elem.options[sp_elem.selectedIndex].dataset.amount
     var number = document.getElementById('number').value;
     document.getElementById('total_amount').value = number * amount;
+    var min_qty = sp_elem.options[sp_elem.selectedIndex].dataset.min_qty;
+    document.getElementById('number').min = min_qty
 }
         </script>
 

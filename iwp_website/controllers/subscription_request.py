@@ -177,14 +177,30 @@ class WebsiteSubscriptionRequest(http.Controller):
         """
         if qcontext is None:
             qcontext = request.params
+        # Find default share
+        default_share = None
+        if 'finprod' in self.reqargs:
+            default_share = self.reqargs['finprod']
+        else:
+            default_shares = qcontext['share_products'].filtered(
+                'default_share_product'
+            )
+            default_share = default_shares[0] if default_shares else None
+        # Set fields
+        if 'shareproduct' not in qcontext or force:
+            if default_share:
+                qcontext['shareproduct'] = default_share.id
+        # Set number according to the default share
         if 'number' not in qcontext or force:
-            qcontext['number'] = 0
+            if default_share and default_share.force_min_qty:
+                qcontext['number'] = default_share.minimum_quantity
+            else:
+                qcontext['number'] = 0
         if 'total_amount' not in qcontext or force:
-            qcontext['total_amount'] = 0
-        if (
-            'shareproduct' not in qcontext or force
-        ) and 'finprod' in self.reqargs:
-            qcontext['shareproduct'] = self.reqargs['finprod'].id
+            if default_share:
+                qcontext['total_amount'] = (
+                    default_share.list_price * qcontext['number']
+                )
         return qcontext
 
     def normalize_form_data(self, qcontext=None):
