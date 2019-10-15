@@ -38,7 +38,7 @@ class WebsiteSubscriptionRequest(http.Controller):
         self.reqargs['struct'] = struct
         # Get findproduct if given
         finprod = (
-            request.env['product.template']
+            request.env['product.product']
             .sudo()
             .browse(finprod_id)
         )
@@ -113,7 +113,7 @@ class WebsiteSubscriptionRequest(http.Controller):
         """
         if qcontext is None:
             qcontext = request.params
-        product_obj = request.env['product.template'].sudo().search(
+        product_obj = request.env['product.product'].sudo().search(
             self.share_product_domain,
         )
         selected_share = qcontext.get('shareproduct', None)
@@ -157,7 +157,7 @@ class WebsiteSubscriptionRequest(http.Controller):
             qcontext = request.params
         # Share products
         share_products = (
-            request.env['product.template']
+            request.env['product.product']
             .sudo()
             .search(self.share_product_domain)
         )
