@@ -91,18 +91,12 @@ class WebsiteSubscriptionRequest(http.Controller):
             key: partner[key]
             for key in partner_fields & sub_req_fields - excepted_fields
         })
-        # Special fields
-        try:
-            iban = partner.bank_ids[0].acc_number
-        except IndexError:
-            _logger.error('no account set for partner %s' % partner)
-            raise ValueError(_('no account set for partner %s' % partner))
 
         values.update({
             'country_id': partner.country_id.id,
             'address': partner.street,
             'zip_code': partner.zip,
-            'iban': iban,
+            'iban': partner.bank_ids[0].acc_number,
             'source': 'website',
             'partner_id': partner.id,
             'share_product_id': qcontext['shareproduct'],
@@ -131,12 +125,15 @@ class WebsiteSubscriptionRequest(http.Controller):
                                   " product.")
             return qcontext
 
+        partner = request.env.user.partner_id
+        if not partner.bank_ids:
+            qcontext['error'] = _('no account set for partner %s' % partner)
+
         shareproduct = product_obj.sudo().browse(selected_share)
         if shareproduct.structure != qcontext['struct']:
             qcontext['error'] = _("Selected share is not available to the "
                                   "structure.")
             return qcontext
-
 
         # Check maximum amount
         max_amount = shareproduct.structure.subscription_maximum_amount
