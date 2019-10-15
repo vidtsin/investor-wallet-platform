@@ -136,6 +136,8 @@ class WebsiteSubscriptionRequest(http.Controller):
             return qcontext
 
         # Check maximum amount
+        # TODO: take shares held by the user into account to adjust the
+        # maximum amount
         max_amount = shareproduct.structure.subscription_maximum_amount
         total_amount = qcontext['number'] * shareproduct.list_price
         if not max_amount:
@@ -164,10 +166,11 @@ class WebsiteSubscriptionRequest(http.Controller):
         qcontext.update({
             'share_products': share_products,
         })
-        cmp = request.env['res.company']._company_default_get()
         # TODO: take shares held by the user into account to adjust the
         # maximum amount
-        qcontext['total_amount_max'] = cmp.subscription_maximum_amount
+        qcontext['total_amount_max'] = (
+            self.reqargs['struct'].subscription_maximum_amount
+        )
         return qcontext
 
     def set_form_defaults(self, qcontext=None, force=False):
