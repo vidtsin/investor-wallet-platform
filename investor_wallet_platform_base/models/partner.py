@@ -6,7 +6,7 @@ from odoo.exceptions import UserError
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    # todo rename
+    # todo rename to is_platform_structure
     is_plateform_structure = fields.Boolean(string="Is a Platform Structure")
     coop_membership = fields.One2many('coop.membership',
                                       'partner_id',

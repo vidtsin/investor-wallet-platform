@@ -117,7 +117,7 @@
 	    </field>
 	</record>
 	
-	<record id="action_wallet_plateform_structure_form" model="ir.actions.act_window">
+	<record id="action_wallet_platform_structure_form" model="ir.actions.act_window">
 	    <field name="name">Platform structures</field>
 	    <field name="type">ir.actions.act_window</field>
 	    <field name="res_model">res.partner</field>

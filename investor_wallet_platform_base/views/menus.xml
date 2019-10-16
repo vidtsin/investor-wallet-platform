@@ -4,6 +4,6 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
 <odoo>
-    <menuitem name="Structures" id="menu_wallet_plateform_structure" parent="easy_my_coop.menu_easy_my_coop_config" action="action_wallet_plateform_structure_form" sequence="401"/>
-    <menuitem name="Structure Projects" id="menu_wallet_plateform_structure_project" parent="easy_my_coop.menu_easy_my_coop_config" action="action_wallet_plateform_structure_project" sequence="405"/>
+    <menuitem name="Structures" id="menu_wallet_platform_structure" parent="easy_my_coop.menu_easy_my_coop_config" action="action_wallet_platform_structure_form" sequence="401"/>
+    <menuitem name="Structure Projects" id="menu_wallet_platform_structure_project" parent="easy_my_coop.menu_easy_my_coop_config" action="action_wallet_platform_structure_project" sequence="405"/>
 </odoo>

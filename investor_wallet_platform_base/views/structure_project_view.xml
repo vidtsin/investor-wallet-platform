@@ -29,7 +29,7 @@
 	    </field>
 	</record>
 
-	<record id="action_wallet_plateform_structure_project" model="ir.actions.act_window">
+	<record id="action_wallet_platform_structure_project" model="ir.actions.act_window">
 	    <field name="name">Structure projects</field>
 	    <field name="type">ir.actions.act_window</field>
 	    <field name="res_model">structure.project</field>
