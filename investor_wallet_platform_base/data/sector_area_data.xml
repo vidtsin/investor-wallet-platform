@@ -5,40 +5,40 @@
 	        <field name="full_name">Agriculture</field>
 	    </record>
 	    <record id="res_partner_industry_iwp_B" model="res.partner.industry">
-	        <field name="name">Alimentation biologique</field>
-	        <field name="full_name">Alimentation biologique</field>
+	        <field name="name">Organic foods</field>
+	        <field name="full_name">Organic foods</field>
 	    </record>
 	    <record id="res_partner_industry_iwp_C" model="res.partner.industry">
-	        <field name="name">Autres services</field>
-	        <field name="full_name">Autres services</field>
+	        <field name="name">Other services</field>
+	        <field name="full_name">Other services services</field>
 	    </record>
 	    <record id="res_partner_industry_iwp_D" model="res.partner.industry">
-	        <field name="name">Commerce et artisanat</field>
-	        <field name="full_name">Commerce et artisanat</field>
+	        <field name="name">Trade and crafts</field>
+	        <field name="full_name">Trade and crafts</field>
 	    </record>
 	    <record id="res_partner_industry_iwp_E" model="res.partner.industry">
-	        <field name="name">Culture et média</field>
-	        <field name="full_name">Culture et média</field>
+	        <field name="name">Culture & media</field>
+	        <field name="full_name">Culture & media</field>
 	    </record>
 	    <record id="res_partner_industry_iwp_F" model="res.partner.industry">
-	        <field name="name">Energies renouvelables</field>
-	        <field name="full_name">Energies renouvelables</field>
+	        <field name="name">Renewable Energy</field>
+	        <field name="full_name">Renewable Energy</field>
 	    </record>
 	    <record id="res_partner_industry_iwp_G" model="res.partner.industry">
-	        <field name="name">Finance responsable et solidaire</field>
-	        <field name="full_name">Finance responsable et solidaire</field>
+	        <field name="name">Fair Finance</field>
+	        <field name="full_name">Fair Financ</field>
 	    </record>
 	    <record id="res_partner_industry_iwp_H" model="res.partner.industry">
-	        <field name="name">Immobilier social</field>
-	        <field name="full_name">Immobilier social</field>
+	        <field name="name">Social real estate social</field>
+	        <field name="full_name">Social real estate social</field>
 	    </record>
 	    <record id="res_partner_industry_iwp_I" model="res.partner.industry">
-	        <field name="name">Mobilité</field>
-	        <field name="full_name">Mobilité</field>
+	        <field name="name">Mobility</field>
+	        <field name="full_name">Mobility</field>
 	    </record>
 	    <record id="res_partner_industry_iwp_J" model="res.partner.industry">
-	        <field name="name">Santé</field>
-	        <field name="full_name">Santé</field>
+	        <field name="name">Health</field>
+	        <field name="full_name">Health</field>
 	    </record>
     </data>
 </odoo>
