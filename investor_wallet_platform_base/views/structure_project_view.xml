@@ -37,5 +37,4 @@
 	    <field name="view_mode">tree,form</field>
 	</record>
 	
-	<menuitem id="menu_wallet_plateform_structure_project" name="Structure projects" parent="easy_my_coop.menu_easy_my_coop_main_coop" action="action_wallet_plateform_structure_project" sequence="110"/>
 </odoo>

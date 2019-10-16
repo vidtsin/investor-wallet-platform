@@ -8,8 +8,8 @@
     "name": "Investor Wallet Platform Base",
     "version": "12.0.1.2.0",
     "depends": [
-            "easy_my_coop",
-        ],
+        "easy_my_coop",
+    ],
     "author": "Houssine BAKKALI <houssine@coopiteasy.be>",
     "category": "Cooperative management",
     "website": "www.coopiteasy.be",
@@ -30,6 +30,7 @@
         'views/product_view.xml',
         'views/structure_project_view.xml',
         'views/activity_area_view.xml'
+        'views/menus.xml',
         ],
     'demo': [
         'demo/structure.xml',

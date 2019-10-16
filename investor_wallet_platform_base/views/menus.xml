@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright 2019 Coop IT Easy
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <menuitem name="Structures" id="menu_wallet_plateform_structure" parent="easy_my_coop.menu_easy_my_coop_main_coop" action="action_wallet_plateform_structure_form" sequence="100"/>
+    <menuitem name="Structure projects" id="menu_wallet_plateform_structure_project" parent="easy_my_coop.menu_easy_my_coop_main_coop" action="action_wallet_plateform_structure_project" sequence="110"/>
+</odoo>

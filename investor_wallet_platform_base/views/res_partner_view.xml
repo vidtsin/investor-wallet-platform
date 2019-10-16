@@ -136,5 +136,4 @@
 	    </field>
 	</record>
         
-    <menuitem id="menu_wallet_plateform_structure" name="Structures" parent="easy_my_coop.menu_easy_my_coop_main_coop" action="action_wallet_plateform_structure_form" sequence="100"/>
 </odoo>
