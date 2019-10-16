@@ -27,7 +27,7 @@
 	    </field>
 	</record>
 
-	<record id="action_wallet_plateform_activity_area" model="ir.actions.act_window">
+	<record id="action_wallet_platform_activity_area" model="ir.actions.act_window">
 	    <field name="name">Activity area</field>
 	    <field name="type">ir.actions.act_window</field>
 	    <field name="res_model">activity.area</field>
@@ -35,5 +35,4 @@
 	    <field name="view_mode">tree,form</field>
 	</record>
 	
-	<menuitem action="action_wallet_plateform_activity_area" id="menu_wallet_plateform_activity_area" parent="easy_my_coop.menu_easy_my_coop_config" sequence="50"/>
 </odoo>

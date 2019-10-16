@@ -1,5 +1,4 @@
 <odoo>
-	<menuitem action="base.res_partner_industry_action" id="partner_industry_config" parent="easy_my_coop.menu_easy_my_coop_config" sequence="30" />
 
 	<record id="view_partner_form_wallet_platform_bis" model="ir.ui.view">
 		<field name="name">res.partner.form.easy_my_coop</field>
@@ -14,7 +13,7 @@
 	    	</page>
 		</field>
 	</record>
-	
+
 	<record id="view_partner_form_wallet_platform" model="ir.ui.view">
 	    <field name="name">res.partner.form.easy_my_coop</field>
 	    <field name="model">res.partner</field>
