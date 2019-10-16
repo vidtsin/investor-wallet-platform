@@ -6,6 +6,7 @@ class ActivityArea(models.Model):
     _description = 'Area'
 
     name = fields.Char(string="Area name")
+    full_name = fields.Char(string="Full name",
+                            translate=True)
     country_id = fields.Many2one('res.country',
                                  string="Country")
-    full_name = fields.Char(string="Full name")

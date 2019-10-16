@@ -53,8 +53,6 @@ class ResPartner(models.Model):
                                           translate=True)
     key_numbers = fields.Html(string="Key Numbers",
                               translate=True)
-    related_risk = fields.Html(string="Risk related to the financial products",
-                               translate=True)
     operational_risk = fields.Html(string="Operational & commercial risk",
                                    translate=True)
     governance_risk = fields.Html(string="Governance risk",
@@ -78,7 +76,8 @@ class ResPartner(models.Model):
                                  translate=True)
     subscription_maximum_amount = fields.Float(
         string="Maximum authorised subscription amount")
-    approval = fields.Char(string="Approval")
+    approval = fields.Char(string="Approval",
+                           translate=True)
     activity_areas = fields.Many2many('activity.area',
                                       string="Activity areas")
     employee_number = fields.Char(string="Employee number",

@@ -21,7 +21,9 @@
 			<field name="company_register_number" position="after">
 				<field name="subscription_maximum_amount" attrs="{'invisible':[('is_plateform_structure','=',False)]}"/>
 			</field>
-
+			<field name="company_register_number" position="attributes">
+				<attribute name="readonly">False</attribute>
+			</field>
 	    	<xpath expr="//page[@name='share']/field[@name='share_ids']/tree/field[@name='effective_date']" position="before">
 	    		<field name="structure"/>
 	    	</xpath>
@@ -63,8 +65,8 @@
 	    		<page name="structure_gov_info" string="Governance info" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
 	    			<group>
 						<group>
+							<field name="statute_link"/>
 	    					<field name="governance"/>
-							<field name="governance_risk"/>
 						</group>
 						<group>
 							<field name="labour_on_capital"/>
@@ -75,12 +77,11 @@
 	    		<page name="structure_fin_info" string="Financial info" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
 					<group>
 						<group>
-						 	<field name="statute_link"/>
     						<field name="break_even_date"/>
     						<field name="last_dividend"/>
 							<field name="total_bs"/>
 							<field name="key_numbers"/>
-							<field name="related_risk"/>
+							<field name="governance_risk"/>
 							<field name="operational_risk"/>
 						</group>
 						<group>
@@ -92,7 +93,7 @@
 							<field name="cash_risk"/>
 							<field name="susbidies_risk"/>
 						</group>
-					</group>	    		
+					</group>
 	    		</page>
 	    		<page name="structure_projects" string="Structure projects" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
    					<field name="structure_project_ids">
