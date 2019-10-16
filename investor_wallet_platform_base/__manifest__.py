@@ -20,9 +20,9 @@
     structures to rise capital through the easy my coop flow.
     """,
     'data': [
-        'security/wallet_platform_security.xml',
+        'security/res_groups.xml',
         'security/ir.model.access.csv',
-        'data/wallet_platform_data.xml',
+        'security/iwp_security.xml',
         'data/sector_area_data.xml',
         'views/res_partner_view.xml',
         'views/subscription_request_view.xml',
