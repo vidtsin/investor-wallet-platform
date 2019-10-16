@@ -17,8 +17,8 @@
 	        <field name="full_name">Trade and crafts</field>
 	    </record>
 	    <record id="res_partner_industry_iwp_E" model="res.partner.industry">
-	        <field name="name">Culture & media</field>
-	        <field name="full_name">Culture & media</field>
+	        <field name="name">Culture and media</field>
+	        <field name="full_name">Culture and media</field>
 	    </record>
 	    <record id="res_partner_industry_iwp_F" model="res.partner.industry">
 	        <field name="name">Renewable Energy</field>
