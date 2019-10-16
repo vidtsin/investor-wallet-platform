@@ -4,13 +4,18 @@
 <odoo>
 
     <template id="portal_menu"
-        name="Portal My Wallet : share product entries"
+        name="Portal My Wallet"
         inherit_id="portal.portal_my_home" priority="20">
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
             <t t-if="share_count" t-call="portal.portal_docs_entry">
                 <t t-set="title">Share Wallet</t>
                 <t t-set="url" t-value="'/my/wallet/share'"/>
                 <t t-set="count" t-value="share_count"/>
+            </t>
+            <t t-if="share_count" t-call="portal.portal_docs_entry">
+                <t t-set="title">Loan Wallet</t>
+                <t t-set="url" t-value="'/my/wallet/loan'"/>
+                <t t-set="count" t-value="loan_count"/>
             </t>
             <t t-if="share_history_count" t-call="portal.portal_docs_entry">
                 <t t-set="title">Share History</t>
@@ -34,11 +39,15 @@
                 t-attf-class="breadcrumb-item active">
                 Share History
             </li>
+            <li t-if="page_name == 'loan_wallet'"
+                t-attf-class="breadcrumb-item active">
+                Loan Wallet
+            </li>
         </xpath>
     </template>
 
 
-    <template id="portal_my_wallet_share" name="My Wallet">
+    <template id="portal_my_wallet_share" name="My Share Wallet">
         <t t-call="portal.portal_layout">
             <t t-set="breadcrumbs_searchbar" t-value="False"/>
 
@@ -166,6 +175,51 @@
                         </td>
                         <td class="text-right">
                             <span t-field="subreg.total_amount_line"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <template id="portal_my_wallet_loan" name="My Loan Wallet">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="False"/>
+
+            <t t-if="not finproducts">
+                <p>
+                    There are currently no finacial product for your account.
+                </p>
+            </t>
+            <t t-if="finproducts" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Reference</th>
+                        <th class="text-right">Subscription Date</th>
+                        <th class="text-right">Quantity</th>
+                        <th class="text-right">Facial Value</th>
+                        <th class="text-right">Amount</th>
+                        <th class="text-right">State</th>
+                    </tr>
+                </thead>
+                <t t-foreach="finproducts" t-as="lil">
+                    <tr>
+                        <td><t t-esc="lil.name"/></td>
+                        <td class="text-right">
+                            <span t-field="lil.date"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="lil.quantity"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="lil.face_value"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="lil.amount"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="lil.state"/>
                         </td>
                     </tr>
                 </t>

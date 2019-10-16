@@ -110,6 +110,28 @@ class InvestorPortal(CustomerPortal):
             values
         )
 
+    @http.route(['/my/wallet/loan'], type='http', auth="user", website=True)
+    def my_wallet_loan(self, **kw):
+        """Wallet of loan owned by the connected user."""
+        values = self._prepare_portal_layout_values()
+        loanline_mgr = request.env['loan.issue.line']
+
+        # Loan issue lines owned by an investor
+        issuelines = loanline_mgr.sudo().search(self.loan_issue_line_domain)
+
+        # TODO: Sort by structure, when structure will be added to loan
+        #       issue. And use similar data structure to shares.
+
+        values.update({
+            'finproducts': issuelines,
+            'page_name': 'loan_wallet',
+            'default_url': '/my/wallet/loan',
+        })
+        return request.render(
+            'iwp_website.portal_my_wallet_loan',
+            values
+        )
+
     @http.route('/struct', type='http', auth="public", website=True)
     def structures(self, page=1, sortby=None, **kw):
         values = self._prepare_portal_layout_values()
@@ -220,22 +242,39 @@ class InvestorPortal(CustomerPortal):
 
     def _prepare_portal_layout_values(self):
         values = super()._prepare_portal_layout_values()
+        # Shares
         shareline_mgr = request.env['share.line']
+        shareline_count = (
+            shareline_mgr.sudo().search_count(self.shareline_domain)
+        )
+        # Loans
+        loanline_mgr = request.env['loan.issue.line']
+        loanline_count = (
+            loanline_mgr.sudo().search_count(self.loan_issue_line_domain)
+        )
+        # Subscription request
         sub_reg_mgr = request.env['subscription.register']
-        shareline_count = (shareline_mgr.sudo()
-                           .search_count(self.shareline_domain))
         subreg_count = (
             sub_reg_mgr.sudo()
             .search_count(self.subscription_register_domain)
         )
         values.update({
             'share_count': shareline_count,
+            'loan_count': loanline_count,
             'share_history_count': subreg_count
         })
         return values
 
     @property
     def shareline_domain(self):
+        partner = request.env.user.partner_id
+        domain = [
+            ('partner_id', 'child_of', [partner.commercial_partner_id.id]),
+        ]
+        return domain
+
+    @property
+    def loan_issue_line_domain(self):
         partner = request.env.user.partner_id
         domain = [
             ('partner_id', 'child_of', [partner.commercial_partner_id.id]),
