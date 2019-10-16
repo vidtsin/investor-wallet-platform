@@ -121,8 +121,8 @@
 						</group>
 					</group>
 	    		</page>
-	    		<page  name="structure_config" string="Structure configuration" attrs="{'invisible': [('is_platform_structure', '=', False)]}" groups="investor_wallet_platform_base.group_platform_manager">
-	    			<button name="generate_sequence" type="object" string ="Initialize" attrs="{'invisible': [('initialized', '=', True)]}" groups="investor_wallet_platform_base.group_platform_manager"/>
+	    		<page  name="structure_config" string="Structure configuration" attrs="{'invisible': [('is_platform_structure', '=', False)]}" groups="investor_wallet_platform_base.group_platform_wallet_manager">
+	    			<button name="generate_sequence" type="object" string ="Initialize" attrs="{'invisible': [('initialized', '=', True)]}" groups="investor_wallet_platform_base.group_platform_wallet_manager"/>
 	    			<field name="initialized" invisible="True"/>
 	    				<group>
 	    					<group>
