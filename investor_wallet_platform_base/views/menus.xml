@@ -4,6 +4,9 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 -->
 <odoo>
+    <!--  sets Easy My Coop as default app, should be set in a custom module  -->
+    <menuitem name="Easy-My Coop" id="easy_my_coop.menu_main_easy_my_coop" groups="easy_my_coop.group_easy_my_coop_user" sequence="0" />
+
     <menuitem name="Structures" id="menu_wallet_platform_structure" parent="easy_my_coop.menu_easy_my_coop_config" action="action_wallet_platform_structure_form" sequence="401"/>
     <menuitem name="Structure Projects" id="menu_wallet_platform_structure_project" parent="easy_my_coop.menu_easy_my_coop_config" action="action_wallet_platform_structure_project" sequence="405"/>
 </odoo>
