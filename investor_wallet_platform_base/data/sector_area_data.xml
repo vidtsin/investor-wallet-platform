@@ -26,7 +26,7 @@
 	    </record>
 	    <record id="res_partner_industry_iwp_G" model="res.partner.industry">
 	        <field name="name">Fair Finance</field>
-	        <field name="full_name">Fair Financ</field>
+	        <field name="full_name">Fair Finance</field>
 	    </record>
 	    <record id="res_partner_industry_iwp_H" model="res.partner.industry">
 	        <field name="name">Social real estate social</field>
