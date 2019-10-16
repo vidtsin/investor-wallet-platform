@@ -271,6 +271,9 @@
             <a href="/struct" class="btn btn-primary mt-2">
                 Subscribe to a structure
             </a>
+            <a href="/loan/subscription" class="btn btn-primary mt-2">
+                Subscribe to loan issue
+            </a>
         </xpath>
     </template>
 

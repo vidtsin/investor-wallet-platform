@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2019-     Coop IT Easy SCRLfs <http://coopiteasy.be>
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
+<odoo>
+
+    <template id="loan_subscription_fields"
+        name="Loan Subscription form fields">
+
+        <div class="form-group field-loan_issue">
+            <label for="loan_issue">Loan Issue</label>
+            <select id="loan_issue"
+                class="form-control form-control-sm"
+                name="loan_issue"
+                onchange="compute_total_amount()"
+                autofocus="autofocus"
+                required="required">
+                <option t-foreach="loan_issues or []" t-as="li"
+                    t-att-selected="'selected' if li.id == loan_issue else None"
+                    t-att-data-facial_value="li.face_value"
+                    t-att-value="li.id">
+                    <t t-esc="li.name"/>
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group field-quantity">
+            <label for="quantity">Quantity</label>
+            <input id="quantity"
+                class="form-control form-control-sm"
+                type="number"
+                name="quantity"
+                t-att-value="quantity"
+                onchange="compute_total_amount()"
+                required="required"/>
+        </div>
+
+        <div class="form-group field-total_amount">
+            <label for="total_amount">Total</label>
+            <input id="total_amount"
+                class="form-control-plaintext form-control-sm"
+                type="text"
+                name="total_amount"
+                t-att-value="str(total_amount)"
+                readonly="readonly"/>
+        </div>
+
+        <script>
+function compute_total_amount() {
+    var loan_issue = document.getElementById('loan_issue')
+    var face_value = loan_issue.options[loan_issue.selectedIndex].dataset.face_value
+    var quantity = document.getElementById('quantity').value;
+    document.getElementById('total_amount').value = number * face_value;
+}
+        </script>
+
+    </template>
+
+    <template id="subscribe_to_loan_issue" name="Subscribe to Loan Issue">
+        <t t-call="portal.portal_layout">
+            <t t-set="additional_title">Subscription to Loan Issue</t>
+            <t t-set="no_breadcrumbs" t-value="True"/>
+            <div class="row justify-content-center">
+                <div class="col-xs-12 col-sm-10  col-md-8 col-lg-6">
+                    <h3 class="text-center">Subscription to Loan Issue</h3>
+                    <form t-if="not success" t-att-action="request.httprequest.path" method="post">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                        <t t-call="iwp_website.loan_subscription_fields"/>
+
+                        <p class="alert alert-danger" t-if="error" role="alert">
+                            <t t-esc="error"/>
+                        </p>
+
+                        <button type="submit" class="btn btn-primary">Envoyer</button>
+                    </form>
+                    <p t-else="" class="alert alert-success">
+                        Your subscription has been registered.
+                    </p>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>
