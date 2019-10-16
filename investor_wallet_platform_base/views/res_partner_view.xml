@@ -1,6 +1,17 @@
 <odoo>
 	<menuitem action="base.res_partner_industry_action" id="partner_industry_config" parent="easy_my_coop.menu_easy_my_coop_config" sequence="30" />
-		
+
+	<record id="view_partner_form_wallet_platform_bis" model="ir.ui.view">
+		<field name="name">res.partner.form.easy_my_coop</field>
+		<field name="model">res.partner</field>
+		<field name="inherit_id" ref="easy_my_coop_loan.view_partner_form_loan_issue"/>
+		<field name="arch" type="xml">
+			<page name="loan_issue_lines" position="attributes">>
+	    		<attribute name="attrs">{'invisible': [('is_plateform_structure', '=', True)]}</attribute>
+	    	</page>
+		</field>
+	</record>
+	
 	<record id="view_partner_form_wallet_platform" model="ir.ui.view">
 	    <field name="name">res.partner.form.easy_my_coop</field>
 	    <field name="model">res.partner</field>
@@ -29,6 +40,16 @@
 	    	</xpath>
 	    	<page name="share" position="attributes">
 	    		<attribute name="attrs">{'invisible': [('is_plateform_structure', '=', True)]}</attribute>
+	    	</page>
+	    	<!-- page contact don't have name so we get it through another attribute -->
+	    	<page autofocus="autofocus" position="attributes">
+	    		<attribute name="invisible">True</attribute>
+	    	</page>
+	    	<page name='internal_notes' position="attributes">
+	    		<attribute name="invisible">True</attribute>
+	    	</page>
+	    	<page name='sales_purchases' position="attributes">
+	    		<attribute name="invisible">True</attribute>
 	    	</page>
 	    	<page name="share_subscription" position="after">
 	    		<page name="coop_membership" string="Cooperator membership" attrs="{'invisible': [('is_plateform_structure', '=', True)]}">

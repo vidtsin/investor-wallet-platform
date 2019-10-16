@@ -9,6 +9,7 @@
     "version": "12.0.1.2.0",
     "depends": [
         "easy_my_coop",
+        "easy_my_coop_loan"
     ],
     "author": "Houssine BAKKALI <houssine@coopiteasy.be>",
     "category": "Cooperative management",
