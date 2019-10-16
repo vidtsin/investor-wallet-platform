@@ -8,6 +8,7 @@ class StructureProject(models.Model):
     name = fields.Char(string="Name")
     description = fields.Html(string="Description")
     url = fields.Char(string="Url")
-    structure_id = fields.Many2one('res.partner',
-                                   string="Structure",
-                                   domain=[('is_plateform_structure', '=', True)])
+    structure_id = fields.Many2one(
+                        'res.partner',
+                        string="Structure",
+                        domain=[('is_plateform_structure', '=', True)])
