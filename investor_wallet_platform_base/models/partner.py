@@ -33,7 +33,7 @@ class ResPartner(models.Model):
                                          string="Operation Register",
                                          readonly=True)
     structure_project_ids = fields.One2many('structure.project',
-                                            'structure_id',
+                                            'structure',
                                             string="Structure projects")
     display_on_website = fields.Boolean(string="display on website")
     # Move to another module ?
