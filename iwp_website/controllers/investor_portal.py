@@ -111,19 +111,32 @@ class InvestorPortal(CustomerPortal):
         )
 
     @http.route(['/my/wallet/loan'], type='http', auth="user", website=True)
-    def my_wallet_loan(self, **kw):
+    def my_wallet_loan(self, sortby=None, **kw):
         """Wallet of loan owned by the connected user."""
         values = self._prepare_portal_layout_values()
         loanline_mgr = request.env['loan.issue.line']
 
+        # Order by
+        searchbar_sortings = {
+            'date': {'label': _('Date'), 'order': 'date desc'},
+            'state': {'label': _('State'), 'order': 'state'},
+        }
+        if not sortby:
+            sortby = 'date'
+        sort_order = searchbar_sortings[sortby]['order']
+
         # Loan issue lines owned by an investor
-        issuelines = loanline_mgr.sudo().search(self.loan_issue_line_domain)
+        issuelines = loanline_mgr.sudo().search(
+            self.loan_issue_line_domain, order=sort_order,
+        )
 
         # TODO: Sort by structure, when structure will be added to loan
         #       issue. And use similar data structure to shares.
 
         values.update({
             'finproducts': issuelines,
+            'searchbar_sortings': searchbar_sortings,
+            'sortby': sortby,
             'page_name': 'loan_wallet',
             'default_url': '/my/wallet/loan',
         })

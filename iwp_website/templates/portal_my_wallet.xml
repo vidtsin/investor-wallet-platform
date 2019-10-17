@@ -185,7 +185,8 @@
 
     <template id="portal_my_wallet_loan" name="My Loan Wallet">
         <t t-call="portal.portal_layout">
-            <t t-set="breadcrumbs_searchbar" t-value="False"/>
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar"/>
 
             <t t-if="not finproducts">
                 <p>
