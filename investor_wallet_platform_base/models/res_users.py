@@ -5,6 +5,6 @@ from odoo.exceptions import UserError, ValidationError
 class ResUsers(models.Model):
     _inherit = 'res.users'
 
-    structure = fields.Many2one('res.partner',
+    structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
                                 domain=[('is_plateform_structure', '=', True)])

@@ -5,9 +5,13 @@ from odoo.exceptions import ValidationError
 class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
-    structure = fields.Many2one('res.partner',
+    def default_structure(self):
+        return self.env.user.structure
+
+    structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
-                                domain=[('is_plateform_structure', '=', True)])
+                                domain=[('is_plateform_structure', '=', True)],
+                                default=default_structure)
 
     def validate_capital_release_request(self):
         if self.release_capital_request and not self.structure:

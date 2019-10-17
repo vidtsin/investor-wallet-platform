@@ -10,6 +10,8 @@ class StructureProject(models.Model):
     description = fields.Html(string="Description",
                               translate=True)
     url = fields.Char(string="Url")
+
+    # todo
     structure_id = fields.Many2one(
                         'res.partner',
                         string="Structure",
