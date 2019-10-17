@@ -6,6 +6,9 @@
 		<field name="model">res.partner</field>
 		<field name="inherit_id" ref="easy_my_coop_loan.view_partner_form_loan_issue"/>
 		<field name="arch" type="xml">
+			<page name="loan_issue_lines" position="before">
+				<field name="is_plateform_structure" attrs="{'invisible': 1}"/>
+			</page>
 			<page name="loan_issue_lines" position="attributes">>
 	    		<attribute name="attrs">{'invisible': [('is_plateform_structure', '=', True)]}</attribute>
 	    	</page>
