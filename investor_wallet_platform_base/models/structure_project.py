@@ -5,12 +5,16 @@ class StructureProject(models.Model):
     _name = 'structure.project'
     _description = 'Structure Project'
 
+    def default_structure(self):
+        return self.env.user.structure
+
     name = fields.Char(string="Name",
                        translate=True)
     description = fields.Html(string="Description",
                               translate=True)
     url = fields.Char(string="Url")
-    structure_id = fields.Many2one(
-                        'res.partner',
+    structure = fields.Many2one(
+                        comodel_name='res.partner',
                         string="Structure",
-                        domain=[('is_plateform_structure', '=', True)])
+                        domain=[("is_plateform_structure", "=", True)],
+                        default=default_structure)

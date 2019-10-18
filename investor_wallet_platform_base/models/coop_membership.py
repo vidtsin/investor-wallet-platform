@@ -36,7 +36,7 @@ class CoopMembership(models.Model):
 
     partner_id = fields.Many2one('res.partner',
                                  string="Cooperator")
-    structure = fields.Many2one('res.partner',
+    structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
                                 domain=[('is_plateform_structure', '=', True)])
     cooperator_number = fields.Integer(string='Cooperator Number')

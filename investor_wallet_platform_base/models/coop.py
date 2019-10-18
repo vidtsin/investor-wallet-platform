@@ -5,9 +5,13 @@ from odoo.exceptions import ValidationError
 class SubscriptionRequest(models.Model):
     _inherit = 'subscription.request'
 
-    structure = fields.Many2one('res.partner',
+    def default_structure(self):
+        return self.env.user.structure
+
+    structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
-                                domain=[('is_plateform_structure', '=', True)])
+                                domain=[('is_plateform_structure', '=', True)],
+                                default=default_structure)
 
     def get_journal(self):
         if self.structure:
@@ -48,22 +52,34 @@ class SubscriptionRequest(models.Model):
 class ShareLine(models.Model):
     _inherit = 'share.line'
 
-    structure = fields.Many2one('res.partner',
+    def default_structure(self):
+        return self.env.user.structure
+
+    structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
-                                domain=[('is_plateform_structure', '=', True)])
+                                domain=[('is_plateform_structure', '=', True)],
+                                default=default_structure)
 
 
 class SubscriptionRegister(models.Model):
     _inherit = 'subscription.register'
 
-    structure = fields.Many2one('res.partner',
+    def default_structure(self):
+        return self.env.user.structure
+
+    structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
-                                domain=[('is_plateform_structure', '=', True)])
+                                domain=[('is_plateform_structure', '=', True)],
+                                default=default_structure)
 
 
 class OperationRequest(models.Model):
     _inherit = 'operation.request'
 
-    structure = fields.Many2one('res.partner',
+    def default_structure(self):
+        return self.env.user.structure
+
+    structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
-                                domain=[('is_plateform_structure', '=', True)])
+                                domain=[('is_plateform_structure', '=', True)],
+                                default=default_structure)

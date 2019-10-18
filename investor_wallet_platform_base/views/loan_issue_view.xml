@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright 2019 Coop IT Easy
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+-->
+<odoo>
+    <record id="view_loan_issue_form" model="ir.ui.view">
+        <field name="name">view_loan_issue_form</field>
+        <field name="model">loan.issue</field>
+        <field name="inherit_id" ref="easy_my_coop_loan.view_loan_issue_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="structure"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

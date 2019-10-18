@@ -6,6 +6,10 @@ from odoo.exceptions import UserError
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
+    def default_structure(self):
+        return self.env.user.structure
+
+
     # todo rename to is_platform_structure
     is_plateform_structure = fields.Boolean(string="Is a Platform Structure")
     coop_membership = fields.One2many('coop.membership',
@@ -15,9 +19,10 @@ class ResPartner(models.Model):
     structure_type = fields.Selection([('cooperative', 'Cooperative'),
                                        ('association', 'Association')],
                                       string="Structure type")
-    structure = fields.Many2one('res.partner',
+    structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
-                                domain=[('is_plateform_structure', '=', True)])
+                                domain=[('is_plateform_structure', '=', True)],
+                                default=default_structure)
     account_journal = fields.Many2one('account.journal',
                                       string="Account Journal",
                                       readonly=True)
@@ -28,7 +33,7 @@ class ResPartner(models.Model):
                                          string="Operation Register",
                                          readonly=True)
     structure_project_ids = fields.One2many('structure.project',
-                                            'structure_id',
+                                            'structure',
                                             string="Structure projects")
     display_on_website = fields.Boolean(string="display on website")
     # Move to another module ?
