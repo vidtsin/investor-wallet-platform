@@ -4,15 +4,72 @@
            <field name="model">product.template</field>
            <field name="inherit_id" ref="easy_my_coop.product_template_share_form_view"/>
            <field name="arch" type="xml">
+           		<header position="inside">
+           			<field name="state" widget="statusbar" statusbar_visible="open,close,waiting" options="{'clickable': '1'}"/>
+           		</header>
+	    		<xpath expr="//div[@name='options']/.." position="after">
+	    			<group attrs="{'invisible': [('is_share','=',False)]}">
+	    				<group>
+	    					<field name="lst_price" readonly="True"/>
+	    					<field name="book_value" readonly="True"/>
+	    					<field name="write_date"/>
+	    				</group>
+	    				<group>
+		    				<field name="subscription_start_date" readonly="True"/>
+		    				<field name="subscription_end_date" readonly="True"/>
+		    				<field name="subscription_length" readonly="True"/>
+	    				</group>
+	    			</group>
+	    		</xpath>
 	    		<field name="short_name" position="before">
 	    			<field name="structure"/>
 	    			<field name="lst_price" widget='monetary' options="{'currency_field': 'currency_id', 'field_digits': True}" attrs="{'readonly': [('product_variant_count', '&gt;', 1)]}"/>
+	    			<field name="book_value" widget='monetary' options="{'currency_field': 'currency_id', 'field_digits': True}"/>
 	    		</field>
 	    		<field name="short_name" position="after">
 		    		<field name="default_code"/>
 	    		</field>
+	    			<group name="configuration" position="after">
+		    			<group name="limit" string="Limit">
+		    				<field name="minimum_amount"/>
+		    				<field name="maximum_amount"/>
+    						<field name="max_target_issue"/>
+    						<field name="subscription_start_date"/>
+    						<field name="subscription_end_date"/>
+    						<field name="subscription_length"/>
+		    			</group>
+		    			<group name="terms" string="Terms">
+		    				<field name="access_terms"/>
+		    				<field name="purpose_of_issue"/>
+		    				<field name="price_fluctuation_risk"/>
+		    				<field name="capital_risk"/>
+		    				<field name="other_product_risk"/>
+		    				<field name="transfer_allowed"/>
+		    				<field name="refund_policy"/>
+		    			</group>
+		    		</group>
 	    		<page name="general_information" position="attributes">
 	    			<attribute name="attrs">{'invisible': [('is_share','=',True)]}</attribute>
+	    		</page>
+	    		<page name="share_information" position="after">
+	    			<page string="Issue Information" name="issue_information" attrs="{'invisible':[('is_share','=',False)]}">
+	    				<group>
+	    					<group>
+		    					<field name="dividend_date"/>
+			    				<field name="tax_benefit"/>
+			    				<field name="tax_policy"/>
+			    				<field name="fees"/>
+		    					<field name="dividen_policy"/>
+		    				</group>
+		    				<group>
+			    				<field name="info_note_url"/>
+			    				<field name="voting_rights"/>
+			    				<field name="advantages"/>
+			    				<field name="oversubscription_policy"/>
+		    				</group>
+	    				</group>
+	    				
+	    			</page>
 	    		</page>
 		   </field>
 	</record>
