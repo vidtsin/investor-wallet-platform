@@ -121,6 +121,7 @@ class AuthSignupInvestor(AuthSignupHome):
                 }
                 rep_values.update({
                     'type': 'representative',
+                    'representative': True,
                     'parent_id': n_user.partner_id.id,
                     'lang': n_user.lang,
                 })
