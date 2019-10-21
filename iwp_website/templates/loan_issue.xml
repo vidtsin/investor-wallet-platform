@@ -16,9 +16,9 @@
                 required="required">
                 <option t-foreach="loan_issues or []" t-as="li"
                     t-att-selected="'selected' if li.id == loan_issue else None"
-                    t-att-data-facial_value="li.face_value"
+                    t-att-data-face_value="li.face_value"
                     t-att-value="li.id">
-                    <t t-esc="li.name"/>
+                    <t t-esc="li.name"/> - <span t-field="li.face_value"/>
                 </option>
             </select>
         </div>
@@ -49,7 +49,7 @@ function compute_total_amount() {
     var loan_issue = document.getElementById('loan_issue')
     var face_value = loan_issue.options[loan_issue.selectedIndex].dataset.face_value
     var quantity = document.getElementById('quantity').value;
-    document.getElementById('total_amount').value = number * face_value;
+    document.getElementById('total_amount').value = quantity * face_value;
 }
         </script>
 
@@ -57,11 +57,15 @@ function compute_total_amount() {
 
     <template id="subscribe_to_loan_issue" name="Subscribe to Loan Issue">
         <t t-call="portal.portal_layout">
-            <t t-set="additional_title">Subscription to Loan Issue</t>
+            <t t-set="additional_title">
+                Subscription to Loan Issue of <t t-esc="struct.name"/>
+            </t>
             <t t-set="no_breadcrumbs" t-value="True"/>
             <div class="row justify-content-center">
                 <div class="col-xs-12 col-sm-10  col-md-8 col-lg-6">
-                    <h3 class="text-center">Subscription to Loan Issue</h3>
+                    <h3 class="text-center">
+                        Subscription to Loan Issue of <t t-esc="struct.name"/>
+                    </h3>
                     <form t-if="not success" t-att-action="request.httprequest.path" method="post">
                         <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 

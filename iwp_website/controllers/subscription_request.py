@@ -18,7 +18,8 @@ class WebsiteSubscriptionRequest(http.Controller):
     @http.route(
         [
             '/struct/<int:struct_id>/subscription',
-            '/struct/<int:struct_id>/finprod/<int:finprod_id>/subscription'
+            '/struct/<int:struct_id>/share/subscription',
+            '/struct/<int:struct_id>/share/<int:finprod_id>/subscription'
         ],
         type='http',
         auth='user',

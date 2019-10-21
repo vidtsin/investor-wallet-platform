@@ -17,23 +17,38 @@ class WebsiteLoanIssue(http.Controller):
 
     @http.route(
         [
-            '/loan/subscription',
+            '/struct/<int:struct_id>/loan/subscription',
+            '/struct/<int:struct_id>/loan/<int:loan_id>/subscription',
         ],
         type='http',
         auth='user',
         website=True,
     )
-    def subscribe_to_loan_issue(
-        self,
-        **post
-    ):
+    def subscribe_to_loan_issue(self, struct_id=None, loan_id=None, **post):
+        # self.reqargs contains request arguments but only if they pass
+        # checks.
+        self.reqargs = {}
+        # Get structure and perform access check
+        struct = request.env['res.partner'].sudo().browse(struct_id)
+        if not struct:
+            raise NotFound
+        if not struct.is_plateform_structure:
+            raise NotFound
+        post['struct'] = struct
+        self.reqargs['struct'] = struct
+        # Get loan if given
+        loan = (
+            request.env['loan.issue']
+            .sudo()
+            .browse(loan_id)
+        )
         self.init_form_data(qcontext=post)
         self.set_form_defaults(qcontext=post)
         self.normalize_form_data(qcontext=post)
         if post and request.httprequest.method == 'POST':
             self.validate_form(qcontext=post)
             if 'error' not in post:
-                values = self.prepare_loan_issue_line_value(qcontext=post)
+                values = self.loan_issue_line_value(qcontext=post)
                 request.env['loan.issue.line'].sudo().create(values)
                 post['success'] = True
         # Populate template value
@@ -43,7 +58,7 @@ class WebsiteLoanIssue(http.Controller):
             qcontext
         )
 
-    def prepare_loan_issue_line_value(self, qcontext=None):
+    def loan_issue_line_value(self, qcontext=None):
         if qcontext is None:
             qcontext = request.params
         partner = request.env.user.partner_id
@@ -85,6 +100,9 @@ class WebsiteLoanIssue(http.Controller):
         loan_issues = (
             request.env['loan.issue'].sudo().get_web_issues(is_company)
         )
+        loan_issues = loan_issues.filtered(
+            lambda r: r.structure == self.reqargs['struct']
+        )
         qcontext.update({
             'loan_issues': loan_issues,
         })
@@ -99,7 +117,7 @@ class WebsiteLoanIssue(http.Controller):
             qcontext = request.params
         # Set number according to the default share
         if 'quantity' not in qcontext or force:
-            qcontext['number'] = 0
+            qcontext['quantity'] = 0
         if 'total_amount' not in qcontext or force:
             qcontext['total_amount'] = 0
         return qcontext
