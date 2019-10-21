@@ -9,7 +9,7 @@
 			<page name="loan_issue_lines" position="before">
 				<field name="is_plateform_structure" attrs="{'invisible': 1}"/>
 			</page>
-			<page name="loan_issue_lines" position="attributes">>
+			<page name="loan_issue_lines" position="attributes">
 	    		<attribute name="attrs">{'invisible': [('is_plateform_structure', '=', True)]}</attribute>
 	    	</page>
 		</field>
