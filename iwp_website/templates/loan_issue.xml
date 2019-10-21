@@ -66,7 +66,7 @@ function compute_total_amount() {
                     <h3 class="text-center">
                         Subscription to Loan Issue of <t t-esc="struct.name"/>
                     </h3>
-                    <form t-if="not success" t-att-action="request.httprequest.path" method="post">
+                    <form t-if="not success and loan_issues" t-att-action="request.httprequest.path" method="post">
                         <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
                         <t t-call="iwp_website.loan_subscription_fields"/>
@@ -77,9 +77,13 @@ function compute_total_amount() {
 
                         <button type="submit" class="btn btn-primary">Envoyer</button>
                     </form>
-                    <p t-else="" class="alert alert-success">
+                    <p t-if="success" class="alert alert-success mt-4">
                         Your subscription has been registered.
                     </p>
+                    <p t-if="not loan_issues" class="alert alert-info mt-4">
+                        There is no loan issues available for the moment.
+                    </p>
+
                 </div>
             </div>
         </t>

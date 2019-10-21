@@ -146,7 +146,7 @@ class InvestorPortal(CustomerPortal):
             values
         )
 
-    @http.route('/struct', type='http', auth="public", website=True)
+    @http.route('/structure', type='http', auth="public", website=True)
     def structures(self, page=1, sortby=None, **kw):
         values = self._prepare_portal_layout_values()
         struct_mgr = request.env['res.partner']
@@ -165,7 +165,7 @@ class InvestorPortal(CustomerPortal):
         struct_count = struct_mgr.sudo().search_count(self.structure_domain)
         # make pager
         pager = portal_pager(
-            url='/struct',
+            url='/structure',
             url_args={
                 'sortby': sortby
             },
@@ -185,7 +185,7 @@ class InvestorPortal(CustomerPortal):
             'structures': structures.sudo(),
             'page_name': 'structures',
             'pager': pager,
-            'default_url': '/struct',
+            'default_url': '/structure',
             'searchbar_sortings': searchbar_sortings,
             'sortby': sortby,
         })

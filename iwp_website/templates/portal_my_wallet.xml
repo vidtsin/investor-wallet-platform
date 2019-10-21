@@ -31,6 +31,10 @@
         inherit_id="portal.portal_breadcrumbs"
         priority="20">
         <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'structures'"
+                t-attf-class="breadcrumb-item active">
+                Structures
+            </li>
             <li t-if="page_name == 'share_wallet'"
                 t-attf-class="breadcrumb-item active">
                 Share Wallet
@@ -238,10 +242,8 @@
     <template id="structures" name="Structures">
         <t t-call="portal.portal_layout">
             <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar"/>
 
-            <t t-call="portal.portal_searchbar">
-                <t t-set="title">Structures</t>
-            </t>
             <t t-if="not structures">
                 <p>There are currently no structures.</p>
             </t>
@@ -250,7 +252,8 @@
                     <tr class="active">
                         <th>Name</th>
                         <th class="text-right">Structure Type</th>
-                        <th class="text-right">Subscribe</th>
+                        <th class="text-right">Subscribe to share</th>
+                        <th class="text-right">Subscribe to loan</th>
                     </tr>
                 </thead>
                 <t t-foreach="structures" t-as="struct">
@@ -260,9 +263,15 @@
                             <span t-field="struct.structure_type"/>
                         </td>
                         <td class="text-right">
-                            <a t-attf-href="/struct/{{ struct.id }}/subscription"
+                            <a t-attf-href="/struct/{{ struct.id }}/share/subscription"
                                 class="btn btn-primary btn-sm">
-                                Subscribe
+                                Shares
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            <a t-attf-href="/struct/{{ struct.id }}/loan/subscription"
+                                class="btn btn-primary btn-sm">
+                                Loans
                             </a>
                         </td>
                     </tr>
@@ -275,11 +284,8 @@
         name="Structures"
         inherit_id="portal.portal_my_home">
         <xpath expr="//div[hasclass('o_portal_my_home')]" position="after">
-            <a href="/struct" class="btn btn-primary mt-2">
+            <a href="/structure" class="btn btn-primary mt-2">
                 Subscribe to a structure
-            </a>
-            <a href="/loan/subscription" class="btn btn-primary mt-2">
-                Subscribe to loan issue
             </a>
         </xpath>
     </template>
