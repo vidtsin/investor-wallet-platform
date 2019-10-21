@@ -120,9 +120,10 @@ class InvestorPortal(CustomerPortal):
         searchbar_sortings = {
             'date': {'label': _('Date'), 'order': 'date desc'},
             'state': {'label': _('State'), 'order': 'state'},
+            'struct': {'label': _('Structure Name'), 'order': 'date desc'},
         }
         if not sortby:
-            sortby = 'date'
+            sortby = 'struct'
         sort_order = searchbar_sortings[sortby]['order']
 
         # Loan issue lines owned by an investor
@@ -130,8 +131,8 @@ class InvestorPortal(CustomerPortal):
             self.loan_issue_line_domain, order=sort_order,
         )
 
-        # TODO: Sort by structure, when structure will be added to loan
-        #       issue. And use similar data structure to shares.
+        if sortby == 'name':
+            issuelines = issuelines.sorted(key=lambda r: r.structure.name)
 
         values.update({
             'finproducts': issuelines,
