@@ -9,4 +9,7 @@
 
     <menuitem name="Structures" id="menu_wallet_platform_structure" parent="easy_my_coop.menu_easy_my_coop_config" action="action_wallet_platform_structure_form" sequence="401"/>
     <menuitem name="Structure Projects" id="menu_wallet_platform_structure_project" parent="easy_my_coop.menu_easy_my_coop_config" action="action_wallet_platform_structure_project" sequence="405"/>
+    <menuitem id="partner_industry_config" action="base.res_partner_industry_action" parent="easy_my_coop.menu_easy_my_coop_config" sequence="410" />
+    <menuitem name="Activity Area" id="menu_wallet_platform_activity_area" action="action_wallet_platform_activity_area" parent="easy_my_coop.menu_easy_my_coop_config" sequence="420"/>
+
 </odoo>
