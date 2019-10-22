@@ -23,6 +23,8 @@
 	    		</xpath>
 	    		<field name="short_name" position="before">
 	    			<field name="structure"/>
+	    			<field name="solidary"/>
+	    			<field name="banking"/>
 	    			<field name="lst_price" widget='monetary' options="{'currency_field': 'currency_id', 'field_digits': True}" attrs="{'readonly': [('product_variant_count', '&gt;', 1)]}"/>
 	    			<field name="book_value" widget='monetary' options="{'currency_field': 'currency_id', 'field_digits': True}"/>
 	    		</field>

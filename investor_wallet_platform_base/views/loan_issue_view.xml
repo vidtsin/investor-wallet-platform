@@ -12,6 +12,41 @@
             <xpath expr="//field[@name='name']" position="after">
                 <field name="structure"/>
             </xpath>
+            <field name="interest_payment" position="after">
+            	<field name="write_date"/>
+            </field>
+            <page name="lines" position="after">
+            	<page string="Issue Information" name="issue_information" attrs="{'invisible':[('is_share','=',False)]}">
+    				<group>
+    					<group>
+    						<field name="solidary"/>
+	    					<field name="banking"/>
+		    				<field name="tax_benefit"/>
+		    				<field name="tax_policy"/>
+		    				<field name="access_terms"/>
+		    				<field name="fees"/>
+	    					<field name="dividen_policy"/>
+	    				</group>
+	    				<group>
+    						<field name="book_value" widget='monetary' options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+	    					<field name="interest_payment_date"/>
+		    				<field name="info_note_url"/>
+		    				<field name="voting_rights"/>
+		    				<field name="advantages"/>
+		    				<field name="oversubscription_policy"/>
+	    				</group>
+    				</group>
+    			</page>
+    			<page string="Risk" name="risk">
+    				<field name="access_terms"/>
+    				<field name="purpose_of_issue"/>
+    				<field name="price_fluctuation_risk"/>
+    				<field name="capital_risk"/>
+    				<field name="other_product_risk"/>
+    				<field name="transfer_allowed"/>
+    				<field name="refund_policy"/>
+    			</page>
+            </page>
         </field>
     </record>
 </odoo>
