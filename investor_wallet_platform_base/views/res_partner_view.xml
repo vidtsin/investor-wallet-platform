@@ -42,6 +42,9 @@
 	    	<xpath expr="//page[@name='share']/field[@name='share_ids']/tree/field[@name='effective_date']" position="before">
 	    		<field name="structure"/>
 	    	</xpath>
+            <xpath expr="//page[@name='share']/field[@name='share_ids']/tree/field[@name='effective_date']" position="after">
+                <field name="creation_mode"/>
+            </xpath>
 	    	<page name="share" position="attributes">
 	    		<attribute name="attrs">{'invisible': [('is_platform_structure', '=', True)]}</attribute>
 	    	</page>

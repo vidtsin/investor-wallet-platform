@@ -59,6 +59,16 @@ class ShareLine(models.Model):
                                 string="Platform Structure",
                                 domain=[('is_platform_structure', '=', True)],
                                 default=default_structure)
+    creation_mode = fields.Selection(
+        [('auto', 'Automatic'), ('manual', 'Manual')],
+        string="Creation mode",
+        default='auto',
+        readonly=True,
+        help=(
+            "'auto' means created by system, 'manual' means manually "
+            "created by a user."
+        ),
+    )
 
 
 class SubscriptionRegister(models.Model):
