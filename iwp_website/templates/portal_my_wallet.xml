@@ -137,10 +137,49 @@
             <t t-call="portal.portal_searchbar">
                 <t t-set="title">Share History</t>
             </t>
-            <t t-if="not subregs">
+
+            <t t-if="subreqs" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Structure Name</th>
+                        <th class="text-right">Date</th>
+                        <th class="text-right">Share Name</th>
+                        <th class="text-right">Quantity</th>
+                        <th class="text-right">Amount</th>
+                        <th class="text-right">Total Amount</th>
+                        <th class="text-right">State</th>
+                    </tr>
+                </thead>
+                <t t-foreach="subreqs" t-as="subreq">
+                    <tr>
+                        <td><t t-esc="subreq.structure.name"/></td>
+                        <td class="text-right">
+                            <span t-field="subreq.date"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="subreq.share_product_id.name"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="subreq.ordered_parts"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="subreq.share_unit_price"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="subreq.subscription_amount"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="subreq.state"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+
+
+            <t t-if="not registers">
                 <p>You currently owns no shares.</p>
             </t>
-            <t t-if="subregs" t-call="portal.portal_table">
+            <t t-if="registers" t-call="portal.portal_table">
                 <thead>
                     <tr class="active">
                         <th>Structure Name</th>
@@ -152,29 +191,29 @@
                         <th class="text-right">Total Amount</th>
                     </tr>
                 </thead>
-                <t t-foreach="subregs" t-as="subreg">
+                <t t-foreach="registers" t-as="register">
                     <tr>
-                        <td><t t-esc="subreg.structure.name"/></td>
+                        <td><t t-esc="register.structure.name"/></td>
                         <td class="text-right">
-                            <span t-field="subreg.date"/>
+                            <span t-field="register.date"/>
                         </td>
                         <td class="text-right">
-                            <span t-field="subreg.type"/>
-                            <span t-if="subreg.type == 'transfer'">
-                                to <t t-esc="subreg.partner_id_to.name"/>
+                            <span t-field="register.type"/>
+                            <span t-if="register.type == 'transfer'">
+                                to <t t-esc="register.partner_id_to.name"/>
                             </span>
                         </td>
                         <td class="text-right">
-                            <span t-field="subreg.share_product_id.name"/>
+                            <span t-field="register.share_product_id.name"/>
                         </td>
                         <td class="text-right">
-                            <span t-field="subreg.quantity"/>
+                            <span t-field="register.quantity"/>
                         </td>
                         <td class="text-right">
-                            <span t-field="subreg.share_unit_price"/>
+                            <span t-field="register.share_unit_price"/>
                         </td>
                         <td class="text-right">
-                            <span t-field="subreg.total_amount_line"/>
+                            <span t-field="register.total_amount_line"/>
                         </td>
                     </tr>
                 </t>

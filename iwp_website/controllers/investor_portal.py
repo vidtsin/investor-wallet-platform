@@ -74,7 +74,8 @@ class InvestorPortal(CustomerPortal):
     @http.route('/my/history/share', type='http', auth="public", website=True)
     def my_history_share(self, sortby=None, **kw):
         values = self._prepare_portal_layout_values()
-        sub_reg_mgr = request.env['subscription.register']
+        register_mgr = request.env['subscription.register']
+        sub_req_mgr = request.env['subscription.request']
 
         searchbar_sortings = {
             'name': {'label': _('Structure Name'), 'order': ''},
@@ -87,19 +88,23 @@ class InvestorPortal(CustomerPortal):
             sortby = 'date'
         sort_order = 'date desc'  # Always order by date
 
-        # search the count to display, according to the pager data
-        subregs = sub_reg_mgr.sudo().search(
+        registers = register_mgr.sudo().search(
             self.subscription_register_domain,
             order=sort_order,
         )
+        subreqs = sub_req_mgr.sudo().search(
+            self.subscription_request_domain,
+            order='date desc',
+        )
 
         if sortby == 'name':
-            subregs = subregs.sorted(
+            registers = registers.sorted(
                 key=lambda r: r.structure.name if r.structure.name else ''
             )
 
         values.update({
-            'subregs': subregs.sudo(),
+            'registers': registers.sudo(),
+            'subreqs': subreqs.sudo(),
             'page_name': 'share_history',
             'default_url': '/my/history/share',
             'searchbar_sortings': searchbar_sortings,
@@ -253,9 +258,9 @@ class InvestorPortal(CustomerPortal):
             loanline_mgr.sudo().search_count(self.loan_issue_line_domain)
         )
         # Subscription request
-        sub_reg_mgr = request.env['subscription.register']
+        register_mgr = request.env['subscription.register']
         subreg_count = (
-            sub_reg_mgr.sudo()
+            register_mgr.sudo()
             .search_count(self.subscription_register_domain)
         )
         values.update({
@@ -295,5 +300,16 @@ class InvestorPortal(CustomerPortal):
             '|',
             ('partner_id', 'child_of', [partner.commercial_partner_id.id]),
             ('partner_id_to', 'child_of', [partner.commercial_partner_id.id]),
+        ]
+        return domain
+
+    @property
+    def subscription_request_domain(self):
+        partner = request.env.user.partner_id
+        domain = [
+            ('partner_id', 'child_of', [partner.commercial_partner_id.id]),
+            '|',
+            ('state', '=', 'draft'),
+            ('state', '=', 'block'),
         ]
         return domain
