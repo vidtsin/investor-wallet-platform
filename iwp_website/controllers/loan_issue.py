@@ -42,6 +42,8 @@ class WebsiteLoanIssue(http.Controller):
             .sudo()
             .browse(loan_id)
         )
+        if loan:
+            self.reqargs['loan'] = loan
         self.init_form_data(qcontext=post)
         self.set_form_defaults(qcontext=post)
         self.normalize_form_data(qcontext=post)
@@ -115,7 +117,15 @@ class WebsiteLoanIssue(http.Controller):
         """
         if qcontext is None:
             qcontext = request.params
-        # Set number according to the default share
+        # Find default loan
+        if 'loan' in self.reqargs:
+            default_loan = self.reqargs['loan']
+        else:
+            default_loans = qcontext['loan_issues'].filtered('default_issue')
+            default_loan = default_loans[0] if default_loans else None
+        if 'loan_issue' not in qcontext or force:
+            if default_loan:
+                qcontext['loan_issue'] = default_loan.id
         if 'quantity' not in qcontext or force:
             qcontext['quantity'] = 0
         if 'total_amount' not in qcontext or force:

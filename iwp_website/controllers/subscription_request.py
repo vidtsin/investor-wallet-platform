@@ -43,11 +43,12 @@ class WebsiteSubscriptionRequest(http.Controller):
             .sudo()
             .browse(finprod_id)
         )
+        if finprod:
+            self.reqargs['finprod'] = finprod
         self.init_form_data(qcontext=post)
         self.set_form_defaults(qcontext=post)
         self.normalize_form_data(qcontext=post)
         if post and request.httprequest.method == 'POST':
-            self.reqargs['finprod'] = finprod
             self.validate_form(qcontext=post)
             if 'error' not in post:
                 values = self.prepare_subscription_request_value(struct,
