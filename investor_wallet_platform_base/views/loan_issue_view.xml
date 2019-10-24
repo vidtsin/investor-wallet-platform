@@ -16,7 +16,7 @@
             	<field name="write_date"/>
             </field>
             <page name="lines" position="after">
-            	<page string="Issue Information" name="issue_information" attrs="{'invisible':[('is_share','=',False)]}">
+            	<page string="Issue Information" name="issue_information" attrs="{'invisible':[('is_loan','=',False)]}">
     				<group>
     					<group>
     						<field name="solidary"/>
@@ -25,13 +25,11 @@
 		    				<field name="tax_policy"/>
 		    				<field name="access_terms"/>
 		    				<field name="fees"/>
-	    					<field name="dividen_policy"/>
 	    				</group>
 	    				<group>
     						<field name="book_value" widget='monetary' options="{'currency_field': 'currency_id', 'field_digits': True}"/>
 	    					<field name="interest_payment_date"/>
 		    				<field name="info_note_url"/>
-		    				<field name="voting_rights"/>
 		    				<field name="advantages"/>
 		    				<field name="oversubscription_policy"/>
 	    				</group>

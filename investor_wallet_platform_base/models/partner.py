@@ -32,6 +32,12 @@ class ResPartner(models.Model):
     operation_sequence = fields.Many2one('ir.sequence',
                                          string="Operation Register",
                                          readonly=True)
+    share_type_ids = fields.One2many("product.template",
+                                     "structure",
+                                     string="Share type")
+    loan_issue_ids = fields.One2many("loan.issue",
+                                     "structure",
+                                     string="Loan issues")
     structure_project_ids = fields.One2many('structure.project',
                                             'structure',
                                             string="Structure projects")
