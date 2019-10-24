@@ -12,7 +12,7 @@ class LoanIssue(models.Model):
     def default_structure(self):
         return self.env.user.structure
 
-    structure = fields.Many2one(omodel_name="res.partner",
+    structure = fields.Many2one(comodel_name="res.partner",
                                 string="Platform Structure",
                                 domain=[("is_plateform_structure", "=", True)],
                                 default=default_structure,
