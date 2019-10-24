@@ -18,7 +18,8 @@ class WebsiteSubscriptionRequest(http.Controller):
     @http.route(
         [
             '/struct/<int:struct_id>/subscription',
-            '/struct/<int:struct_id>/finprod/<int:finprod_id>/subscription'
+            '/struct/<int:struct_id>/share/subscription',
+            '/struct/<int:struct_id>/share/<int:finprod_id>/subscription'
         ],
         type='http',
         auth='user',
@@ -42,11 +43,12 @@ class WebsiteSubscriptionRequest(http.Controller):
             .sudo()
             .browse(finprod_id)
         )
+        if finprod:
+            self.reqargs['finprod'] = finprod
         self.init_form_data(qcontext=post)
         self.set_form_defaults(qcontext=post)
         self.normalize_form_data(qcontext=post)
         if post and request.httprequest.method == 'POST':
-            self.reqargs['finprod'] = finprod
             self.validate_form(qcontext=post)
             if 'error' not in post:
                 values = self.prepare_subscription_request_value(struct,

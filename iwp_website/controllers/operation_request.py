@@ -30,6 +30,7 @@ class WebsiteOperationRequest(http.Controller):
             raise NotFound
         if not struct.is_plateform_structure:
             raise NotFound
+        post['struct'] = struct
         self.reqargs['struct'] = struct
         # Get findproduct if given
         finprod = (

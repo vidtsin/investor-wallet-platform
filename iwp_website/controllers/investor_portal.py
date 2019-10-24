@@ -111,19 +111,33 @@ class InvestorPortal(CustomerPortal):
         )
 
     @http.route(['/my/wallet/loan'], type='http', auth="user", website=True)
-    def my_wallet_loan(self, **kw):
+    def my_wallet_loan(self, sortby=None, **kw):
         """Wallet of loan owned by the connected user."""
         values = self._prepare_portal_layout_values()
         loanline_mgr = request.env['loan.issue.line']
 
-        # Loan issue lines owned by an investor
-        issuelines = loanline_mgr.sudo().search(self.loan_issue_line_domain)
+        # Order by
+        searchbar_sortings = {
+            'date': {'label': _('Date'), 'order': 'date desc'},
+            'state': {'label': _('State'), 'order': 'state'},
+            'struct': {'label': _('Structure Name'), 'order': 'date desc'},
+        }
+        if not sortby:
+            sortby = 'struct'
+        sort_order = searchbar_sortings[sortby]['order']
 
-        # TODO: Sort by structure, when structure will be added to loan
-        #       issue. And use similar data structure to shares.
+        # Loan issue lines owned by an investor
+        issuelines = loanline_mgr.sudo().search(
+            self.loan_issue_line_domain, order=sort_order,
+        )
+
+        if sortby == 'name':
+            issuelines = issuelines.sorted(key=lambda r: r.structure.name)
 
         values.update({
             'finproducts': issuelines,
+            'searchbar_sortings': searchbar_sortings,
+            'sortby': sortby,
             'page_name': 'loan_wallet',
             'default_url': '/my/wallet/loan',
         })
@@ -132,7 +146,7 @@ class InvestorPortal(CustomerPortal):
             values
         )
 
-    @http.route('/struct', type='http', auth="public", website=True)
+    @http.route('/structure', type='http', auth="public", website=True)
     def structures(self, page=1, sortby=None, **kw):
         values = self._prepare_portal_layout_values()
         struct_mgr = request.env['res.partner']
@@ -151,7 +165,7 @@ class InvestorPortal(CustomerPortal):
         struct_count = struct_mgr.sudo().search_count(self.structure_domain)
         # make pager
         pager = portal_pager(
-            url='/struct',
+            url='/structure',
             url_args={
                 'sortby': sortby
             },
@@ -171,7 +185,7 @@ class InvestorPortal(CustomerPortal):
             'structures': structures.sudo(),
             'page_name': 'structures',
             'pager': pager,
-            'default_url': '/struct',
+            'default_url': '/structure',
             'searchbar_sortings': searchbar_sortings,
             'sortby': sortby,
         })
