@@ -104,6 +104,7 @@
                     <tr class="active">
                         <th>Name</th>
                         <th class="text-right">Date</th>
+                        <th class="text-right">Creation</th>
                         <th class="text-right">Number</th>
                         <th class="text-right">Amount</th>
                         <th class="text-right">Total Amount</th>
@@ -116,6 +117,9 @@
                         </td>
                         <td class="text-right">
                             <span t-field="finprod.effective_date"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="finprod.creation_mode"/>
                         </td>
                         <td class="text-right">
                             <span t-field="finprod.share_number"/>
