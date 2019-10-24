@@ -3,8 +3,7 @@
 
 {
     'name': "Investor Wallet Platform Website",
-    'summary': """
-        Website element for Investor Wallet Platform""",
+    'summary': """Website element for Investor Wallet Platform""",
     'version': '12.0.0.12.0',
     'license': 'AGPL-3',
     'author': "Coop IT Easy SCRLfs",
@@ -16,6 +15,7 @@
     ],
     'data': [
         'templates/assets.xml',
+        'templates/form.xml',
         'templates/auth_signup_investor.xml',
         'templates/portal_my_wallet.xml',
         'templates/investor_portal.xml',
@@ -23,6 +23,7 @@
         'templates/subscription_request.xml',
         'templates/operation_request.xml',
         'templates/loan_issue.xml',
+        'templates/manual_share_form.xml',
     ],
     'demo': [
         'demo/users.xml',

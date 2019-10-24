@@ -7,6 +7,8 @@
         <xpath expr="." position="inside">
             <link rel="stylesheet"
                 href="/iwp_website/static/src/less/design.less"/>
-            </xpath>
+            <script type="text/javascript"
+                src="/iwp_website/static/src/js/form.js"/>
+        </xpath>
     </template>
 </odoo>
