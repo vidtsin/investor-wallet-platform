@@ -26,8 +26,8 @@ class ProductTemplate(models.Model):
     book_value = fields.Html(string="Book value",
                              translate=True)
     dividend_date = fields.Date(string="Dividend payment date")
-    dividen_policy = fields.Html(string="Dividend policy",
-                                 translate=True)
+    dividend_policy = fields.Html(string="Dividend policy",
+                                  translate=True)
     voting_rights = fields.Html(string="Voting rights",
                                 help="Voting rights of the associate",
                                 translate=True)

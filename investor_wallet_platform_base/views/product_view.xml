@@ -61,7 +61,7 @@
 			    				<field name="tax_benefit"/>
 			    				<field name="tax_policy"/>
 			    				<field name="fees"/>
-		    					<field name="dividen_policy"/>
+		    					<field name="dividend_policy"/>
 		    				</group>
 		    				<group>
 			    				<field name="info_note_url"/>
