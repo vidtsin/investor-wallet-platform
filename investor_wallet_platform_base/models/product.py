@@ -16,15 +16,16 @@ class ProductTemplate(models.Model):
     state = fields.Selection([('open', 'Open'),
                               ('close', 'Close'),
                               ('waiting', 'Waiting list')],
-                             string="State")
+                             string="State",
+                             default='close')
     solidary = fields.Selection([('yes', 'Yes'),
                                  ('no', 'No')],
                                 string="Solidary product")
     banking = fields.Selection([('yes', 'Yes'),
                                 ('no', 'No')],
                                string="Banking product")
-    book_value = fields.Html(string="Book value",
-                             translate=True)
+    book_value = fields.Float(string="Book value",
+                              translate=True)
     dividend_date = fields.Date(string="Dividend payment date")
     dividend_policy = fields.Html(string="Dividend policy",
                                   translate=True)
@@ -55,7 +56,7 @@ class ProductTemplate(models.Model):
                                           translate=True)
     purpose_of_issue = fields.Html(string="Purpose of the issue",
                                    translate=True)
-    price_fluctuation_risk = fields.Char(string="Price fluctuation price")
+    price_fluctuation_risk = fields.Char(string="Price fluctuation risk")
     capital_risk = fields.Html(string="Risk on equity",
                                translate=True)
     other_product_risk = fields.Html(string="Other risk on product",

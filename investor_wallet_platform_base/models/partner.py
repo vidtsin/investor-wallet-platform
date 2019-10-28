@@ -10,7 +10,6 @@ class ResPartner(models.Model):
         return self.env.user.structure
 
 
-    # todo rename to is_platform_structure
     is_plateform_structure = fields.Boolean(string="Is a Platform Structure")
     is_platform_structure = fields.Boolean(related='is_plateform_structure',
                                            string="Is a Platform Structure",
@@ -77,8 +76,6 @@ class ResPartner(models.Model):
                          translate=True)
     solvency_ratio = fields.Html(string="Solvency ratio",
                                  translate=True)
-    cash_risk = fields.Html(string="Cash risk",
-                            translate=True)
     last_result = fields.Html(string="Last result",
                               translate=True)
     last_dividend = fields.Html(string="Last 3 years dividend",

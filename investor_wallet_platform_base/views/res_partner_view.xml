@@ -23,6 +23,7 @@
 	    		<field name="cover_image" widget='image' options='{"preview_image": "image_medium"}'/>
 	    		<field name="is_platform_structure"/>
 	    		<field name="structure_type" attrs="{'invisible': [('is_platform_structure', '=', False)]}"/>
+                <field name="write_date" readonly="True"/>
 	    	</field>
 
 	    	<field name="cooperator_register_number" position="replace"/>
@@ -113,7 +114,6 @@
 							<field name="equity"/>
 							<field name="liquidity_ratio"/>
 							<field name="solvency_ratio"/>
-							<field name="cash_risk"/>
 							<field name="susbidies_risk"/>
 						</group>
 					</group>
