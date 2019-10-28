@@ -33,7 +33,7 @@ class WebsiteSubscriptionRequest(http.Controller):
         struct = request.env['res.partner'].sudo().browse(struct_id)
         if not struct:
             raise NotFound
-        if not struct.is_plateform_structure:
+        if not struct.is_platform_structure:
             raise NotFound
         post['struct'] = struct
         self.reqargs['struct'] = struct

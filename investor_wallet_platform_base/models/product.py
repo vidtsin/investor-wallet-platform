@@ -11,7 +11,7 @@ class ProductTemplate(models.Model):
 
     structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
-                                domain=[('is_plateform_structure', '=', True)],
+                                domain=[('is_platform_structure', '=', True)],
                                 default=default_structure)
     state = fields.Selection([('open', 'Open'),
                               ('close', 'Close'),

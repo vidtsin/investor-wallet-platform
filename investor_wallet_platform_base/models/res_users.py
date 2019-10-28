@@ -7,4 +7,4 @@ class ResUsers(models.Model):
 
     structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
-                                domain=[('is_plateform_structure', '=', True)])
+                                domain=[('is_platform_structure', '=', True)])
