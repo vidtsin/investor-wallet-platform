@@ -37,6 +37,7 @@
     'demo': [
         'demo/structure.xml',
         'demo/coop.xml',
+        'demo/users.xml',
     ],
     'installable': True,
     'application': True,
