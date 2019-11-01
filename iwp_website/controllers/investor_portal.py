@@ -76,6 +76,15 @@ class InvestorPortal(CustomerPortal):
             item['lines'] = item['lines'].sudo()
             data.append(item)
 
+        # Manual share suppression
+        values["back_from_delete_share"] = False
+        if "delete_share_success" in request.session:
+            values["back_from_delete_share"] = True
+            values["delete_share_success"] = request.session[
+                "delete_share_success"
+            ]
+            del request.session["delete_share_success"]
+
         values.update({
             'finproducts': data,
             'page_name': 'share_wallet',

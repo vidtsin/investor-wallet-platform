@@ -38,6 +38,26 @@ class ManualShareAction(http.Controller):
         qcontext = {"form": form, "struct": struct}
         return request.render("iwp_website.new_manual_share_form", qcontext)
 
+    @http.route(
+        "/share/<int:share_line_id>/delete",
+        type="http",
+        auth="user",
+        website=True,
+    )
+    def delete_manual_share(self, share_line_id=None, **params):
+        """Route for form to delete a manual share"""
+        shareline = (
+            request.env["share.line"].sudo().browse(share_line_id).exists()
+        )
+        if not shareline or shareline.creation_mode != "manual":
+            raise NotFound
+        user = request.env.user
+        request.session["delete_share_success"] = False
+        if shareline.partner_id == user.partner_id:
+            shareline.unlink()
+            request.session["delete_share_success"] = True
+        return request.redirect(params.get("nexturl"))
+
     def manual_share_form(self, data=None, context=None):
         """Return form object"""
         form = ManualShareForm(

@@ -54,6 +54,28 @@
         <t t-call="portal.portal_layout">
             <t t-set="breadcrumbs_searchbar" t-value="False"/>
 
+            <p t-if="back_from_delete_share and delete_share_success"
+                class="alert alert-success alert-dismissible mt-4">
+                The share has been deleted.
+                <button type="button"
+                    class="close"
+                    data-dismiss="alert"
+                    aria-label="Close">
+                    <i class="fa fa-times"/>
+                </button>
+            </p>
+            <p t-if="back_from_delete_share and not delete_share_success"
+                class="alert alert-danger alert-dismissible mt-4"
+                role="alert">
+                Error when deleting a share.
+                <button type="button"
+                    class="close"
+                    data-dismiss="alert"
+                    aria-label="Close">
+                    <i class="fa fa-times"/>
+                </button>
+            </p>
+
             <t t-if="not finproducts">
                 <p>
                     There are currently no finacial product for your account.
@@ -108,6 +130,7 @@
                         <th class="text-right">Number</th>
                         <th class="text-right">Amount</th>
                         <th class="text-right">Total Amount</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <t t-foreach="elem['lines']" t-as="finprod">
@@ -130,7 +153,49 @@
                         <td class="text-right">
                             <span t-field="finprod.total_amount_line"/>
                         </td>
+                        <td class="text-right">
+                            <button type="button"
+                                class="btn btn-default"
+                                t-if="finprod.creation_mode == 'manual'"
+                                data-toggle="modal"
+                                t-attf-data-target="#confirm-delete-{{finprod.id}}">
+                                <i class="fa fa-trash"/>
+                            </button>
+                        </td>
                     </tr>
+                    <div class="modal fade"
+                        t-if="finprod.creation_mode == 'manual'"
+                        t-attf-id="confirm-delete-{{finprod.id}}"
+                        tabindex="-1"
+                        role="dialog"
+                        aria-labelledby="ConfirmDeleteShare"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Delete share</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <i class="fa fa-times"/>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Do you realy want to delete this share from the system?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button"
+                                        class="btn btn-secondary"
+                                        data-dismiss="modal">
+                                        Cancel
+                                    </button>
+                                    <a t-attf-href="/share/{{finprod.id}}/delete?nexturl=/my/wallet/share"
+                                        class="btn btn-primary">
+                                        Confirm suppression
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </t>
             </t>
         </div>
