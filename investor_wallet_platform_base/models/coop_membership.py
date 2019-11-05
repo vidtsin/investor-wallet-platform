@@ -38,7 +38,7 @@ class CoopMembership(models.Model):
                                  string="Cooperator")
     structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
-                                domain=[('is_plateform_structure', '=', True)])
+                                domain=[('is_platform_structure', '=', True)])
     cooperator_number = fields.Integer(string='Cooperator Number')
     member = fields.Boolean(string='Effective cooperator',
                             help="Check this box if this cooperator"

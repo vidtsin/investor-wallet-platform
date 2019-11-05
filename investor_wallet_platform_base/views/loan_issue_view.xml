@@ -16,7 +16,7 @@
             	<field name="write_date"/>
             </field>
             <page name="lines" position="after">
-            	<page string="Issue Information" name="issue_information" attrs="{'invisible':[('is_loan','=',False)]}">
+            	<page string="Issue Information" name="issue_information">
     				<group>
     					<group>
     						<field name="solidary"/>
@@ -36,13 +36,19 @@
     				</group>
     			</page>
     			<page string="Risk" name="risk">
-    				<field name="access_terms"/>
-    				<field name="purpose_of_issue"/>
-    				<field name="price_fluctuation_risk"/>
-    				<field name="capital_risk"/>
-    				<field name="other_product_risk"/>
-    				<field name="transfer_allowed"/>
-    				<field name="refund_policy"/>
+    				<group>
+    					<group>
+		    				<field name="access_terms"/>
+		    				<field name="purpose_of_issue"/>
+		    				<field name="price_fluctuation_risk"/>
+		    				<field name="capital_risk"/>
+    					</group>
+    					<group>
+		    				<field name="other_product_risk"/>
+		    				<field name="transfer_allowed"/>
+		    				<field name="refund_policy"/>
+    					</group>
+    				</group>
     			</page>
             </page>
         </field>

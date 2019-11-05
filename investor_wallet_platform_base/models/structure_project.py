@@ -16,5 +16,5 @@ class StructureProject(models.Model):
     structure = fields.Many2one(
                         comodel_name='res.partner',
                         string="Structure",
-                        domain=[("is_plateform_structure", "=", True)],
+                        domain=[("is_platform_structure", "=", True)],
                         default=default_structure)

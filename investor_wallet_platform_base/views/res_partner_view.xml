@@ -6,10 +6,10 @@
 		<field name="inherit_id" ref="easy_my_coop_loan.view_partner_form_loan_issue"/>
 		<field name="arch" type="xml">
 			<page name="loan_issue_lines" position="before">
-				<field name="is_plateform_structure" attrs="{'invisible': 1}"/>
+				<field name="is_platform_structure" attrs="{'invisible': 1}"/>
 			</page>
 			<page name="loan_issue_lines" position="attributes">
-	    		<attribute name="attrs">{'invisible': [('is_plateform_structure', '=', True)]}</attribute>
+	    		<attribute name="attrs">{'invisible': [('is_platform_structure', '=', True)]}</attribute>
 	    	</page>
 		</field>
 	</record>
@@ -21,8 +21,9 @@
 	    <field name="arch" type="xml">
 	    	<field name="representative" position="before">
 	    		<field name="cover_image" widget='image' options='{"preview_image": "image_medium"}'/>
-	    		<field name="is_plateform_structure"/>
-	    		<field name="structure_type" attrs="{'invisible': [('is_plateform_structure', '=', False)]}"/>
+	    		<field name="is_platform_structure"/>
+	    		<field name="structure_type" attrs="{'invisible': [('is_platform_structure', '=', False)]}"/>
+                <field name="write_date" readonly="True"/>
 	    	</field>
 
 	    	<field name="cooperator_register_number" position="replace"/>
@@ -32,7 +33,7 @@
 			<field name="effective_date" position="replace"/>
 			<field name="industry_id" position="replace"/>
 			<field name="company_register_number" position="after">
-				<field name="subscription_maximum_amount" attrs="{'invisible':[('is_plateform_structure','=',False)]}"/>
+				<field name="subscription_maximum_amount" attrs="{'invisible':[('is_platform_structure','=',False)]}"/>
 			</field>
 			<field name="company_register_number" position="attributes">
 				<attribute name="readonly">False</attribute>
@@ -41,7 +42,7 @@
 	    		<field name="structure"/>
 	    	</xpath>
 	    	<page name="share" position="attributes">
-	    		<attribute name="attrs">{'invisible': [('is_plateform_structure', '=', True)]}</attribute>
+	    		<attribute name="attrs">{'invisible': [('is_platform_structure', '=', True)]}</attribute>
 	    	</page>
 	    	<!-- page contact don't have name so we get it through another attribute -->
 	    	<page autofocus="autofocus" position="attributes">
@@ -54,7 +55,7 @@
 	    		<attribute name="invisible">True</attribute>
 	    	</page>
 	    	<page name="share_subscription" position="after">
-	    		<page name="coop_membership" string="Cooperator membership" attrs="{'invisible': [('is_plateform_structure', '=', True)]}">
+	    		<page name="coop_membership" string="Cooperator membership" attrs="{'invisible': [('is_platform_structure', '=', True)]}">
 	    			<field name="coop_membership">
 	    				<tree>
 		    				<field name="structure"/>
@@ -66,7 +67,7 @@
 		    			</tree>
 	    			</field>
 	    		</page>
-	    		<page name="structure_info" string="Structure info" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
+	    		<page name="structure_info" string="Structure info" attrs="{'invisible': [('is_platform_structure', '=', False)]}">
 	    			<group>
 	    				<group>
 	    					<field name="display_on_website"/>
@@ -85,7 +86,7 @@
 						</group>
 	    			</group>
 	    		</page>
-	    		<page name="structure_gov_info" string="Governance info" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
+	    		<page name="structure_gov_info" string="Governance info" attrs="{'invisible': [('is_platform_structure', '=', False)]}">
 	    			<group>
 						<group>
 							<field name="statute_link"/>
@@ -97,7 +98,7 @@
 						</group>
 					</group>
 	    		</page>
-	    		<page name="structure_fin_info" string="Financial info" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
+	    		<page name="structure_fin_info" string="Financial info" attrs="{'invisible': [('is_platform_structure', '=', False)]}">
 					<group>
 						<group>
     						<field name="break_even_date"/>
@@ -113,12 +114,11 @@
 							<field name="equity"/>
 							<field name="liquidity_ratio"/>
 							<field name="solvency_ratio"/>
-							<field name="cash_risk"/>
 							<field name="susbidies_risk"/>
 						</group>
 					</group>
 	    		</page>
-	    		<page name="structure_projects" string="Structure projects" attrs="{'invisible': [('is_plateform_structure', '=', False)]}">
+	    		<page name="structure_projects" string="Structure projects" attrs="{'invisible': [('is_platform_structure', '=', False)]}">
    					<field name="structure_project_ids">
    						<tree>
    							<field name="name"/>
@@ -126,7 +126,7 @@
    						</tree>
    					</field>
 	    		</page>
-	    		<page  name="structure_config" string="Structure configuration" attrs="{'invisible': [('is_plateform_structure', '=', False)]}" groups="investor_wallet_platform_base.group_platform_manager">
+	    		<page  name="structure_config" string="Structure configuration" attrs="{'invisible': [('is_platform_structure', '=', False)]}" groups="investor_wallet_platform_base.group_platform_manager">
 	    			<button name="generate_sequence" type="object" string ="Initialize" attrs="{'invisible': [('initialized', '=', True)]}" groups="investor_wallet_platform_base.group_platform_manager"/>
 	    			<field name="initialized" invisible="True"/>
 	    				<group>
@@ -147,8 +147,8 @@
 	    <field name="res_model">res.partner</field>
 	    <field name="view_type">form</field>
 	    <field name="view_mode">kanban,tree,form</field>
-	    <field name="domain">[('is_plateform_structure','=',True)]</field>
-	    <field name="context">{'default_is_plateform_structure':1}</field>
+	    <field name="domain">[('is_platform_structure','=',True)]</field>
+	    <field name="context">{'default_is_platform_structure':1}</field>
 	    <field name="help" type="html">
 	      <p class="oe_view_nocontent_create">
 	        Click to add a contact in your address book.

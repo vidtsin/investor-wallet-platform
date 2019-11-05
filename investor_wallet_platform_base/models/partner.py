@@ -9,9 +9,10 @@ class ResPartner(models.Model):
     def default_structure(self):
         return self.env.user.structure
 
-
-    # todo rename to is_platform_structure
     is_plateform_structure = fields.Boolean(string="Is a Platform Structure")
+    is_platform_structure = fields.Boolean(related='is_plateform_structure',
+                                           string="Is a Platform Structure",
+                                           store=True)
     coop_membership = fields.One2many('coop.membership',
                                       'partner_id',
                                       string="Cooperative membership")
@@ -21,7 +22,7 @@ class ResPartner(models.Model):
                                       string="Structure type")
     structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
-                                domain=[('is_plateform_structure', '=', True)],
+                                domain=[('is_platform_structure', '=', True)],
                                 default=default_structure)
     account_journal = fields.Many2one('account.journal',
                                       string="Account Journal",
@@ -74,8 +75,6 @@ class ResPartner(models.Model):
                          translate=True)
     solvency_ratio = fields.Html(string="Solvency ratio",
                                  translate=True)
-    cash_risk = fields.Html(string="Cash risk",
-                            translate=True)
     last_result = fields.Html(string="Last result",
                               translate=True)
     last_dividend = fields.Html(string="Last 3 years dividend",

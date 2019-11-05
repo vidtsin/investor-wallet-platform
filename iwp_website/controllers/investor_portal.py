@@ -303,7 +303,7 @@ class InvestorPortal(CustomerPortal):
     @property
     def structure_domain(self):
         domain = [
-            ('is_plateform_structure', '=', True)
+            ('is_platform_structure', '=', True)
         ]
         return domain
 

@@ -10,7 +10,7 @@ class SubscriptionRequest(models.Model):
 
     structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
-                                domain=[('is_plateform_structure', '=', True)],
+                                domain=[('is_platform_structure', '=', True)],
                                 default=default_structure)
 
     def get_journal(self):
@@ -57,7 +57,7 @@ class ShareLine(models.Model):
 
     structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
-                                domain=[('is_plateform_structure', '=', True)],
+                                domain=[('is_platform_structure', '=', True)],
                                 default=default_structure)
 
 
@@ -69,7 +69,7 @@ class SubscriptionRegister(models.Model):
 
     structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
-                                domain=[('is_plateform_structure', '=', True)],
+                                domain=[('is_platform_structure', '=', True)],
                                 default=default_structure)
 
 
@@ -81,5 +81,5 @@ class OperationRequest(models.Model):
 
     structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
-                                domain=[('is_plateform_structure', '=', True)],
+                                domain=[('is_platform_structure', '=', True)],
                                 default=default_structure)

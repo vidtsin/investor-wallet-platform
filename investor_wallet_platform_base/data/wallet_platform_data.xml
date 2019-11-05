@@ -65,7 +65,7 @@
 	        <field name="name">Partners</field>
 	        <field name="model_id" ref="base.model_res_partner"/>
 	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user')),(4, ref('easy_my_coop.group_easy_my_coop_manager')),(4, ref('easy_my_coop.group_easy_my_coop_super_manager'))]"/>
-	        <field name="domain_force">['|',('is_plateform_structure','=',False),('structure','=',user.structure.id)]</field>
+	        <field name="domain_force">['|',('is_platform_structure','=',False),('structure','=',user.structure.id)]</field>
 	    </record>
 	    <!-- make sure this is necessary -->
 	    <record id="res_partner_structure_rule" model="ir.rule">
