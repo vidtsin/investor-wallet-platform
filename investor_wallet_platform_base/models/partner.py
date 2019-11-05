@@ -9,10 +9,7 @@ class ResPartner(models.Model):
     def default_structure(self):
         return self.env.user.structure
 
-    is_plateform_structure = fields.Boolean(string="Is a Platform Structure")
-    is_platform_structure = fields.Boolean(related='is_plateform_structure',
-                                           string="Is a Platform Structure",
-                                           store=True)
+    is_platform_structure = fields.Boolean(string="Is a Platform Structure")
     coop_membership = fields.One2many('coop.membership',
                                       'partner_id',
                                       string="Cooperative membership")
