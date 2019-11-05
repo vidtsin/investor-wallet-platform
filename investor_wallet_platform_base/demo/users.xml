@@ -6,13 +6,14 @@
 <odoo>
 
     <record id="res_partner_user_iwp_demo" model="res.partner">
-        <field name="name">User IWP</field>
+        <field name="name">User Coop IT Easy IWP</field>
         <field name="customer" eval="False"/>
         <field name="is_company" eval="False"/>
         <field name="email">user.iwp@coop.coop</field>
         <field name="street">Rue de la colocation, 23</field>
         <field name="city">Bruxelles</field>
         <field name="zip">1030</field>
+        <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
         <field name="country_id" ref="base.be"/>
     </record>
 

@@ -24,20 +24,6 @@
         <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
     </record>
 
-    <record id="coop_membership_share_line_1_demo" model="coop.membership">
-        <field name="partner_id" ref="easy_my_coop.res_partner_cooperator_1_demo"/>
-        <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
-        <field name="cooperator_number">1</field>
-        <field name="member" eval="True"/>
-    </record>
-
-    <record id="coop_membership_share_line_2_demo" model="coop.membership">
-        <field name="partner_id" ref="easy_my_coop.res_partner_cooperator_2_demo"/>
-        <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
-        <field name="cooperator_number">2</field>
-        <field name="member" eval="True"/>
-    </record>
-
     <record id="product_template_share_type_coopcity_1_demo" model="product.template">
         <field name="name">Part A - Sympathizer</field>
         <field name="short_name">Part A</field>
@@ -52,8 +38,41 @@
         <field name="structure" ref="res_partner_structure_coopcity_demo"/>
     </record>
 
-    <record id="product_product_share_type_coopcity_1_demo" model="product.product">
-        <field name="product_tmpl_id" ref="product_template_share_type_coopcity_1_demo"/>
+    <record id="share_line_coopcity_demo" model="share.line">
+        <field name="share_product_id" model="product.template" eval="obj(ref('product_template_share_type_coopcity_1_demo')).product_variant_id.id"/>
+        <field name="share_number">4</field>
+        <field name="share_unit_price">50</field>
+        <field name="partner_id" ref="easy_my_coop.res_partner_cooperator_3_demo"/>
+        <field name="effective_date" eval="datetime.now() - timedelta(days=120)"/>
+        <field name="structure" ref="res_partner_structure_coopcity_demo"/>
     </record>
 
+    <record id="coop_membership_share_line_1_demo" model="coop.membership">
+        <field name="partner_id" ref="easy_my_coop.res_partner_cooperator_1_demo"/>
+        <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
+        <field name="cooperator_number">1</field>
+        <field name="member" eval="True"/>
+    </record>
+
+    <record id="coop_membership_share_line_2_demo" model="coop.membership">
+        <field name="partner_id" ref="easy_my_coop.res_partner_cooperator_2_demo"/>
+        <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
+        <field name="cooperator_number">2</field>
+        <field name="member" eval="True"/>
+    </record>
+
+    <record id="subscription_request_2_demo" model="subscription.request">
+        <field name="name">Michel Brel</field>
+        <field name="structure" ref="res_partner_structure_coopcity_demo"/>
+        <field name="email">michel@demo.coop</field>
+        <field name="address">stgillisstraat</field>
+        <field name="zip_code">1111</field>
+        <field name="city">Brussels</field>
+        <field name="country_id" ref="base.be"/>
+        <field name="date" eval="datetime.now() - timedelta(days=12)"/>
+        <field name="source">manual</field>
+        <field name="ordered_parts">1</field>
+        <field name="share_product_id" model="product.template" eval="obj(ref('product_template_share_type_coopcity_1_demo')).product_variant_id.id"/>
+        <field name="lang">en_US</field>
+    </record>
 </odoo>

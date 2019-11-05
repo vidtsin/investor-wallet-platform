@@ -15,3 +15,5 @@ class IWPBaseCase(EMCBaseCase):
         self.uid = self.ref(
             "investor_wallet_platform_base.res_users_manager_iwp_demo"
         )
+
+# todo: test loan issue flow
