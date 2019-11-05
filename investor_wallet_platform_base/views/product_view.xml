@@ -43,8 +43,8 @@
 		    			</group>
 		    			<group name="terms" string="Terms">
 		    				<field name="access_terms"/>
-		    				<field name="purpose_of_issue"/>
 		    				<field name="price_fluctuation_risk"/>
+		    				<field name="purpose_of_issue"/>
 		    				<field name="capital_risk"/>
 		    				<field name="other_product_risk"/>
 		    				<field name="transfer_allowed"/>
