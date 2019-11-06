@@ -325,8 +325,6 @@ class InvestorPortal(CustomerPortal):
         partner = request.env.user.partner_id
         domain = [
             ('partner_id', 'child_of', [partner.commercial_partner_id.id]),
-            '|',
-            ('state', '=', 'draft'),
-            ('state', '=', 'block'),
+            ('state', '!=', 'paid'),
         ]
         return domain
