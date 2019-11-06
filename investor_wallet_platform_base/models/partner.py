@@ -36,7 +36,7 @@ class ResPartner(models.Model):
     loan_issue_ids = fields.One2many("loan.issue",
                                      "structure",
                                      string="Loan issues")
-    projects = fields.Html(string="Project",
+    projects = fields.Html(string="Projects",
                            translate=True)
     display_on_website = fields.Boolean(string="display on website")
     # Move to another module ?
