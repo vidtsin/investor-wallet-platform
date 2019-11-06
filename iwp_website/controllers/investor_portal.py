@@ -136,7 +136,7 @@ class InvestorPortal(CustomerPortal):
             self.loan_issue_line_domain, order=sort_order,
         )
 
-        if sortby == 'name':
+        if sortby == 'struct':
             issuelines = issuelines.sorted(key=lambda r: r.structure.name)
 
         values.update({
