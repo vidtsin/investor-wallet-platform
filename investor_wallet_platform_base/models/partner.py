@@ -91,14 +91,13 @@ class ResPartner(models.Model):
                                   translate=True)
     statute_link = fields.Char(string="Statute link")
     annual_report_link = fields.Char(string="Last annual report link")
-    area_one2many = fields.One2many(compute='_return_area_one2many',
-                                    comodel_name='activity.area',
-                                    string="activity areas")
+    area_char_list = fields.Char(compute='_return_area_char_list',
+                                 string="activity areas")
 
     @api.multi
-    def _return_area_one2many(self):
+    def _return_area_char_list(self):
         for partner in self:
-            partner.area_one2many = partner.activity_areas
+            partner.area_char_list = partner.activity_areas.mapped('name')
 
     @api.multi
     def generate_sequence(self):
