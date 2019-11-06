@@ -142,6 +142,8 @@
                 <t t-set="title">Share History</t>
             </t>
 
+            <h3 t-if="subreqs" class="mt-4">Subscription Request</h3>
+
             <t t-if="subreqs" t-call="portal.portal_table">
                 <thead>
                     <tr class="active">
@@ -179,6 +181,7 @@
                 </t>
             </t>
 
+            <h3 class="mt-4">Share History</h3>
 
             <t t-if="not registers">
                 <p>You currently owns no shares.</p>
