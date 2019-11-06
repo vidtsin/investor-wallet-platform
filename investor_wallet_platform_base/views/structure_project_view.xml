@@ -8,7 +8,6 @@
 	                <group>
 		                <field name="name"/>
 	          			<field name="structure"/>
-	          			<field name="url" widget="url"/>
           			</group>
           			<group>
 	          			<field name="description"/>
