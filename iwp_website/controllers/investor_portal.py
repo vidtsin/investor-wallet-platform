@@ -101,6 +101,9 @@ class InvestorPortal(CustomerPortal):
             registers = registers.sorted(
                 key=lambda r: r.structure.name if r.structure.name else ''
             )
+            subreqs = subreqs.sorted(
+                key=lambda r: r.structure.name if r.structure.name else ''
+            )
 
         values.update({
             'registers': registers.sudo(),
