@@ -36,9 +36,8 @@ class ResPartner(models.Model):
     loan_issue_ids = fields.One2many("loan.issue",
                                      "structure",
                                      string="Loan issues")
-    structure_project_ids = fields.One2many('structure.project',
-                                            'structure',
-                                            string="Structure projects")
+    projects = fields.Html(string="Project",
+                           translate=True)
     display_on_website = fields.Boolean(string="display on website")
     # Move to another module ?
     is_renewable_energy = fields.Boolean(string="is renewable energy")

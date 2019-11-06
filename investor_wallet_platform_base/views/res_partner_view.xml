@@ -75,6 +75,7 @@
 	    					<field name="industry_id" attrs="{'invisible': [('is_company', '=', False)]}" options="{'no_create': True}"/>
 	    					<field name="description"/>
 	    					<field name="about_us"/>
+                            <field name="projects"/>
 	    				</group>
 						<group>
 	    					<field name="activity_areas" widget="many2many_tags" options="{'no_create': True}"/>
@@ -117,14 +118,6 @@
 							<field name="susbidies_risk"/>
 						</group>
 					</group>
-	    		</page>
-	    		<page name="structure_projects" string="Structure projects" attrs="{'invisible': [('is_platform_structure', '=', False)]}">
-   					<field name="structure_project_ids">
-   						<tree>
-   							<field name="name"/>
-   							<field name="structure"/>
-   						</tree>
-   					</field>
 	    		</page>
 	    		<page  name="structure_config" string="Structure configuration" attrs="{'invisible': [('is_platform_structure', '=', False)]}" groups="investor_wallet_platform_base.group_platform_manager">
 	    			<button name="generate_sequence" type="object" string ="Initialize" attrs="{'invisible': [('initialized', '=', True)]}" groups="investor_wallet_platform_base.group_platform_manager"/>
