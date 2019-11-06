@@ -134,7 +134,18 @@
 	    	</page>
 	    </field>
 	</record>
-	
+
+	<record id="view_partner_filter" model="ir.ui.view">
+		<field name="name">res.partner.search</field>
+		<field name="model">res.partner</field>
+		<field name="inherit_id" ref="base.view_res_partner_filter"/>
+		<field name="arch" type="xml">
+			<filter name="salesperson" position="before">
+				<filter name="Creation Date" context="{'group_by': 'create_date'}"/>
+			</filter>
+		</field>
+	</record>
+
 	<record id="action_wallet_platform_structure_form" model="ir.actions.act_window">
 	    <field name="name">Platform structures</field>
 	    <field name="type">ir.actions.act_window</field>

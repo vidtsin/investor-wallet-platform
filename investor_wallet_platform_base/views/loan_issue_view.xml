@@ -52,4 +52,17 @@
             </page>
         </field>
     </record>
+
+    <record id="view_loan_issue_filter" model="ir.ui.view">
+        <field name="name">Loans Issue Search</field>
+        <field name="model">loan.issue</field>
+        <field name="inherit_id" ref="easy_my_coop_loan.view_loan_issue_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <group expand="0" name="group_by" string="Group By">
+                    <filter name="structure" string="Structure" context="{'group_by' : 'structure'}" />
+                </group>
+            </xpath>
+        </field>
+    </record>
 </odoo>
