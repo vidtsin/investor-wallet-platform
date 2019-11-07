@@ -101,6 +101,9 @@ class InvestorPortal(CustomerPortal):
             registers = registers.sorted(
                 key=lambda r: r.structure.name if r.structure.name else ''
             )
+            subreqs = subreqs.sorted(
+                key=lambda r: r.structure.name if r.structure.name else ''
+            )
 
         values.update({
             'registers': registers.sudo(),
@@ -322,8 +325,6 @@ class InvestorPortal(CustomerPortal):
         partner = request.env.user.partner_id
         domain = [
             ('partner_id', 'child_of', [partner.commercial_partner_id.id]),
-            '|',
-            ('state', '=', 'draft'),
-            ('state', '=', 'block'),
+            ('state', '!=', 'paid'),
         ]
         return domain
