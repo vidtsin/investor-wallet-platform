@@ -15,7 +15,8 @@ class ResPartner(models.Model):
                                       string="Cooperative membership")
     initialized = fields.Boolean(string="Sequence initialized")
     structure_type = fields.Selection([('cooperative', 'Cooperative'),
-                                       ('association', 'Association')],
+                                       ('association', 'Association'),
+                                       ('limited_company', 'Limited Company')],
                                       string="Structure type")
     structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
