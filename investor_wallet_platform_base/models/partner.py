@@ -94,6 +94,9 @@ class ResPartner(models.Model):
     area_char_list = fields.Char(compute='_return_area_char_list',
                                  string="activity areas")
     industry_char_list = fields.Char(compute='_return_industry_char_list')
+    total_outstanding_amount = fields.Monetary(
+        string="Total Outsanding Amount"
+    )
 
     @api.multi
     def _return_area_char_list(self):

@@ -3,7 +3,7 @@
 #   Robin Keunen <robin@coopiteasy.be>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class LoanIssue(models.Model):
@@ -51,6 +51,14 @@ class LoanIssue(models.Model):
     refund_policy = fields.Html(string="Refund policy",
                                 translate=True)
     info_note_url = fields.Char(string="Information note url")
+
+    @api.model
+    def count_published_loans(self):
+        """Count number of loan issue that investor can invest in"""
+        return self.search_count([
+            ("state", "=", "ongoing"),
+            ("display_on_website", "=", True),
+        ])
 
 
 class LoanIssueLine(models.Model):

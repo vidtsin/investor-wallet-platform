@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import api, fields, models
 
 from odoo.addons import decimal_precision as dp
 
@@ -67,3 +67,13 @@ class ProductTemplate(models.Model):
     refund_policy = fields.Html(string="Refund policy",
                                 translate=True)
     info_note_url = fields.Char(string="Information note url")
+
+    @api.model
+    def count_published_shares(self):
+        """Count number of share type that investor can invest in"""
+        return self.search_count([
+            ("is_share", "=", True),
+            ("sale_ok", "=", True),
+            ("purchase_ok", "=", True),
+            ("display_on_website", "=", True),
+        ])

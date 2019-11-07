@@ -32,6 +32,7 @@
         'views/activity_area_view.xml',
         'views/loan_issue_view.xml',
         'views/menus.xml',
+        'views/res_company_view.xml',
         ],
     'demo': [
         'demo/structure.xml',
