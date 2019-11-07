@@ -38,7 +38,6 @@
     			<page string="Risk" name="risk">
     				<group>
     					<group>
-		    				<field name="access_terms"/>
 		    				<field name="purpose_of_issue"/>
 		    				<field name="price_fluctuation_risk"/>
 		    				<field name="capital_risk"/>

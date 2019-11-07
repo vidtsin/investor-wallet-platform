@@ -29,7 +29,6 @@
         'views/invoice_view.xml',
         'views/res_users_view.xml',
         'views/product_view.xml',
-        'views/structure_project_view.xml',
         'views/activity_area_view.xml',
         'views/loan_issue_view.xml',
         'views/menus.xml',

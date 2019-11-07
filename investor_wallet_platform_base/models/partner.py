@@ -9,16 +9,14 @@ class ResPartner(models.Model):
     def default_structure(self):
         return self.env.user.structure
 
-    is_plateform_structure = fields.Boolean(string="Is a Platform Structure")
-    is_platform_structure = fields.Boolean(related='is_plateform_structure',
-                                           string="Is a Platform Structure",
-                                           store=True)
+    is_platform_structure = fields.Boolean(string="Is a Platform Structure")
     coop_membership = fields.One2many('coop.membership',
                                       'partner_id',
                                       string="Cooperative membership")
     initialized = fields.Boolean(string="Sequence initialized")
     structure_type = fields.Selection([('cooperative', 'Cooperative'),
-                                       ('association', 'Association')],
+                                       ('association', 'Association'),
+                                       ('limited_company', 'Limited Company')],
                                       string="Structure type")
     structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
@@ -39,9 +37,8 @@ class ResPartner(models.Model):
     loan_issue_ids = fields.One2many("loan.issue",
                                      "structure",
                                      string="Loan issues")
-    structure_project_ids = fields.One2many('structure.project',
-                                            'structure',
-                                            string="Structure projects")
+    projects = fields.Html(string="Projects",
+                           translate=True)
     display_on_website = fields.Boolean(string="display on website")
     # Move to another module ?
     is_renewable_energy = fields.Boolean(string="is renewable energy")
@@ -94,6 +91,13 @@ class ResPartner(models.Model):
                                   translate=True)
     statute_link = fields.Char(string="Statute link")
     annual_report_link = fields.Char(string="Last annual report link")
+    area_char_list = fields.Char(compute='_return_area_char_list',
+                                 string="activity areas")
+
+    @api.multi
+    def _return_area_char_list(self):
+        for partner in self:
+            partner.area_char_list = partner.activity_areas.mapped('name')
 
     @api.multi
     def generate_sequence(self):

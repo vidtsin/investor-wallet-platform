@@ -56,7 +56,8 @@ class ProductTemplate(models.Model):
                                           translate=True)
     purpose_of_issue = fields.Html(string="Purpose of the issue",
                                    translate=True)
-    price_fluctuation_risk = fields.Char(string="Price fluctuation risk")
+    price_fluctuation_risk = fields.Char(string="Price fluctuation risk",
+                                         translate=True)
     capital_risk = fields.Html(string="Risk on equity",
                                translate=True)
     other_product_risk = fields.Html(string="Other risk on product",
