@@ -241,7 +241,6 @@
                     <tr class="active">
                         <th>Structure</th>
                         <th class="text-right">Loan issue</th>
-                        <th class="text-right">Reference</th>
                         <th class="text-right">Subscription Date</th>
                         <th class="text-right">Quantity</th>
                         <th class="text-right">Facial Value</th>
@@ -255,7 +254,6 @@
                         <td class="text-right">
                             <t t-esc="lil.loan_issue_id.name"/>
                         </td>
-                        <td class="text-right"><t t-esc="lil.name"/></td>
                         <td class="text-right">
                             <span t-field="lil.date"/>
                         </td>
