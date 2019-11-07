@@ -1,18 +1,49 @@
 <odoo>
-	<!-- <data noupdate="1"> -->
+	<!-- <data noupdate="1"> fixme -->
 	<data>
-<!--		<record id="subscription_request_structure_rule" model="ir.rule">-->
-<!--	        <field name="name">Subscription Request</field>-->
-<!--	        <field name="model_id" ref="easy_my_coop.model_subscription_request"/>-->
-<!--	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user')),(4, ref('easy_my_coop.group_easy_my_coop_manager')),(4, ref('easy_my_coop.group_easy_my_coop_super_manager'))]"/>-->
-<!--	        <field name="domain_force">[('structure','=',user.structure.id)]</field>-->
-<!--	    </record>-->
-<!--	    <record id="subscription_request_structure_rule_wallet_platform" model="ir.rule">-->
-<!--	        <field name="name">Subscription Request</field>-->
-<!--	        <field name="model_id" ref="easy_my_coop.model_subscription_request"/>-->
-<!--	        <field name="groups" eval="[(4, ref('group_platform_wallet_user'))]"/>-->
-<!--	        <field name="domain_force">[(1,'=',1)]</field>-->
-<!--	    </record>-->
+
+	    <record id="res_partner_only_iwp_creates_structure_rule" model="ir.rule">
+	        <field name="name">IWP manager only can create structure</field>
+	        <field name="model_id" ref="base.model_res_partner"/>
+	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user')),
+	        							(4, ref('easy_my_coop.group_easy_my_coop_manager')),
+	        							(4, ref('group_platform_wallet_user'))]"/>
+			<field name="perm_create" eval="1"/>
+			<field name="perm_write" eval="1"/>
+			<field name="perm_unlink" eval="1"/>
+	        <field name="domain_force">[('is_platform_structure','=', False)]</field>
+	    </record>
+
+	    <record id="res_partner_iwp_user_modify_its_structure" model="ir.rule">
+	        <field name="name">IWP user can only can modify its structure</field>
+	        <field name="model_id" ref="base.model_res_partner"/>
+	        <field name="groups" eval="[(4, ref('group_platform_wallet_user'))]"/>
+			<field name="perm_write" eval="1"/>
+	        <field name="domain_force">[('is_platform_structure','=', True), ('id', '=', user.partner_id.structure.id)]</field>
+	    </record>
+
+	    <record id="res_partner_iwp_manager_gets_full_access_to_partners" model="ir.rule">
+	        <field name="name">IWP manager can manage partners</field>
+	        <field name="model_id" ref="base.model_res_partner"/>
+	        <field name="groups" eval="[(4, ref('group_platform_wallet_manager'))]"/>
+			<field name="perm_read" eval="1"/>
+			<field name="perm_create" eval="1"/>
+			<field name="perm_write" eval="1"/>
+			<field name="perm_unlink" eval="1"/>
+			<field name="domain_force">[(1, '=', 1)]</field>
+	    </record>
+
+	    <record id="subscription_request_own_structure_rule" model="ir.rule">
+	        <field name="name">IWP user can read only its structure request</field>
+	        <field name="model_id" ref="easy_my_coop.model_subscription_request"/>
+	        <field name="groups" eval="[(4, ref('group_platform_wallet_user'))]"/>
+			<field name="perm_read" eval="1"/>
+			<field name="perm_write" eval="1"/>
+			<field name="perm_create" eval="1"/>
+			<field name="perm_unlink" eval="1"/>
+	        <field name="domain_force">[('structure','=',user.partner_id.structure.id)]</field>
+	    </record>
+
 <!--	    <record id="capital_release_request_structure_rule" model="ir.rule">-->
 <!--	        <field name="name">Capital Release Request</field>-->
 <!--	        <field name="model_id" ref="account.model_account_invoice"/>-->
