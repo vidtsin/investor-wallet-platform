@@ -42,6 +42,9 @@ class ResPartner(models.Model):
     loan_issue_ids = fields.One2many("loan.issue",
                                      "structure",
                                      string="Loan issues")
+    mail_template_ids = fields.One2many("mail.template",
+                                        "structure",
+                                        string="Mail templates")
     projects = fields.Html(string="Projects",
                            translate=True)
     display_on_website = fields.Boolean(string="display on website")
@@ -162,3 +165,14 @@ class ResPartner(models.Model):
     def get_membership(self, structure):
         return self.coop_membership.filtered(
                         lambda record: record.structure == structure)
+
+    @api.multi
+    def generate_mail_templates(self):
+        self.ensure_one()
+        mail_template_obj = self.env['mail.template']
+        mail_templates = mail_template_obj.search([('easy_my_coop', '=', True),
+                                                   ('structure', '=', False)
+                                                   ])
+        if not self.mail_template_ids:
+            for mail_template in mail_templates:
+                print(mail_template.name)
