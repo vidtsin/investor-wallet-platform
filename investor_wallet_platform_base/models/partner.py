@@ -93,11 +93,17 @@ class ResPartner(models.Model):
     annual_report_link = fields.Char(string="Last annual report link")
     area_char_list = fields.Char(compute='_return_area_char_list',
                                  string="activity areas")
+    industry_char_list = fields.Char(compute='_return_industry_char_list')
 
     @api.multi
     def _return_area_char_list(self):
         for partner in self:
             partner.area_char_list = partner.activity_areas.mapped('name')
+
+    @api.multi
+    def _return_industry_char_list(self):
+        for partner in self:
+            partner.industry_char_list = partner.industry_id.mapped('full_name') # noqa
 
     @api.multi
     def generate_sequence(self):
