@@ -33,7 +33,7 @@
 			<field name="perm_write" eval="1"/>
 			<field name="perm_unlink" eval="0"/>
 			<!-- todo use user.structure-->
-			<field name="domain_force">[('id','=',user.partner_id.structure.id)]</field>
+			<field name="domain_force">[('id','=',user.structure.id)]</field>
 	    </record>
 
 	    <record id="res_partner_iwp_manager_access_to_all_partners" model="ir.rule">
@@ -57,7 +57,7 @@
 			<field name="perm_write" eval="1"/>
 			<field name="perm_create" eval="1"/>
 			<field name="perm_unlink" eval="1"/>
-	        <field name="domain_force">[('structure','=',user.partner_id.structure.id)]</field>
+	        <field name="domain_force">[('structure','=',user.structure.id)]</field>
 	    </record>
 
 	    <record id="subscription_request_iwp_manager_all_subscription_request_rule" model="ir.rule">
@@ -81,7 +81,7 @@
 			<field name="perm_write" eval="1"/>
 			<field name="perm_create" eval="1"/>
 			<field name="perm_unlink" eval="1"/>
-	        <field name="domain_force">[('structure','=',user.partner_id.structure.id)]</field>
+	        <field name="domain_force">[('structure','=',user.structure.id)]</field>
 	    </record>
 
 	    <record id="operation_request_iwp_manager_all_operation_request_rule" model="ir.rule">
@@ -105,7 +105,7 @@
 			<field name="perm_write" eval="1"/>
 			<field name="perm_create" eval="1"/>
 			<field name="perm_unlink" eval="1"/>
-	        <field name="domain_force">[('structure','=',user.partner_id.structure.id)]</field>
+	        <field name="domain_force">[('structure','=',user.structure.id)]</field>
 	    </record>
 
 	    <record id="share_line_iwp_manager_all_share_line_rule" model="ir.rule">
@@ -129,7 +129,7 @@
 			<field name="perm_write" eval="1"/>
 			<field name="perm_create" eval="1"/>
 			<field name="perm_unlink" eval="1"/>
-	        <field name="domain_force">[('structure','=',user.partner_id.structure.id)]</field>
+	        <field name="domain_force">[('structure','=',user.structure.id)]</field>
 	    </record>
 
 	    <record id="subscription_register_iwp_manager_all_subscription_register_rule" model="ir.rule">
@@ -164,7 +164,7 @@
 			<field name="perm_write" eval="1"/>
 			<field name="perm_create" eval="1"/>
 			<field name="perm_unlink" eval="1"/>
-	        <field name="domain_force">[('is_share', '=', True),('structure','=',user.partner_id.structure.id)]</field>
+	        <field name="domain_force">[('is_share', '=', True),('structure','=',user.structure.id)]</field>
 	    </record>
 
 	    <record id="product_template_iwp_user_access_not_share_product_template_rule" model="ir.rule">
@@ -208,7 +208,7 @@
 			<field name="perm_write" eval="1"/>
 			<field name="perm_create" eval="1"/>
 			<field name="perm_unlink" eval="1"/>
-	        <field name="domain_force">[('is_share', '=', True),('structure','=',user.partner_id.structure.id)]</field>
+	        <field name="domain_force">[('is_share', '=', True),('structure','=',user.structure.id)]</field>
 	    </record>
 
 	    <record id="product_product_iwp_user_access_not_share_product_product_rule" model="ir.rule">
@@ -243,7 +243,7 @@
 			<field name="perm_write" eval="1"/>
 			<field name="perm_create" eval="1"/>
 			<field name="perm_unlink" eval="1"/>
-	        <field name="domain_force">[('structure','=',user.partner_id.structure.id)]</field>
+	        <field name="domain_force">[('structure','=',user.structure.id)]</field>
 	    </record>
 
 	    <record id="account_invoice_iwp_manager_all_account_invoice_rule" model="ir.rule">
@@ -267,7 +267,7 @@
 			<field name="perm_write" eval="1"/>
 			<field name="perm_create" eval="1"/>
 			<field name="perm_unlink" eval="1"/>
-	        <field name="domain_force">[('structure','=',user.partner_id.structure.id)]</field>
+	        <field name="domain_force">[('structure','=',user.structure.id)]</field>
 	    </record>
 
 	    <record id="loan_issue_iwp_manager_all_loan_issue_rule" model="ir.rule">
@@ -291,7 +291,7 @@
 			<field name="perm_write" eval="1"/>
 			<field name="perm_create" eval="1"/>
 			<field name="perm_unlink" eval="1"/>
-	        <field name="domain_force">[('structure','=',user.partner_id.structure.id)]</field>
+	        <field name="domain_force">[('structure','=',user.structure.id)]</field>
 	    </record>
 
 	    <record id="loan_issue_line_iwp_manager_all_loan_issue_line_rule" model="ir.rule">

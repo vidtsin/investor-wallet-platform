@@ -56,7 +56,7 @@ class IWPSubscriptionCase(IWPBaseCase):
         )
 
         self.as_emc_user()
-        self.env.user.partner_id.structure = structure
+        self.env.user.structure = structure
         request = self.env["subscription.request"].create(
             {
                 "structure": structure.id,
