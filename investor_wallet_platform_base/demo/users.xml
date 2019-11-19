@@ -22,6 +22,7 @@
         <field name="login">user-iwp</field>
         <field name="password">demo</field>
         <field name="groups_id" eval="[(4, ref('investor_wallet_platform_base.group_platform_wallet_user'))]"/>
+        <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
     </record>
 
     <record id="res_partner_manager_iwp_demo" model="res.partner">
@@ -42,4 +43,19 @@
         <field name="groups_id" eval="[(4, ref('investor_wallet_platform_base.group_platform_wallet_manager'))]"/>
     </record>
 
+    <record id="easy_my_coop.res_partner_user_emc_demo" model="res.partner">
+        <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
+    </record>
+
+    <record id="easy_my_coop.res_users_user_emc_demo" model="res.users">
+        <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
+    </record>
+
+    <record id="easy_my_coop.res_partner_manager_emc_demo" model="res.partner">
+        <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
+    </record>
+
+    <record id="easy_my_coop.res_users_manager_emc_demo" model="res.users">
+        <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
+    </record>
 </odoo>
