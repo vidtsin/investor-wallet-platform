@@ -503,3 +503,60 @@ class IWPIRulesCase(IWPBaseCase):
         template.write({"name": "write passes"})
         with self.assertRaises(AccessError):
             template.unlink()
+
+    def test_iwp_user_access_to_partners(self):
+        self.as_iwp_user()
+        partner = self.env["res.users"].browse(self.uid).partner_id
+        partner.structure = self.coopiteasy
+
+        vals = {
+            "name": "create passes",
+            "is_platform_structure": False,
+        }
+        partner = self.env['res.partner'].create(vals)
+        _ = partner.name
+        partner.write({"name": "write passes"})
+        with self.assertRaises(AccessError):
+            partner.unlink()
+
+        vals = {
+            "name": "create fails",
+            "is_platform_structure": True,
+        }
+        with self.assertRaises(AccessError):
+            self.env['res.partner'].create(vals)
+        
+        coopiteasy = self.env['res.partner'].browse(self.coopiteasy.id)
+        _ = coopiteasy.name
+        coopiteasy.write({"name": "write passes"})
+        with self.assertRaises(AccessError):
+            coopiteasy.unlink()       
+            
+        coopcity = self.env['res.partner'].browse(self.coopcity.id)
+        with self.assertRaises(AccessError):
+            coopcity.write({"name": "write fails"})
+        with self.assertRaises(AccessError):
+            coopcity.unlink()
+
+    def test_iwp_manager_access_to_all_res_partner(self):
+        self.as_iwp_manager()
+        partner = self.env["res.users"].browse(self.uid).partner_id
+        partner.structure = False
+
+        vals = {
+            "name": "create passes",
+            "is_platform_structure": False,
+        }
+        partner = self.env['res.partner'].create(vals)
+        _ = partner.name
+        partner.write({"name": "write passes"})
+        partner.unlink()
+
+        vals = {
+            "name": "create passes",
+            "is_platform_structure": True,
+        }
+        partner = self.env['res.partner'].create(vals)
+        _ = partner.name
+        partner.write({"name": "write passes"})
+        partner.unlink()
