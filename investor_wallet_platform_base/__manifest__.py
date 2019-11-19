@@ -34,6 +34,7 @@
         'views/loan_issue_view.xml',
         'views/menus.xml',
         'views/res_company_view.xml',
+        'views/ir_mail_server_view.xml'
         ],
     'demo': [
         'demo/account.xml',

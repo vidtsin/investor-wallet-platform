@@ -103,6 +103,8 @@ class ResPartner(models.Model):
     annual_report_link = fields.Char(string="Last annual report link")
     area_char_list = fields.Char(compute='_return_area_char_list',
                                  string="activity areas")
+    mail_serveur_out = fields.Many2one('ir.mail_server',
+                                       string="Mail serveur out")
     industry_char_list = fields.Char(compute='_return_industry_char_list')
     total_outstanding_amount = fields.Monetary(
         string="Total Outsanding Amount"
@@ -169,10 +171,16 @@ class ResPartner(models.Model):
     @api.multi
     def generate_mail_templates(self):
         self.ensure_one()
-        mail_template_obj = self.env['mail.template']
-        mail_templates = mail_template_obj.search([('easy_my_coop', '=', True),
-                                                   ('structure', '=', False)
-                                                   ])
-        if not self.mail_template_ids:
-            for mail_template in mail_templates:
-                print(mail_template.name)
+        if self.mail_serveur_out:
+            mail_template_obj = self.env['mail.template']
+            mail_templates = mail_template_obj.search([
+                ('easy_my_coop', '=', True),
+                ('structure', '=', False)
+                ])
+            if not self.mail_template_ids:
+                for mail_template in mail_templates:
+                    # clone mail_template for the structure
+                    # mail_template_copy.mail_server_id = self.mail_serveur_out
+                    print(mail_template.name)
+        else:
+            raise UserError(_('You need first to define a mail server out'))

@@ -16,5 +16,6 @@
     <menuitem name="Structures" id="menu_wallet_platform_structure" parent="easy_my_coop.menu_easy_my_coop_config" action="action_wallet_platform_structure_form" groups="group_platform_wallet_manager" sequence="401"/>
     <menuitem name="Industry" id="partner_industry_config" action="base.res_partner_industry_action" parent="easy_my_coop.menu_easy_my_coop_config" groups="group_platform_wallet_manager" sequence="410" />
     <menuitem name="Activity Area" id="menu_wallet_platform_activity_area" action="action_wallet_platform_activity_area" parent="easy_my_coop.menu_easy_my_coop_config" groups="group_platform_wallet_manager" sequence="420"/>
+	<menuitem name="Outgoing Mail Servers" id="menu_mail_servers_iwp" action="base.action_ir_mail_server_list" parent="easy_my_coop.menu_easy_my_coop_config" sequence="450" groups="investor_wallet_platform_base.group_platform_manager"/>
 
 </odoo>
