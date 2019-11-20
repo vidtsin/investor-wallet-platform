@@ -18,7 +18,7 @@
                     t-att-data-amount="sp.list_price"
                     t-att-data-min_qty="sp.minimum_quantity if sp.force_min_qty else 1"
                     t-att-value="sp.id">
-                    <t t-esc="sp.name"/> - <t t-esc="sp.list_price"/>
+                    <t t-esc="sp.name"/> - <t t-esc="sp.list_price" t-options="{'widget': 'monetary', 'display_currency': sp.currency_id}"/>
                 </option>
             </select>
         </div>

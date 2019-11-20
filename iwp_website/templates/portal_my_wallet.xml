@@ -10,17 +10,16 @@
             <t t-if="share_count" t-call="portal.portal_docs_entry">
                 <t t-set="title">Share Wallet</t>
                 <t t-set="url" t-value="'/my/wallet/share'"/>
-                <t t-set="count" t-value="share_count"/>
+                <t t-set="count" t-value="monetary_to_text(share_amount)"/>
             </t>
             <t t-if="share_count" t-call="portal.portal_docs_entry">
                 <t t-set="title">Loan Wallet</t>
                 <t t-set="url" t-value="'/my/wallet/loan'"/>
-                <t t-set="count" t-value="loan_count"/>
+                <t t-set="count" t-value="monetary_to_text(loan_amount)"/>
             </t>
             <t t-if="share_history_count" t-call="portal.portal_docs_entry">
                 <t t-set="title">Share History</t>
                 <t t-set="url" t-value="'/my/history/share'"/>
-                <t t-set="count" t-value="share_history_count"/>
             </t>
         </xpath>
     </template>
@@ -84,7 +83,7 @@
                     </a>
                 </div>
                 <span class="amount float-right">
-                    <t t-esc="elem['total_amount']"/> €
+                    <t t-esc="elem['total_amount']" t-options="{'widget': 'monetary', 'display_currency': currency}"/>
                 </span>
             </div>
             <div class="head_button">

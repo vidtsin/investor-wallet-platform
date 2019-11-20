@@ -17,7 +17,7 @@
                     t-att-selected="'selected' if sp.id == shareproduct else None"
                     t-att-data-amount="sp.list_price"
                     t-att-value="sp.id">
-                    <t t-esc="sp.name"/> - <t t-esc="sp.list_price"/>
+                    <t t-esc="sp.name"/> - <t t-esc="sp.list_price" t-options="{'widget': 'monetary', 'display_currency': sp.currency_id}"/>
                 </option>
             </select>
         </div>

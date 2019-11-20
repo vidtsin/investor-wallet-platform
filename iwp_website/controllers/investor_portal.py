@@ -16,6 +16,21 @@ from odoo.tools.translate import _
 # TODO: Try to not give sudo object to a view.
 
 
+def monetary_to_text(value, currency=None):
+    if currency is None:
+        currency = (
+            request.env['res.company']._company_default_get().currency_id
+        )
+    value_to_html = request.env['ir.qweb.field.monetary'].value_to_html
+    html_val = value_to_html(float(value), {"display_currency": currency})
+    raw_val = (
+        html_val
+        .replace('<span class="oe_currency_value">', "")
+        .replace("</span>", "")
+    )
+    return raw_val
+
+
 class InvestorPortal(CustomerPortal):
 
     @http.route(['/my/wallet/share'], type='http', auth="user", website=True)
@@ -65,6 +80,9 @@ class InvestorPortal(CustomerPortal):
             'finproducts': data,
             'page_name': 'share_wallet',
             'default_url': '/my/wallet/share',
+            'currency': (
+                request.env['res.company']._company_default_get().currency_id
+            ),
         })
         return request.render(
             'iwp_website.portal_my_wallet_share',
@@ -269,10 +287,20 @@ class InvestorPortal(CustomerPortal):
         shareline_count = (
             shareline_mgr.sudo().search_count(self.shareline_domain)
         )
+        share_amount = sum(
+            r.total_amount_line
+            for r in shareline_mgr.sudo().search(self.shareline_domain)
+        )
         # Loans
         loanline_mgr = request.env['loan.issue.line']
+        loan_domain = self.loan_issue_line_domain
+        loan_domain += [("state", "=", "waiting"), ("state", "=", "paid")]
         loanline_count = (
             loanline_mgr.sudo().search_count(self.loan_issue_line_domain)
+        )
+        loanline_amount = sum(
+            r.amount
+            for r in loanline_mgr.sudo().search(self.loan_issue_line_domain)
         )
         # Subscription request
         register_mgr = request.env['subscription.register']
@@ -282,8 +310,11 @@ class InvestorPortal(CustomerPortal):
         )
         values.update({
             'share_count': shareline_count,
+            'share_amount': share_amount,
             'loan_count': loanline_count,
-            'share_history_count': subreg_count
+            'loan_amount': loanline_amount,
+            'share_history_count': subreg_count,
+            'monetary_to_text': monetary_to_text,
         })
         return values
 
