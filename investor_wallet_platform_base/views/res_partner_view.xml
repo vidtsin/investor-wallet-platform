@@ -136,8 +136,19 @@
 	    				</group>
                         <group>
                             <group>
-                               <field name="mail_serveur_out" context="{'default_structure': active_id}" groups="investor_wallet_platform_base.group_platform_manager"/>
-                               <field name="mail_template_ids"/>
+                                <field name="mail_serveur_out" context="{'default_structure': active_id}" groups="investor_wallet_platform_base.group_platform_manager"/>
+                                <field name="mail_template_ids">
+                                	<tree>
+                                        <field name="name"/>
+                                        <field name="model_id"/>
+                                        <field name="subject"/>
+                                        <field name="email_from"/>
+                                        <field name="email_to"/>
+                                        <field name="partner_to"/>
+                                	</tree>
+                               </field>
+                            </group>
+                            <group>
                             </group>
                         </group>
 	    		</page>

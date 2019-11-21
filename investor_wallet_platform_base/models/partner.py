@@ -179,8 +179,10 @@ class ResPartner(models.Model):
                 ])
             if not self.mail_template_ids:
                 for mail_template in mail_templates:
-                    # clone mail_template for the structure
-                    # mail_template_copy.mail_server_id = self.mail_serveur_out
-                    print(mail_template.name)
+                    stuct_mail_template = mail_template.copy(default={
+                            'mail_server_id': self.mail_serveur_out.id,
+                            'structure': self.id
+                        })
+                    stuct_mail_template.name = mail_template.name
         else:
             raise UserError(_('You need first to define a mail server out'))
