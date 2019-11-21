@@ -44,10 +44,6 @@
             Web :&nbsp;<a href="${object.structure.website}">${object.structure.website}</a>
         </div>
     %endif
-
-    <div>
-        <img src=${object.company_id.logo_url}>
-    </div>
 </div>
             ]]></field>
         </record>
@@ -96,10 +92,6 @@
             Web :&nbsp;<a href="${object.structure.website}">${object.structure.website}</a>
         </div>
     %endif
-
-    <div>
-        <img src=${object.company_id.logo_url}>
-    </div>
 </div>
             ]]></field>
         </record>
@@ -150,10 +142,6 @@
             Web :&nbsp;<a href="${object.structure.website}">${object.structure.website}</a>
         </div>
     %endif
-
-    <div>
-        <img src=${object.company_id.logo_url}>
-    </div>
 </div>
             ]]></field>
         </record>
@@ -204,10 +192,6 @@
             Web :&nbsp;<a href="${object.structure.website}">${object.structure.website}</a>
         </div>
     %endif
-
-    <div>
-        <img src=${object.company_id.logo_url}>
-    </div>
 </div>
             ]]></field>
         </record>
@@ -258,10 +242,6 @@
             Web :&nbsp;<a href="${object.structure.website}">${object.structure.website}</a>
         </div>
     %endif
-
-    <div>
-        <img src=${object.company_id.logo_url}>
-    </div>
 </div>
             ]]></field>
         </record>
@@ -312,10 +292,6 @@
             Web :&nbsp;<a href="${object.structure.website}">${object.structure.website}</a>
         </div>
     %endif
-
-    <div>
-        <img src=${object.company_id.logo_url}>
-    </div>
 </div>
             ]]></field>
         </record>
@@ -366,10 +342,6 @@
             Web :&nbsp;<a href="${object.structure.website}">${object.structure.website}</a>
         </div>
     %endif
-
-     <div>
-         <img src=${object.company_id.logo_url}>
-     </div>
 </div>
             ]]></field>
         </record>
@@ -418,10 +390,6 @@
             Web :&nbsp;<a href="${object.structure.website}">${object.structure.website}</a>
         </div>
     %endif
-
-    <div>
-        <img src=${object.company_id.logo_url}>
-    </div>
 </div>
             ]]></field>
         </record>
@@ -470,10 +438,6 @@
             Web :&nbsp;<a href="${object.structure.website}">${object.structure.website}</a>
         </div>
     %endif
-
-    <div>
-        <img src=${object.company_id.logo_url}>
-    </div>
 </div>
             ]]></field>
         </record>
