@@ -24,6 +24,7 @@
         'security/ir.model.access.csv',
         'security/iwp_security.xml',
         'data/sector_area_data.xml',
+        'data/mail_template_data.xml',
         'views/res_partner_view.xml',
         'views/operation_request_view.xml',
         'views/subscription_request_view.xml',
