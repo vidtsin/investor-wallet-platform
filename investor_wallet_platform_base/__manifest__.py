@@ -11,7 +11,7 @@
         "easy_my_coop",
         "easy_my_coop_loan",
     ],
-    "author": "Houssine BAKKALI <houssine@coopiteasy.be>",
+    "author": "Coop IT Easy SCRLfs",
     "category": "Cooperative management",
     "website": "www.coopiteasy.be",
     "license": "AGPL-3",
@@ -33,9 +33,9 @@
         'views/product_view.xml',
         'views/activity_area_view.xml',
         'views/loan_issue_view.xml',
-        'views/menus.xml',
         'views/res_company_view.xml',
-        'views/ir_mail_server_view.xml'
+        'views/ir_mail_server_view.xml',
+        'views/menus.xml',
         ],
     'demo': [
         'demo/account.xml',
