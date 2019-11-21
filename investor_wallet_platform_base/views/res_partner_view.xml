@@ -74,7 +74,8 @@
 	    					<field name="display_on_website"/>
 	    					<field name="employee_number"/>
 	    					<field name="industry_id" attrs="{'invisible': [('is_company', '=', False)]}" options="{'no_create': True}"/>
-	    					<field name="description"/>
+                            <field name="board_representative"/>
+                            <field name="description"/>
 	    					<field name="about_us"/>
                             <field name="projects"/>
 	    				</group>
@@ -82,6 +83,7 @@
 	    					<field name="activity_areas" widget="many2many_tags" options="{'no_create': True}"/>
 	    					<field name="approval"/>
 	    					<field name="is_renewable_energy"/>
+                            <field name="signature_scan"/>
 	    					<field name="renewable_energy" attrs="{'invisible': [('is_renewable_energy', '=', False)]}"/>
 							<field name="purpose_service"/>
 							<field name="sustainable_development"/>

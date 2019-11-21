@@ -45,6 +45,8 @@ class ResPartner(models.Model):
     projects = fields.Html(string="Projects",
                            translate=True)
     display_on_website = fields.Boolean(string="display on website")
+    board_representative = fields.Char(string="Board representative name")
+    signature_scan = fields.Binary(string="Board representative signature")
     # Move to another module ?
     is_renewable_energy = fields.Boolean(string="is renewable energy")
     renewable_energy = fields.Html(string="Renewable energy",
