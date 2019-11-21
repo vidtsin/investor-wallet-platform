@@ -362,6 +362,7 @@
                         <th>Name</th>
                         <th class="text-right">Structure Type</th>
                         <th class="text-right">Subscribe to share</th>
+                        <th class="text-right">Encode already owned shares</th>
                         <th class="text-right">Subscribe to loan</th>
                     </tr>
                 </thead>
@@ -374,13 +375,19 @@
                         <td class="text-right">
                             <a t-attf-href="/struct/{{ struct.id }}/share/subscription"
                                 class="btn btn-primary btn-sm">
-                                Shares
+                                Subscribe to new shares
+                            </a>
+                        </td>
+                        <td class="text-right">
+                            <a t-attf-href="/struct/{{ struct.id }}/share/manual/new"
+                                class="btn btn-primary btn-sm">
+                                Add existing shares
                             </a>
                         </td>
                         <td class="text-right">
                             <a t-attf-href="/struct/{{ struct.id }}/loan/subscription"
                                 class="btn btn-primary btn-sm">
-                                Loans
+                                Subscribe to new loans
                             </a>
                         </td>
                     </tr>
@@ -394,7 +401,7 @@
         inherit_id="portal.portal_my_home">
         <xpath expr="//div[hasclass('o_portal_my_home')]" position="after">
             <a href="/structure" class="btn btn-primary mt-2">
-                Subscribe to a structure
+                Show actions on structures
             </a>
         </xpath>
     </template>

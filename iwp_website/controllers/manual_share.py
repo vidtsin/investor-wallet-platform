@@ -23,7 +23,7 @@ class ManualShareAction(http.Controller):
     def new_manual_share(self, struct_id=None, **params):
         """Route for form to create a new manual share"""
         struct = request.env["res.partner"].sudo().browse(struct_id)
-        if not struct or not struct.is_plateform_structure:
+        if not struct or not struct.is_platform_structure:
             raise NotFound
         form_context = {"struct": struct, "user": request.env.user}
         if request.httprequest.method == "POST":
@@ -73,10 +73,14 @@ class ManualShareAction(http.Controller):
         initial = {}
         struct = context.get("struct")
         if struct:
-            default_share_type = struct.share_type_ids.filtered(
+            default_share_types = struct.share_type_ids.filtered(
                 lambda r: r.display_on_website and r.default_share_product
-            )[0]
-            initial["share_type"] = str(default_share_type.id)
+            )
+            default_share_type = (
+                default_share_types[0] if default_share_types else None
+            )
+            if default_share_type:
+                initial["share_type"] = str(default_share_type.id)
         initial["quantity"] = 1
         initial["date"] = date.today().isoformat()
         return initial
