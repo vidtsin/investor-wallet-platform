@@ -15,7 +15,7 @@ class AccountInvoice(models.Model):
 
     def get_mail_template_certificate(self):
         templ_obj = self.env['mail.template']
-        membership = self.partner_id.get_membership(self, self.structure)
+        membership = self.partner_id.get_membership(self.structure)
         if membership and membership.member:
             return templ_obj.get_email_template_by_key('certificate_inc',
                                                        self.structure)
