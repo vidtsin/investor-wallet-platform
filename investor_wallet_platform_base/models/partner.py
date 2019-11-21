@@ -172,17 +172,16 @@ class ResPartner(models.Model):
     def generate_mail_templates(self):
         self.ensure_one()
         if self.mail_serveur_out:
-            mail_template_obj = self.env['mail.template']
-            mail_templates = mail_template_obj.search([
-                ('easy_my_coop', '=', True),
-                ('structure', '=', False)
-                ])
+            mail_templ = self.env['mail.template']._get_email_template_dict()
+
             if not self.mail_template_ids:
-                for mail_template in mail_templates:
-                    stuct_mail_template = mail_template.copy(default={
+                for mt_key, mt_xml_id in mail_templ.items():
+                    mail_template = self.env.ref(mt_xml_id, False)
+                    struct_mail_template = mail_template.copy(default={
                             'mail_server_id': self.mail_serveur_out.id,
-                            'structure': self.id
+                            'structure': self.id,
+                            'template_key': mt_key
                         })
-                    stuct_mail_template.name = mail_template.name
+                    struct_mail_template.name = mail_template.name
         else:
             raise UserError(_('You need first to define a mail server out'))

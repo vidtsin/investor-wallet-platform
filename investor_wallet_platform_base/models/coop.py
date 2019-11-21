@@ -13,6 +13,20 @@ class SubscriptionRequest(models.Model):
                                 domain=[('is_platform_structure', '=', True)],
                                 default=default_structure)
 
+    def get_mail_template_notif(self, is_company=False):
+        templ_obj = self.env['mail.template']
+        if is_company:
+            return templ_obj.get_email_template_by_key('sub_req_comp_notif',
+                                                       self.structure)
+        else:
+            return templ_obj.get_email_template_by_key('sub_req_notif',
+                                                       self.structure)
+
+    def get_capital_release_mail_template(self):
+        template_obj = self.env['mail.template']
+        return template_obj.get_email_template_by_key('rel_capital',
+                                                      self.structure)
+
     def get_journal(self):
         if self.structure:
             if self.structure.account_journal:
@@ -83,3 +97,11 @@ class OperationRequest(models.Model):
                                 string="Platform Structure",
                                 domain=[('is_platform_structure', '=', True)],
                                 default=default_structure)
+
+    def get_share_trans_mail_template(self):
+        templ_obj = self.env['mail.template']
+        return templ_obj.get_email_template_by_key('certificate_trans')
+
+    def get_share_update_mail_template(self):
+        templ_obj = self.env['mail.template']
+        return templ_obj.get_email_template_by_key('share_update')
