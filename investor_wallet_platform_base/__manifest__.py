@@ -25,6 +25,7 @@
         'security/iwp_security.xml',
         'data/sector_area_data.xml',
         'views/res_partner_view.xml',
+        'views/operation_request_view.xml',
         'views/subscription_request_view.xml',
         'views/invoice_view.xml',
         'views/res_users_view.xml',
