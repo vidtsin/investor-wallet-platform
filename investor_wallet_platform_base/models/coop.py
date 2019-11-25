@@ -105,3 +105,17 @@ class OperationRequest(models.Model):
     def get_share_update_mail_template(self):
         templ_obj = self.env['mail.template']
         return templ_obj.get_email_template_by_key('share_update')
+
+    def send_share_trans_mail(self, sub_register_line):
+        cert_email_template = self.get_share_trans_mail_template()
+        # TODO this will need a dedicated certificate report 
+        cert_email_template.send_mail(sub_register_line.id, False)
+
+    def send_share_update_mail(self, sub_register_line):
+        cert_email_template = self.get_share_update_mail_template()
+        cert_email_template.send_mail(sub_register_line.id, False)
+    
+    def get_subscription_register_vals(self, effective_date):
+        vals = super(OperationRequest, self).get_subscription_register_vals(effective_date)
+        vals['structure'] = self.structure
+        return vals
