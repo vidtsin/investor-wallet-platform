@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+
+	<data noupdate="0">
+		
+		<report
+            id="easy_my_coop.action_cooperator_report_certificat" 
+            model="subscription.register" 
+            string="Cooperator certificat"
+            report_type="qweb-pdf"
+            name="easy_my_coop.cooperator_certificat_G001" 
+            file="easy_my_coop.cooperator_certificat_G001.xml" 
+            multi="True"
+ 			menu="True"        
+        />
+        
+	</data>
+</openerp>
