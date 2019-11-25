@@ -7,6 +7,21 @@ class CoopMembership(models.Model):
 
     @api.multi
     @api.depends('partner_id.share_ids')
+    def _compute_share_info(self):
+        for membership in self:
+            number_of_share = 0
+            total_value = 0.0
+            share_ids = membership.partner_id.share_ids.filtered(
+                            lambda record:
+                            record.structure == membership.structure)
+            for line in share_ids:
+                number_of_share += line.share_number
+                total_value += line.share_unit_price * line.share_number
+            membership.number_of_share = number_of_share
+            membership.total_value = total_value
+
+    @api.multi
+    @api.depends('partner_id.share_ids')
     def _compute_effective_date(self):
         # TODO change it to compute it from the share register
         for membership in self:
@@ -54,3 +69,11 @@ class CoopMembership(models.Model):
     effective_date = fields.Date(string="Effective date",
                                  compute=_compute_effective_date,
                                  store=True)
+    number_of_share = fields.Integer(string='Number of share',
+                                     compute=_compute_share_info,
+                                     multi='share',
+                                     readonly=True)
+    total_value = fields.Float(string='Total value of shares',
+                               compute=_compute_share_info,
+                               multi='share',
+                               readonly=True)

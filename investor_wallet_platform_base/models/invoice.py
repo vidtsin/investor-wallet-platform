@@ -22,6 +22,10 @@ class AccountInvoice(models.Model):
         return templ_obj.get_email_template_by_key('certificate',
                                                    self.structure)
 
+    def send_certificat_email(self, certificate_email_template, sub_reg_line):
+        # we send the email with the certificate in attachment
+        certificate_email_template.sudo().send_mail(sub_reg_line.id, False)
+
     def validate_capital_release_request(self):
         if self.release_capital_request and not self.structure:
             raise ValidationError(_('There is no structure defined on this '
