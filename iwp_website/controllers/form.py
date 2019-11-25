@@ -8,7 +8,7 @@
 
 """Form factory for Odoo website"""
 
-from datetime import date
+from datetime import date, datetime
 
 
 class FormValidationError(Exception):
@@ -43,7 +43,7 @@ class Field:
         if self.input_type == "number":
             return int(value)
         if self.input_type == "date":
-            return date.fromisoformat(value)
+            return datetime.strptime(value, "%Y-%m-%d").date()
         return value
 
     def clean(self, value):

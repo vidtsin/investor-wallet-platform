@@ -68,7 +68,7 @@ class ManualShareForm(Form):
 
     def _validate_date(self, value):
         maximum = self.fields["date"].att.get("max")
-        if maximum and value > date.fromisoformat(maximum):
+        if maximum and value > self.fields["date"].to_python(maximum):
             raise FormValidationError("Please enter date in the past.")
 
     def _choices_share_type(self):
