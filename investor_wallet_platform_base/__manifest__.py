@@ -24,7 +24,6 @@
         'security/ir.model.access.csv',
         'security/iwp_security.xml',
         'data/sector_area_data.xml',
-        'data/mail_template_data.xml',
         'views/res_partner_view.xml',
         'views/operation_request_view.xml',
         'views/subscription_request_view.xml',
@@ -37,7 +36,9 @@
         'views/ir_mail_server_view.xml',
         'views/menus.xml',
         'report/cooperator_certificat.xml',
-        'report/easy_my_coop_report.xml'
+        'report/cooperator_to_certificat.xml',
+        'report/easy_my_coop_report.xml',
+        'data/mail_template_data.xml'
         ],
     'demo': [
         'demo/account.xml',

@@ -4,15 +4,24 @@
 	<data noupdate="0">
 		
 		<report
-            id="easy_my_coop.action_cooperator_report_certificat" 
+            id="investor_wallet_platform_base.action_cooperator_report_certificat" 
             model="subscription.register" 
-            string="Cooperator certificat"
+            string="IWP Cooperator certificat"
             report_type="qweb-pdf"
-            name="easy_my_coop.cooperator_certificat_G001" 
-            file="easy_my_coop.cooperator_certificat_G001.xml" 
+            name="investor_wallet_platform_base.iwp_cooperator_certificat" 
+            file="investor_wallet_platform_base.cooperator_certificat.xml" 
             multi="True"
  			menu="True"        
         />
-        
+        <report
+            id="investor_wallet_platform_base.action_cooperator_to_report_certificat" 
+            model="subscription.register" 
+            string="IWP Receiver cooperator certificat"
+            report_type="qweb-pdf"
+            name="investor_wallet_platform_base.iwp_cooperator_to_certificat" 
+            file="investor_wallet_platform_base.cooperator_to_certificat.xml" 
+            multi="True"
+ 			menu="True"        
+        />
 	</data>
 </openerp>

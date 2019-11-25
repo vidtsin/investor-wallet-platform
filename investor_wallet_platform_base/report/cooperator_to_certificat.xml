@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <template id="investor_wallet_platform_base.cooperator_certificat_document">
+    <template id="investor_wallet_platform_base.cooperator_to_certificat_document">
 
         <t t-call="web.external_layout">
             <t t-set="address">
-                <address t-field="o.partner_id.commercial_partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />
+                <address t-field="o.partner_id_to.commercial_partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />
             </t>
             <div class="page mt32">
                 <h2>
@@ -13,9 +13,9 @@
                 </h2>
 
                 <p name="label_coop_number" class="mt16">
-                    <span t-field="o.partner_id.name"/>
+                    <span t-field="o.partner_id_to.name"/>
                     is recorded in the register of cooperators under number
-                    <t t-set="coop_membership" t-value="o.partner_id.coop_membership.filtered(lambda record: record.structure == o.structure)"/>
+                    <t t-set="coop_membership" t-value="o.partner_id_to.coop_membership.filtered(lambda record: record.structure == o.structure)"/>
                     <span t-esc="coop_membership.cooperator_number"/>.
                 </p>
 
@@ -32,7 +32,7 @@
                         </tr>
                     </thead>
                     <tbody class="invoice_tbody">
-                        <t t-foreach="o.partner_id.share_ids.filtered(lambda record: record.structure == o.structure)" t-as="line">
+                        <t t-foreach="o.partner_id_to.share_ids.filtered(lambda record: record.structure == o.structure)" t-as="line">
                             <tr>
                                 <td class="text-left" name="effective_date">
                                     <span t-field="line.effective_date"/>
@@ -99,10 +99,10 @@
     </template>
 
 
-    <template id="investor_wallet_platform_base.iwp_cooperator_to_certificat">
+    <template id="investor_wallet_platform_base.cooperator_to_certificat">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
-                <t t-call="investor_wallet_platform_base.cooperator_certificat_document" t-lang="o.partner_id.lang"/>
+                <t t-call="investor_wallet_platform_base.cooperator_to_certificat_document" t-lang="o.partner_id_to.lang"/>
             </t>
         </t>
     </template>
