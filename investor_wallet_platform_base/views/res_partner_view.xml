@@ -65,6 +65,8 @@
 		    				<field name="member"/>
 		    				<field name="coop_candidate"/>
 		    				<field name="old_member"/>
+                            <field name="number_of_share"/>
+                            <field name="total_value"/>
 		    			</tree>
 	    			</field>
 	    		</page>
