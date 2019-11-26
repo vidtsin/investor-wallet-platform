@@ -309,7 +309,16 @@ class InvestorPortal(CustomerPortal):
         )
         loanline_amount = sum(
             r.amount
-            for r in loanline_mgr.sudo().search(self.loan_issue_line_domain)
+            for r in (
+                loanline_mgr.sudo()
+                .search(self.loan_issue_line_domain)
+                .filtered(
+                    lambda r: (
+                        r.state == "paid" or r.state == "waiting"
+                        or r.state == "subscribed"
+                    )
+                )
+            )
         )
         # Subscription request
         register_mgr = request.env['subscription.register']
