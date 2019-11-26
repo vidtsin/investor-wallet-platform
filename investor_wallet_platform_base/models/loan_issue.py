@@ -68,4 +68,5 @@ class LoanIssueLine(models.Model):
         comodel_name="res.partner",
         string="Platform Structure",
         related="loan_issue_id.structure",
+        store=True,
     )
