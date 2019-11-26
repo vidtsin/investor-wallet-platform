@@ -36,6 +36,7 @@
         'views/res_company_view.xml',
         ],
     'demo': [
+        'demo/account.xml',
         'demo/structure.xml',
         'demo/coop.xml',
         'demo/users.xml',

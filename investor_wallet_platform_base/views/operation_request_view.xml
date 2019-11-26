@@ -4,7 +4,7 @@
         <field name="model">operation.request</field>
         <field name="inherit_id" ref="easy_my_coop.operation_request_tree"/>
         <field name="arch" type="xml">
-        	<field name="name" position="before">
+        	<field name="request_date" position="before">
         		<field name="structure"/>
         	</field>
         </field>
