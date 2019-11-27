@@ -1,7 +1,7 @@
 <odoo>
 
 	<record id="view_partner_form_wallet_platform_bis" model="ir.ui.view">
-		<field name="name">res.partner.form.easy_my_coop</field>
+		<field name="name">res.partner.form.iwp_bis</field>
 		<field name="model">res.partner</field>
 		<field name="inherit_id" ref="easy_my_coop_loan.view_partner_form_loan_issue"/>
 		<field name="arch" type="xml">
@@ -15,7 +15,7 @@
 	</record>
 
 	<record id="view_partner_form_wallet_platform" model="ir.ui.view">
-	    <field name="name">res.partner.form.easy_my_coop</field>
+	    <field name="name">res.partner.form.iwp</field>
 	    <field name="model">res.partner</field>
 	    <field name="inherit_id" ref="easy_my_coop.view_partner_form_easy_my_coop"/>
 	    <field name="arch" type="xml">
@@ -138,7 +138,7 @@
 	    				</group>
                         <group>
                             <group>
-                                <field name="mail_serveur_out" context="{'default_structure': active_id}" groups="investor_wallet_platform_base.group_platform_manager"/>
+                                <field name="mail_serveur_out" context="{'default_structure': active_id}" groups="investor_wallet_platform_base.group_platform_wallet_manager"/>
                                 <field name="mail_template_ids">
                                 	<tree>
                                         <field name="name"/>
