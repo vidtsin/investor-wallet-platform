@@ -168,7 +168,8 @@
                             <span t-field="subreq.ordered_parts"/>
                         </td>
                         <td class="text-right">
-                            <span t-field="subreq.share_unit_price"/>
+                            <span t-field="subreq.share_unit_price"
+                                t-options="{'widget': 'monetary', 'display_currency': subreq.company_currency_id}"/>
                         </td>
                         <td class="text-right">
                             <span t-field="subreq.subscription_amount"/>
