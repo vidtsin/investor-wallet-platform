@@ -1,19 +1,5 @@
 <odoo>
 
-	<record id="view_partner_form_wallet_platform_bis" model="ir.ui.view">
-		<field name="name">res.partner.form.iwp_bis</field>
-		<field name="model">res.partner</field>
-		<field name="inherit_id" ref="easy_my_coop_loan.view_partner_form_loan_issue"/>
-		<field name="arch" type="xml">
-			<page name="loan_issue_lines" position="before">
-				<field name="is_platform_structure" attrs="{'invisible': 1}"/>
-			</page>
-			<page name="loan_issue_lines" position="attributes">
-	    		<attribute name="attrs">{'invisible': [('is_platform_structure', '=', True)]}</attribute>
-	    	</page>
-		</field>
-	</record>
-
 	<record id="view_partner_form_wallet_platform" model="ir.ui.view">
 	    <field name="name">res.partner.form.iwp</field>
 	    <field name="model">res.partner</field>
@@ -165,6 +151,20 @@
 	    	</page>
 	    </field>
 	</record>
+
+    <record id="view_partner_form_wallet_platform_bis" model="ir.ui.view">
+        <field name="name">res.partner.form.iwp_bis</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="easy_my_coop_loan.view_partner_form_loan_issue"/>
+        <field name="arch" type="xml">
+            <page name="loan_issue_lines" position="before">
+                <field name="is_platform_structure" attrs="{'invisible': 1}"/>
+            </page>
+            <page name="loan_issue_lines" position="attributes">
+                <attribute name="attrs">{'invisible': [('is_platform_structure', '=', True)]}</attribute>
+            </page>
+        </field>
+    </record>
 
 	<record id="view_partner_filter" model="ir.ui.view">
 		<field name="name">res.partner.search</field>
