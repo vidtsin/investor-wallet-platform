@@ -20,9 +20,7 @@ class ResCompany(models.Model):
 
     total_outstanding_amount = fields.Monetary(
         string="Total Outstanding Amount",
-        compute="_compute_total_outstanding_amount",
-        help="Sum of all outstanding amount referenced in structure by "
-        "their manager.",
+        currency_field="currency_id",
     )
 
     def _compute_published_financial_product(self):
@@ -40,15 +38,3 @@ class ResCompany(models.Model):
             [("member", "=", True)]
         )
         self.nb_investor = loaners + cooperators
-
-    def _compute_total_outstanding_amount(self):
-        """
-        Compute total outstanding amount referenced in structure by
-        their manager.
-        """
-        structures = self.env["res.partner"].search(
-            [("is_platform_structure", "=", True)]
-        )
-        self.total_outstanding_amount = sum(
-            r.total_outstanding_amount for r in structures
-        )

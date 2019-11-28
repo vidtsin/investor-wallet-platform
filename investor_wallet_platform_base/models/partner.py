@@ -121,9 +121,6 @@ class ResPartner(models.Model):
     mail_serveur_out = fields.Many2one('ir.mail_server',
                                        string="Mail serveur out")
     industry_char_list = fields.Char(compute='_return_industry_char_list')
-    total_outstanding_amount = fields.Monetary(
-        string="Total Outsanding Amount"
-    )
 
     @api.multi
     def _return_area_char_list(self):

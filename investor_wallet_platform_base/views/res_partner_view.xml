@@ -104,7 +104,6 @@
     						<field name="break_even_date"/>
     						<field name="last_dividend"/>
 							<field name="total_bs"/>
-							<field name="total_outstanding_amount"/>
 							<field name="key_numbers"/>
 							<field name="governance_risk"/>
 							<field name="operational_risk"/>
