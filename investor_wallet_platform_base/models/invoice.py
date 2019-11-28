@@ -13,6 +13,19 @@ class AccountInvoice(models.Model):
                                 domain=[('is_platform_structure', '=', True)],
                                 default=default_structure)
 
+    def get_mail_template_certificate(self):
+        templ_obj = self.env['mail.template']
+        membership = self.partner_id.get_membership(self.structure)
+        if membership and membership.member:
+            return templ_obj.get_email_template_by_key('certificate_inc',
+                                                       self.structure)
+        return templ_obj.get_email_template_by_key('certificate',
+                                                   self.structure)
+
+    def send_certificate_email(self, certificate_email_template, sub_reg_line):
+        # we send the email with the certificate in attachment
+        certificate_email_template.sudo().send_mail(sub_reg_line.id, False)
+
     def validate_capital_release_request(self):
         if self.release_capital_request and not self.structure:
             raise ValidationError(_('There is no structure defined on this '

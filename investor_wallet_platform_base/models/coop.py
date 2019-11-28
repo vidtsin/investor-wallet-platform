@@ -13,6 +13,20 @@ class SubscriptionRequest(models.Model):
                                 domain=[('is_platform_structure', '=', True)],
                                 default=default_structure)
 
+    def get_mail_template_notif(self, is_company=False):
+        templ_obj = self.env['mail.template']
+        if is_company:
+            return templ_obj.get_email_template_by_key('sub_req_comp_notif',
+                                                       self.structure)
+        else:
+            return templ_obj.get_email_template_by_key('sub_req_notif',
+                                                       self.structure)
+
+    def get_capital_release_mail_template(self):
+        template_obj = self.env['mail.template']
+        return template_obj.get_email_template_by_key('rel_capital',
+                                                      self.structure)
+
     def get_journal(self):
         if self.structure:
             if self.structure.account_journal:
@@ -93,3 +107,25 @@ class OperationRequest(models.Model):
                                 string="Platform Structure",
                                 domain=[('is_platform_structure', '=', True)],
                                 default=default_structure)
+
+    def get_share_trans_mail_template(self):
+        templ_obj = self.env['mail.template']
+        return templ_obj.get_email_template_by_key('certificate_trans')
+
+    def get_share_update_mail_template(self):
+        templ_obj = self.env['mail.template']
+        return templ_obj.get_email_template_by_key('share_update')
+
+    def send_share_trans_mail(self, sub_register_line):
+        cert_email_template = self.get_share_trans_mail_template()
+        # TODO this will need a dedicated certificate report 
+        cert_email_template.send_mail(sub_register_line.id, False)
+
+    def send_share_update_mail(self, sub_register_line):
+        cert_email_template = self.get_share_update_mail_template()
+        cert_email_template.send_mail(sub_register_line.id, False)
+    
+    def get_subscription_register_vals(self, effective_date):
+        vals = super(OperationRequest, self).get_subscription_register_vals(effective_date)
+        vals['structure'] = self.structure
+        return vals

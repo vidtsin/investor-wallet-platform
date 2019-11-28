@@ -6,4 +6,6 @@ from . import coop_membership
 from . import product
 from . import activity_area
 from . import loan_issue
+from . import mail_template
+from . import ir_mail_server
 from . import res_company

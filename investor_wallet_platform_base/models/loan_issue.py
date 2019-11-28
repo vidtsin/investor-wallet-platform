@@ -70,3 +70,13 @@ class LoanIssueLine(models.Model):
         related="loan_issue_id.structure",
         store=True,
     )
+
+    def get_loan_sub_mail_template(self):
+        template_obj = self.env['mail.template']
+        return template_obj.get_email_template_by_key('loan_sub_conf',
+                                                      self.structure)
+
+    def get_loan_pay_req_mail_template(self):
+        template_obj = self.env['mail.template']
+        return template_obj.get_email_template_by_key('loan_payment_req',
+                                                      self.structure)

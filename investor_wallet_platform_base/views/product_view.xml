@@ -21,6 +21,7 @@
 	    				</group>
 	    			</group>
 	    		</xpath>
+                <field name="mail_template" position="after"/>
 	    		<field name="short_name" position="before">
 	    			<field name="structure"/>
 	    			<field name="solidary"/>

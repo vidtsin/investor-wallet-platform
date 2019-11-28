@@ -1,7 +1,7 @@
 <odoo>
 
 	<record id="view_partner_form_wallet_platform_bis" model="ir.ui.view">
-		<field name="name">res.partner.form.easy_my_coop</field>
+		<field name="name">res.partner.form.iwp_bis</field>
 		<field name="model">res.partner</field>
 		<field name="inherit_id" ref="easy_my_coop_loan.view_partner_form_loan_issue"/>
 		<field name="arch" type="xml">
@@ -15,11 +15,11 @@
 	</record>
 
 	<record id="view_partner_form_wallet_platform" model="ir.ui.view">
-	    <field name="name">res.partner.form.easy_my_coop</field>
+	    <field name="name">res.partner.form.iwp</field>
 	    <field name="model">res.partner</field>
 	    <field name="inherit_id" ref="easy_my_coop.view_partner_form_easy_my_coop"/>
 	    <field name="arch" type="xml">
-<!--            <button id="action_view_update_partner_info" position="replace"/>-->
+            <button id="action_view_update_partner_info" position="replace"/>
 	    	<field name="representative" position="before">
 	    		<field name="cover_image" widget='image' options='{"preview_image": "image_medium"}'/>
 	    		<field name="is_platform_structure"/>
@@ -68,6 +68,8 @@
 		    				<field name="member"/>
 		    				<field name="coop_candidate"/>
 		    				<field name="old_member"/>
+                            <field name="number_of_share"/>
+                            <field name="total_value"/>
 		    			</tree>
 	    			</field>
 	    		</page>
@@ -77,7 +79,8 @@
 	    					<field name="display_on_website"/>
 	    					<field name="employee_number"/>
 	    					<field name="industry_id" attrs="{'invisible': [('is_company', '=', False)]}" options="{'no_create': True}"/>
-	    					<field name="description"/>
+                            <field name="board_representative"/>
+                            <field name="description"/>
 	    					<field name="about_us"/>
                             <field name="projects"/>
 	    				</group>
@@ -85,6 +88,7 @@
 	    					<field name="activity_areas" widget="many2many_tags" options="{'no_create': True}"/>
 	    					<field name="approval"/>
 	    					<field name="is_renewable_energy"/>
+                            <field name="signature_scan"/>
 	    					<field name="renewable_energy" attrs="{'invisible': [('is_renewable_energy', '=', False)]}"/>
 							<field name="purpose_service"/>
 							<field name="sustainable_development"/>
@@ -126,6 +130,7 @@
 	    		</page>
 	    		<page  name="structure_config" string="Structure configuration" attrs="{'invisible': [('is_platform_structure', '=', False)]}" groups="investor_wallet_platform_base.group_platform_wallet_manager">
 	    			<button name="generate_sequence" type="object" string ="Initialize" attrs="{'invisible': [('initialized', '=', True)]}" groups="investor_wallet_platform_base.group_platform_wallet_manager"/>
+                    <button name="generate_mail_templates" type="object" string ="Create mail templates" groups="investor_wallet_platform_base.group_platform_wallet_manager"/>
 	    			<field name="initialized" invisible="True"/>
 	    				<group>
 	    					<group>
@@ -134,6 +139,23 @@
 				    			<field name="operation_sequence"/>
 	    					</group>
 	    				</group>
+                        <group>
+                            <group>
+                                <field name="mail_serveur_out" context="{'default_structure': active_id}" groups="investor_wallet_platform_base.group_platform_wallet_manager"/>
+                                <field name="mail_template_ids">
+                                	<tree>
+                                        <field name="name"/>
+                                        <field name="model_id"/>
+                                        <field name="subject"/>
+                                        <field name="email_from"/>
+                                        <field name="email_to"/>
+                                        <field name="partner_to"/>
+                                	</tree>
+                               </field>
+                            </group>
+                            <group>
+                            </group>
+                        </group>
 	    		</page>
 	    	</page>
 	    </field>

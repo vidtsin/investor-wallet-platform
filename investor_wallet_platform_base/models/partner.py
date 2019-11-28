@@ -42,9 +42,14 @@ class ResPartner(models.Model):
     loan_issue_ids = fields.One2many("loan.issue",
                                      "structure",
                                      string="Loan issues")
+    mail_template_ids = fields.One2many("mail.template",
+                                        "structure",
+                                        string="Mail templates")
     projects = fields.Html(string="Projects",
                            translate=True)
     display_on_website = fields.Boolean(string="display on website")
+    board_representative = fields.Char(string="Board representative name")
+    signature_scan = fields.Binary(string="Board representative signature")
     # Move to another module ?
     is_renewable_energy = fields.Boolean(string="is renewable energy")
     renewable_energy = fields.Html(string="Renewable energy",
@@ -98,6 +103,8 @@ class ResPartner(models.Model):
     annual_report_link = fields.Char(string="Last annual report link")
     area_char_list = fields.Char(compute='_return_area_char_list',
                                  string="activity areas")
+    mail_serveur_out = fields.Many2one('ir.mail_server',
+                                       string="Mail serveur out")
     industry_char_list = fields.Char(compute='_return_industry_char_list')
     total_outstanding_amount = fields.Monetary(
         string="Total Outsanding Amount"
@@ -160,3 +167,21 @@ class ResPartner(models.Model):
     def get_membership(self, structure):
         return self.coop_membership.filtered(
                         lambda record: record.structure == structure)
+
+    @api.multi
+    def generate_mail_templates(self):
+        self.ensure_one()
+        if self.mail_serveur_out:
+            mail_templ = self.env['mail.template']._get_email_template_dict()
+
+            if not self.mail_template_ids:
+                for mt_key, mt_xml_id in mail_templ.items():
+                    mail_template = self.env.ref(mt_xml_id, False)
+                    struct_mail_template = mail_template.copy(default={
+                            'mail_server_id': self.mail_serveur_out.id,
+                            'structure': self.id,
+                            'template_key': mt_key
+                        })
+                    struct_mail_template.name = mail_template.name
+        else:
+            raise UserError(_('You need first to define a mail server out'))
