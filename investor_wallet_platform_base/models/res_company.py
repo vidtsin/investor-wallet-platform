@@ -30,11 +30,5 @@ class ResCompany(models.Model):
         self.published_financial_product = nb_loans + nb_shares
 
     def _compute_nb_investor(self):
-        """Count number of investors"""
-        loaners = self.env["res.partner"].search_count(
-            [("is_loaner", "=", True)]
-        )
-        cooperators = self.env["res.partner"].search_count(
-            [("member", "=", True)]
-        )
-        self.nb_investor = loaners + cooperators
+        """Count number users that are not internal user."""
+        self.nb_investor = len(self.env.ref("base.group_portal").users)
