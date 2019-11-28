@@ -59,7 +59,6 @@
 	    			<page string="Issue Information" name="issue_information" attrs="{'invisible':[('is_share','=',False)]}">
 	    				<group>
 	    					<group>
-		    					<field name="dividend_date"/>
 			    				<field name="tax_benefit"/>
 			    				<field name="tax_policy"/>
 			    				<field name="fees"/>
