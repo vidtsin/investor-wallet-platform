@@ -20,6 +20,11 @@
 	    <field name="inherit_id" ref="easy_my_coop.view_partner_form_easy_my_coop"/>
 	    <field name="arch" type="xml">
             <button id="action_view_update_partner_info" position="replace"/>
+            
+            <field name="email" position="attributes">
+                <attribute name="attrs">{'required': [('is_platform_structure', '=', True)]}</attribute>
+            </field>
+            
 	    	<field name="representative" position="before">
 	    		<field name="cover_image" widget='image' options='{"preview_image": "image_medium"}'/>
 	    		<field name="is_platform_structure"/>
