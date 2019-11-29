@@ -36,14 +36,14 @@ class SubscriptionRequest(models.Model):
     @api.model
     def create(self, vals):
         subscr_request = super(SubscriptionRequest, self).create(vals)
-        notification_template = self.get_structure_email_template_notif(False)
+        notification_template = subscr_request.get_structure_email_template_notif(False)
         notification_template.send_mail(subscr_request.id)
         return subscr_request
 
     @api.model
     def create_comp_sub_req(self, vals):
         subscr_request = super(SubscriptionRequest, self).create_comp_sub_req(vals)
-        notification_template = self.get_structure_email_template_notif(True)
+        notification_template = subscr_request.get_structure_email_template_notif(True)
         notification_template.send_mail(subscr_request.id)
         return subscr_request
 
