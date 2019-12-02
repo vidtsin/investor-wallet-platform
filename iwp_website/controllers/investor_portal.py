@@ -293,9 +293,6 @@ class InvestorPortal(CustomerPortal):
         values = super()._prepare_portal_layout_values()
         # Shares
         shareline_mgr = request.env['share.line']
-        shareline_count = (
-            shareline_mgr.sudo().search_count(self.shareline_domain)
-        )
         share_amount = sum(
             r.total_amount_line
             for r in shareline_mgr.sudo().search(self.shareline_domain)
@@ -304,9 +301,6 @@ class InvestorPortal(CustomerPortal):
         loanline_mgr = request.env['loan.issue.line']
         loan_domain = self.loan_issue_line_domain
         loan_domain += [("state", "=", "waiting"), ("state", "=", "paid")]
-        loanline_count = (
-            loanline_mgr.sudo().search_count(self.loan_issue_line_domain)
-        )
         loanline_amount = sum(
             r.amount
             for r in (
@@ -320,18 +314,9 @@ class InvestorPortal(CustomerPortal):
                 )
             )
         )
-        # Subscription request
-        register_mgr = request.env['subscription.register']
-        subreg_count = (
-            register_mgr.sudo()
-            .search_count(self.subscription_register_domain)
-        )
         values.update({
-            'share_count': shareline_count,
             'share_amount': share_amount,
-            'loan_count': loanline_count,
             'loan_amount': loanline_amount,
-            'share_history_count': subreg_count,
             'monetary_to_text': monetary_to_text,
         })
         return values
