@@ -34,10 +34,10 @@
 	    		</field>
 	    			<group name="configuration" position="after">
 		    			<group name="limit" string="Limit">
-		    				<field name="minimum_amount"/>
-		    				<field name="maximum_amount"/>
-                            <field name="min_target_issue"/>
-    						<field name="max_target_issue"/>
+		    				<field name="minimum_amount" widget='monetary' options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+		    				<field name="maximum_amount" widget='monetary' options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+                            <field name="min_target_issue" widget='monetary' options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+    						<field name="max_target_issue" widget='monetary' options="{'currency_field': 'currency_id', 'field_digits': True}"/>
     						<field name="subscription_start_date"/>
     						<field name="subscription_end_date"/>
     						<field name="subscription_length"/>

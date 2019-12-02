@@ -101,8 +101,13 @@ class ResPartner(models.Model):
                                   translate=True)
     susbidies_risk = fields.Html(string="Risks related to subsidies",
                                  translate=True)
-    subscription_maximum_amount = fields.Float(
-        string="Maximum authorised subscription amount")
+    subscription_maximum_amount = fields.Monetary(
+        string="Maximum authorised subscription amount",
+        currency_field='company_currency_id')
+    company_currency_id = fields.Many2one('res.currency',
+                                          related='company_id.currency_id',
+                                          string="Company Currency",
+                                          readonly=True)
     approval = fields.Char(string="Approval",
                            translate=True)
     activity_areas = fields.Many2many('activity.area',

@@ -39,7 +39,7 @@
 			<field name="effective_date" position="replace"/>
 			<field name="industry_id" position="replace"/>
 			<field name="company_register_number" position="after">
-				<field name="subscription_maximum_amount" attrs="{'invisible':[('is_platform_structure','=',False)]}"/>
+				<field name="subscription_maximum_amount" widget='monetary' options="{'currency_field': 'currency_id', 'field_digits': True}" attrs="{'invisible':[('is_platform_structure','=',False)]}"/>
 			</field>
 			<field name="company_register_number" position="attributes">
 				<attribute name="readonly">False</attribute>
