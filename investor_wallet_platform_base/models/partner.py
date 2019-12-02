@@ -14,7 +14,17 @@ class ResPartner(models.Model):
     def default_structure(self):
         return self.env.user.structure
 
+    @api.multi
+    @api.depends('share_ids')
+    def _compute_cooperator_type(self):
+        for partner in self:
+            partner.cooperator_type = 'none'
+
     is_platform_structure = fields.Boolean(string="Is a Platform Structure")
+    cooperator_type = fields.Selection(selection=[('none', 'None')],
+                                       compute=_compute_cooperator_type,
+                                       string='Cooperator Type',
+                                       store=True)
     coop_membership = fields.One2many('coop.membership',
                                       'partner_id',
                                       string="Cooperative membership")
