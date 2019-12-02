@@ -99,7 +99,7 @@
     </template>
 
 
-    <template id="investor_wallet_platform_base.cooperator_to_certificat">
+    <template id="investor_wallet_platform_base.iwp_cooperator_to_certificat">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
                 <t t-call="investor_wallet_platform_base.cooperator_to_certificat_document" t-lang="o.partner_id_to.lang"/>
