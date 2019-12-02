@@ -69,7 +69,7 @@
                                     </td>
                                     <td class="text-right">
                                         <span t-esc="coop_membership.total_value"
-                                        t-options='{"widget": "monetary", "display_currency": o.share_product_currency_id}'/>
+                                        t-options='{"widget": "monetary", "display_currency": o.company_currency_id}'/>
                                     </td>
                                 </tr>
                             </table>
