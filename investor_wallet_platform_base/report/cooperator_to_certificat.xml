@@ -46,11 +46,11 @@
                                 <td t-attf-class="text-right {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}"
                                     name="share_unit_price">
                                     <span t-field="line.share_unit_price"
-                                        t-options='{"widget": "monetary", "display_currency": line.currency_id}'/>
+                                        t-options='{"widget": "monetary", "display_currency": line.company_currency_id}'/>
                                 </td>
                                 <td class="text-right" name="total_amount_line">
                                     <span t-field="line.total_amount_line"
-                                        t-options='{"widget": "monetary", "display_currency": line.currency_id}'/>
+                                        t-options='{"widget": "monetary", "display_currency": line.company_currency_id}'/>
                                 </td>
                             </tr>
                         </t>
