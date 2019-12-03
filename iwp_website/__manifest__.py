@@ -18,7 +18,7 @@
         'templates/form.xml',
         'templates/auth_signup_form.xml',
         'templates/portal_my_wallet.xml',
-        'templates/investor_portal.xml',
+        'templates/investor_portal_form.xml',
         'templates/subscription_request.xml',
         'templates/operation_request.xml',
         'templates/loan_issue.xml',

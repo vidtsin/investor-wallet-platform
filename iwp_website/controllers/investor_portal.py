@@ -8,10 +8,10 @@ from itertools import groupby
 from odoo import http
 from odoo.addons.portal.controllers.portal import CustomerPortal
 from odoo.addons.portal.controllers.portal import pager as portal_pager
-from odoo.addons.iwp_website.controllers.investor_form import InvestorForm
-from odoo.addons.iwp_website.controllers.investor_form import InvestorCompanyForm
 from odoo.http import request
 from odoo.tools.translate import _
+
+from .user_form import InvestorCompanyForm, InvestorPersonForm
 
 # TODO: Try to not give sudo object to a view.
 
@@ -233,61 +233,187 @@ class InvestorPortal(CustomerPortal):
     def account(self, redirect=None, **post):
         """Form processing to edit user details"""
         user = request.env.user
-        if user.is_company:
-            form = InvestorCompanyForm()
+        is_company = user.parent_id.is_company
+        if request.httprequest.method == "POST":
+            form = self.user_form(
+                data=request.params, context={"user": user}
+            )
+            if form.is_valid():
+                if is_company:
+                    self.process_company_form(form, context={"user": user})
+                else:
+                    self.process_user_form(form, context={"user": user})
+                return request.redirect('/my/home')
         else:
-            form = InvestorForm()
-        # Prepare the form
-        form.normalize_form_data(request.params)
-        form.validate_form(request.params)
-        form.init_form_data(request.params)
-        form.set_form_defaults(request.params, user=user)
-        if 'firstname' in request.params or 'lastname' in request.params:
-            request.params['name'] = form.generate_name_field(
-                request.params.get('firstname', ''),
-                request.params.get('lastname', ''),
-            )
-        # Process the form
-        if ('error' not in request.params
-                and request.httprequest.method == 'POST'):
-            if user.is_company:
-                # company
-                values = {
-                    key: request.params[key]
-                    for key in request.params
-                    if key in form.company_fields
-                }
-                user.write(values)
-                # representative
-                values = {
-                    key[4:]: request.params[key]
-                    for key in request.params
-                    if key in form.representative_fields
-                }
-                representative = user.child_ids[0]
-                representative.write(values)
-            else:
-                values = {
-                    key: request.params[key]
-                    for key in request.params
-                    if key in form.user_fields
-                }
-                user.write(values)
-            return request.redirect('/my/home')
-
-        qcontext = request.params
-        qcontext.update({
-            'page_name': 'my_details',
-        })
-        if user.partner_id.is_company:
+            form = self.user_form(context={"user": user})
+        qcontext = {"form": form}
+        if is_company:
             return request.render(
-                'iwp_website.investor_company_details',
-                qcontext
+                "iwp_website.investor_company_details", qcontext
             )
-        return request.render(
-            'iwp_website.investor_details',
-            qcontext
-        )
+        return request.render("iwp_website.investor_details", qcontext)
+
+    def user_form(self, data=None, context=None):
+        """Return form object."""
+        context = {} if context is None else context
+        if context.get("user") and context["user"].parent_id.is_company:
+            form = InvestorCompanyForm(
+                initial=self.company_form_initial(context=context),
+                data=data or None,
+                context=context,
+            )
+        else:
+            form = InvestorPersonForm(
+                initial=self.user_form_initial(context=context),
+                data=data or None,
+                context=context,
+            )
+        return form
+
+    def user_form_initial(self, context=None):
+        """Initial data for user form."""
+        context = {} if context is None else context
+        user = context.get("user")
+        initial = {}
+        if user:
+            initial.update(
+                {
+                    "firstname": user.firstname,
+                    "lastname": user.lastname,
+                    "gender": str(user.gender),
+                    "birthdate": user.birthdate_date.isoformat(),
+                    "phone": user.phone,
+                    "lang": user.lang,
+                    "street": user.street,
+                    "zip_code": user.zip,
+                    "city": user.city,
+                    "country": str(user.country_id.id),
+                }
+            )
+            if user.bank_ids:
+                initial["bank_account"] = user.bank_ids[0].acc_number
+        return initial
+
+    def company_form_initial(self, context=None):
+        """Initial data for company user form."""
+        initial = {}
+        context = {} if context is None else context
+        user = context.get("user")
+        initial = {}
+        if user:
+            company = user.parent_id
+            initial.update(
+                {
+                    "name": company.name,
+                    "phone": company.phone,
+                    "lang": company.lang,
+                    "street": company.street,
+                    "zip_code": company.zip,
+                    "city": company.city,
+                    "country": str(company.country_id.id),
+
+                    "rep_firstname": user.firstname,
+                    "rep_lastname": user.lastname,
+                    "rep_gender": str(user.gender),
+                    "rep_birthdate": user.birthdate_date.isoformat(),
+                    "rep_phone": user.phone,
+                    "rep_lang": user.lang,
+                    "rep_street": user.street,
+                    "rep_zip_code": user.zip,
+                    "rep_city": user.city,
+                    "rep_country": str(user.country_id.id),
+                }
+            )
+            if company.bank_ids:
+                initial["bank_account"] = company.bank_ids[0].acc_number
+        return initial
+
+    def process_company_form(self, form, context=None):
+        user = context.get("user")
+        company = user.parent_id
+        user.sudo().write(self.representative_vals(form, context))
+        company.sudo().write(self.company_vals(form, context))
+
+    def process_user_form(self, form, context=None):
+        user = context.get("user")
+        user.sudo().write(self.user_vals(form, context))
+
+    def user_vals(self, form, context=None):
+        """Return vals to add information on a res.users."""
+        user = context.get("user")
+        vals = {
+            "firstname": form.cleaned_data["firstname"],
+            "lastname": form.cleaned_data["lastname"],
+            "gender": form.cleaned_data["gender"],
+            "phone": form.cleaned_data["phone"],
+            "birthdate_date": form.cleaned_data["birthdate"],
+            "street": form.cleaned_data["street"],
+            "city": form.cleaned_data["city"],
+            "zip": form.cleaned_data["zip_code"],
+            "country_id": form.cleaned_data["country"],
+            "lang": form.cleaned_data["lang"],
+        }
+        if user.bank_ids:
+            vals["bank_ids"] = [
+                (
+                    1,
+                    user.bank_ids[0].id,
+                    {"acc_number": form.cleaned_data["bank_account"]}
+                )
+            ]
+        else:
+            vals["bank_ids"] = [
+                (0, None, {"acc_number": form.cleaned_data["bank_account"]})
+            ]
+        return vals
+
+    def company_vals(self, form, context=None):
+        """Return vals to create company res.users."""
+        user = context.get("user")
+        company = user.parent_id
+        vals = {
+            "company_type": "company",
+            "name": form.cleaned_data["name"],
+            "phone": form.cleaned_data["phone"],
+            "street": form.cleaned_data["street"],
+            "city": form.cleaned_data["city"],
+            "zip": form.cleaned_data["zip_code"],
+            "country_id": form.cleaned_data["country"],
+        }
+        if company.bank_ids:
+            vals["bank_ids"] = [
+                (
+                    1,
+                    company.bank_ids[0].id,
+                    {"acc_number": form.cleaned_data["bank_account"]}
+                )
+            ]
+        else:
+            vals["bank_ids"] = [
+                (0, None, {"acc_number": form.cleaned_data["bank_account"]})
+            ]
+        return vals
+
+    def representative_vals(self, form, context=None):
+        """
+        Return vals to create a representative for a company res.users.
+        """
+        vals = {
+            "type": 'representative',
+            "company_type": "person",
+            "representative": True,
+            "firstname": form.cleaned_data["rep_firstname"],
+            "lastname": form.cleaned_data["rep_lastname"],
+            "gender": form.cleaned_data["rep_gender"],
+            "phone": form.cleaned_data["rep_phone"],
+            "birthdate_date": form.cleaned_data["rep_birthdate"],
+            "street": form.cleaned_data["rep_street"],
+            "city": form.cleaned_data["rep_city"],
+            "zip": form.cleaned_data["rep_zip_code"],
+            "country_id": form.cleaned_data["rep_country"],
+            "lang": form.cleaned_data["lang"],
+        }
+        return vals
 
     def _prepare_portal_layout_values(self):
         values = super()._prepare_portal_layout_values()
@@ -315,8 +441,9 @@ class InvestorPortal(CustomerPortal):
             )
         )
         values.update({
-            'share_amount': share_amount,
-            'loan_amount': loanline_amount,
+            "invoice_count": 0,  # Hide invoice entry
+            'share_amount': share_amount or 0,
+            'loan_amount': loanline_amount or 0,
             'monetary_to_text': monetary_to_text,
         })
         return values
