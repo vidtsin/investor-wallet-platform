@@ -9,7 +9,7 @@ from datetime import date
 
 from odoo.http import request
 
-from .form import Field, Form, FormValidationError
+from .form import Choice, Field, Form, FormValidationError
 
 
 class ManualShareForm(Form):
@@ -21,7 +21,6 @@ class ManualShareForm(Form):
         self.fields["share_type"] = Field(
             label="Share Type",
             required=True,
-            validators=[self._validate_share_type],
             template="iwp_website.selection_field",
             choices=self._choices_share_type,
         )
@@ -48,19 +47,6 @@ class ManualShareForm(Form):
             input_type="date",
         )
 
-    def _validate_share_type(self, value):
-        """
-        Validate share_type. Raise Error if validation doesn't succeed.
-        """
-        share_types_ids = [
-            st["value"] for st in self.fields["share_type"].choices()
-        ]
-        # Check share type are in the choices
-        if value not in share_types_ids:
-            raise FormValidationError(
-                "The selected share is not valid choice."
-            )
-
     def _validate_quantity(self, value):
         minimum = self.fields["quantity"].att.get("min")
         if minimum and value < minimum:
@@ -82,16 +68,15 @@ class ManualShareForm(Form):
             share_types = struct.share_type_ids.filtered(
                 lambda r: r.display_on_website and r.by_individual
             )
-        # TODO: choices should be a list of choices object.
         choices = []
         if struct:
             for st in share_types:
                 choices.append(
-                    {
-                        "value": str(st.id),
-                        "display": "%s - %s" % (st.name, st.list_price),
-                        "att": {"data-amount": st.list_price},
-                        "obj": st,
-                    }
+                    Choice(
+                        value=str(st.id),
+                        display="%s - %s" % (st.name, st.list_price),
+                        att={"data-amount": st.list_price},
+                        obj=st,
+                    )
                 )
         return choices

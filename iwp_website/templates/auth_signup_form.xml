@@ -25,21 +25,30 @@
     </template>
 
 
-    <template id="signup_investor" name="Sign up login for investor">
+    <template id="investor_signup_form" name="Sign up login for investor">
         <t t-call="web.login_layout">
             <t t-set="disable_footer" t-value="True"/>
             <form class="oe_signup_form" role="form" method="post" t-if="not message">
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                <p class="alert alert-danger" t-if="error" role="alert">
-                    <t t-esc="error"/>
+
+                <p class="alert alert-danger" role="alert" t-if="form.errors.get('__all__')">
+                    <t t-esc="form.errors.get('__all__')"/>
                 </p>
 
-                <t t-call="iwp_website.investor_signup_fields"/>
-                <t t-call="iwp_website.investor_fields"/>
+                <t t-foreach="form.fields" t-as="field_name">
+                    <t t-call="{{form.fields[field_name].template}}">
+                        <t t-set="name" t-value="field_name"/>
+                        <t t-set="field" t-value="form.fields[field_name]"/>
+                    </t>
+                    <p t-if="field_name == 'data_policy_approval'">
+                        <t t-raw="data_policy_text"/>
+                    </p>
+                </t>
 
-                <p class="alert alert-danger" t-if="error" role="alert">
-                    <t t-esc="error"/>
+                <p class="alert alert-danger" role="alert" t-if="form.errors.get('__all__')">
+                    <t t-esc="form.errors.get('__all__')"/>
                 </p>
+
                 <input type="hidden" name="redirect" t-att-value="redirect"/>
                 <input type="hidden" name="token" t-att-value="token"/>
                 <div class="text-center oe_login_buttons pt-3">
@@ -52,24 +61,36 @@
     </template>
 
 
-    <template id="signup_investor_company" name="Sign up login for company investor">
+    <template id="company_signup_form" name="Sign up login for investor">
         <t t-call="web.login_layout">
             <t t-set="disable_footer" t-value="True"/>
             <form class="oe_signup_form" role="form" method="post" t-if="not message">
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                <p class="alert alert-danger" t-if="error" role="alert">
-                    <t t-esc="error"/>
+
+                <p class="alert alert-danger" role="alert" t-if="form.errors.get('__all__')">
+                    <t t-esc="form.errors.get('__all__')"/>
                 </p>
 
-                <t t-call="iwp_website.investor_signup_fields"/>
-                <h3>Company</h3>
-                <t t-call="iwp_website.investor_company_fields"/>
-                <h3>Representative</h3>
-                <t t-call="iwp_website.investor_company_representative_fields"/>
+                <t t-foreach="form.fields" t-as="field_name">
+                    <h3 t-if="field_name == 'login'">
+                        Company
+                    </h3>
+                    <h3 t-if="field_name == 'rep_firstname'">
+                        Representative
+                    </h3>
+                    <t t-call="{{form.fields[field_name].template}}">
+                        <t t-set="name" t-value="field_name"/>
+                        <t t-set="field" t-value="form.fields[field_name]"/>
+                    </t>
+                    <p t-if="field_name == 'data_policy_approval'">
+                        <t t-raw="data_policy_text"/>
+                    </p>
+                </t>
 
-                <p class="alert alert-danger" t-if="error" role="alert">
-                    <t t-esc="error"/>
+                <p class="alert alert-danger" role="alert" t-if="form.errors.get('__all__')">
+                    <t t-esc="form.errors.get('__all__')"/>
                 </p>
+
                 <input type="hidden" name="redirect" t-att-value="redirect"/>
                 <input type="hidden" name="token" t-att-value="token"/>
                 <div class="text-center oe_login_buttons pt-3">

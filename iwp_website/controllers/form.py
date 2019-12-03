@@ -8,11 +8,23 @@
 
 """Form factory for Odoo website"""
 
+from collections import OrderedDict
 from datetime import date, datetime
+from inspect import signature
 
 
 class FormValidationError(Exception):
     """Error raised when a value cannot be validated."""
+
+
+class Choice:
+    """Choices for a select field."""
+
+    def __init__(self, value, display, att=None, obj=None):
+        self.value = value
+        self.display = display
+        self.att = att if att is not None else {}
+        self.obj = obj
 
 
 class Field:
@@ -55,9 +67,18 @@ class Field:
 
     def validate(self, value):
         """Default validation for the field."""
+        # Required fields
         if not value and self.required:
             raise FormValidationError("This field is required.")
-        # TODO: Check that readonly value has not changed.
+        # Choices fields
+        if self.choices is not None:
+            choices_ids = [
+                choice.value for choice in self.choices()
+            ]
+            if value not in choices_ids:
+                raise FormValidationError(
+                    "The selected item is not valid choice."
+                )
 
     def run_validators(self, value):
         """
@@ -65,7 +86,10 @@ class Field:
         validate.
         """
         for validator in self.validators:
-            validator(value)
+            if len(signature(validator).parameters) > 1:
+                validator(value=value, field=self)
+            else:
+                validator(value)
 
 
 class Form:
@@ -79,7 +103,7 @@ class Form:
         self.context = {} if context is None else context
         self.cleaned_data = None
         self._errors = None
-        self.fields = {}
+        self.fields = OrderedDict()
 
     @property
     def errors(self):
