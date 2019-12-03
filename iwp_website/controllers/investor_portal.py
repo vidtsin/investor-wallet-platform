@@ -262,12 +262,18 @@ class InvestorPortal(CustomerPortal):
                 data=data or None,
                 context=context,
             )
+            # Set the bank account readonly
+            form.fields["bank_account"].readonly = True
+            form.fields["bank_account"].required = False
         else:
             form = InvestorPersonForm(
                 initial=self.user_form_initial(context=context),
                 data=data or None,
                 context=context,
             )
+            # Set the bank account readonly
+            form.fields["bank_account"].readonly = True
+            form.fields["bank_account"].required = False
         return form
 
     def user_form_initial(self, context=None):
@@ -340,7 +346,6 @@ class InvestorPortal(CustomerPortal):
 
     def user_vals(self, form, context=None):
         """Return vals to add information on a res.users."""
-        user = context.get("user")
         vals = {
             "firstname": form.cleaned_data["firstname"],
             "lastname": form.cleaned_data["lastname"],
@@ -353,24 +358,10 @@ class InvestorPortal(CustomerPortal):
             "country_id": form.cleaned_data["country"],
             "lang": form.cleaned_data["lang"],
         }
-        if user.bank_ids:
-            vals["bank_ids"] = [
-                (
-                    1,
-                    user.bank_ids[0].id,
-                    {"acc_number": form.cleaned_data["bank_account"]}
-                )
-            ]
-        else:
-            vals["bank_ids"] = [
-                (0, None, {"acc_number": form.cleaned_data["bank_account"]})
-            ]
         return vals
 
     def company_vals(self, form, context=None):
         """Return vals to create company res.users."""
-        user = context.get("user")
-        company = user.parent_id
         vals = {
             "company_type": "company",
             "name": form.cleaned_data["name"],
@@ -380,18 +371,6 @@ class InvestorPortal(CustomerPortal):
             "zip": form.cleaned_data["zip_code"],
             "country_id": form.cleaned_data["country"],
         }
-        if company.bank_ids:
-            vals["bank_ids"] = [
-                (
-                    1,
-                    company.bank_ids[0].id,
-                    {"acc_number": form.cleaned_data["bank_account"]}
-                )
-            ]
-        else:
-            vals["bank_ids"] = [
-                (0, None, {"acc_number": form.cleaned_data["bank_account"]})
-            ]
         return vals
 
     def representative_vals(self, form, context=None):
