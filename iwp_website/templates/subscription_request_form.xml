@@ -62,25 +62,31 @@ function compute_total_amount() {
 
     <template id="subscribe_to_structure" name="Subscribe to Structure">
         <t t-call="portal.portal_layout">
-            <t t-set="additional_title">Subscription</t>
+            <t t-set="additional_title">New Subscription</t>
             <t t-set="no_breadcrumbs" t-value="True"/>
             <div class="row justify-content-center">
                 <div class="col-xs-12 col-sm-10  col-md-8 col-lg-6">
-                    <h3 class="text-center">Subscription to <t t-esc="struct.name"/></h3>
-                    <form t-if="not success" t-att-action="request.httprequest.path" method="post">
+                    <h3 class="mt-4 text-center">
+                        New Subscription to <t t-esc="struct.name"/>
+                    </h3>
+                    <form class="oe_subscription_request_form" method="post">
                         <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
-                        <t t-call="iwp_website.subscription_fields"/>
+                        <t t-foreach="form.fields" t-as="field_name">
+                            <t t-call="{{form.fields[field_name].template}}">
+                                <t t-set="name" t-value="field_name"/>
+                                <t t-set="field" t-value="form.fields[field_name]"/>
+                            </t>
+                        </t>
 
-                        <p class="alert alert-danger" t-if="error" role="alert">
-                            <t t-esc="error"/>
+
+                        <p class="alert alert-danger"
+                            t-if="'__all__' in form.errors" role="alert">
+                            <t t-esc="form.errors['__all__']"/>
                         </p>
 
                         <button type="submit" class="btn btn-primary">Envoyer</button>
                     </form>
-                    <p t-else="" class="alert alert-success">
-                        Your subscription has been registered.
-                    </p>
                 </div>
             </div>
         </t>

@@ -7,10 +7,8 @@ from werkzeug.exceptions import NotFound
 from odoo import http
 from odoo.http import request
 from odoo.tools.translate import _
-import logging
 
-
-_logger = logging.getLogger(__name__)
+from .subscription_request_form import SubscriptionRequestForm
 
 
 class WebsiteSubscriptionRequest(http.Controller):
@@ -26,210 +24,101 @@ class WebsiteSubscriptionRequest(http.Controller):
         website=True,
     )
     def subscribe_to_structure(self, struct_id=None, finprod_id=None, **post):
-        # self.reqargs contains request arguments but only if they pass
-        # checks.
-        self.reqargs = {}
+        """Route for form to subscribe to a new share."""
         # Get structure and perform access check
-        struct = request.env['res.partner'].sudo().browse(struct_id)
-        if not struct:
+        struct = request.env["res.partner"].sudo().browse(struct_id)
+        if not struct or not struct.is_platform_structure:
             raise NotFound
-        if not struct.is_platform_structure:
-            raise NotFound
-        post['struct'] = struct
-        self.reqargs['struct'] = struct
-        # Get findproduct if given
-        finprod = (
-            request.env['product.product']
-            .sudo()
-            .browse(finprod_id)
-        )
-        if finprod:
-            self.reqargs['finprod'] = finprod
-        self.init_form_data(qcontext=post)
-        self.set_form_defaults(qcontext=post)
-        self.normalize_form_data(qcontext=post)
-        if post and request.httprequest.method == 'POST':
-            self.validate_form(qcontext=post)
-            if 'error' not in post:
-                values = self.prepare_subscription_request_value(struct,
-                                                                 qcontext=post)
-                request.env['subscription.request'].sudo().create(values)
-                post['success'] = True
-        # Populate template value
-
-        qcontext = post.copy()
-        return request.render(
-            'iwp_website.subscribe_to_structure',
-            qcontext
-        )
-
-    def prepare_subscription_request_value(self, struct, qcontext=None):
-        if qcontext is None:
-            qcontext = request.params
-        partner = request.env.user.partner_id
-        values = {}
-        partner_fields = set(key for key in request.env['res.partner']._fields)
-        sub_req_fields = set(
-            key for key in request.env['subscription.request'] ._fields
-        )
-        # TODO: can be improved, because there is to many fields that
-        # needs to be excepted.
-        excepted_fields = set([
-            'type',
-            'company_type',
-            'company_id',
-            'company_name',
-            'company_register_number',
-            'date',
-            'create_date',
-            'create_uid',
-            'write_date',
-            'write_uid',
-            '__last_update',
-            'user_id',
-        ])
-        # Value from user also in subscription request.
-        values.update({
-            key: partner[key]
-            for key in partner_fields & sub_req_fields - excepted_fields
-        })
-
-        values.update({
-            'country_id': partner.country_id.id,
-            'address': partner.street,
-            'zip_code': partner.zip,
-            'iban': partner.bank_ids[0].acc_number,
-            'source': 'website',
-            'partner_id': partner.id,
-            'share_product_id': qcontext['shareproduct'],
-            'ordered_parts': qcontext['number'],
-            'structure': struct.id,
-        })
-        return values
-
-    def validate_form(self, qcontext=None):
-        """
-        Populate request.parms with errors if the params from the form
-        are not correct. If a qcontext is given, this function works on
-        this qcontext.
-        """
-        if qcontext is None:
-            qcontext = request.params
-        product_obj = request.env['product.product'].sudo().search(
-            self.share_product_domain,
-        )
-        selected_share = qcontext.get('shareproduct', None)
-        if not selected_share:
-            qcontext['error'] = _("You must select a financial product.")
-            return qcontext
-        if qcontext.get('number', 0) < 1:
-            qcontext['error'] = _("You must order at least 1 financial"
-                                  " product.")
-            return qcontext
-
-        partner = request.env.user.partner_id
-        if not partner.bank_ids:
-            qcontext['error'] = _('no account set for partner %s' % partner)
-
-        shareproduct = product_obj.sudo().browse(selected_share)
-        if shareproduct.structure != qcontext['struct']:
-            qcontext['error'] = _("Selected share is not available to the "
-                                  "structure.")
-            return qcontext
-
-        # Check maximum amount
-        # TODO: take shares held by the user into account to adjust the
-        # maximum amount
-        max_amount = shareproduct.structure.subscription_maximum_amount
-        total_amount = qcontext['number'] * shareproduct.list_price
-        if not max_amount:
-            qcontext['error'] = _("This structure has not set the allowed "
-                                  "number of share. Please contact system "
-                                  "administrator. ")
-        elif max_amount <= total_amount:
-            qcontext['error'] = _("You cannot order more than %s."
-                                  % max_amount)
-            return qcontext
-        return qcontext
-
-    def init_form_data(self, qcontext=None):
-        """
-        Populate qcontext if given, else populate request.params with
-        defalut data needed to render the form.
-        """
-        if qcontext is None:
-            qcontext = request.params
-        # Share products
-        share_products = (
-            request.env['product.product']
-            .sudo()
-            .search(self.share_product_domain)
-        )
-        qcontext.update({
-            'share_products': share_products,
-        })
-        # TODO: take shares held by the user into account to adjust the
-        # maximum amount
-        qcontext['total_amount_max'] = (
-            self.reqargs['struct'].subscription_maximum_amount
-        )
-        return qcontext
-
-    def set_form_defaults(self, qcontext=None, force=False):
-        """
-        Populate the given qcontext or request.parms if empty with the
-        default value for the form.
-        """
-        if qcontext is None:
-            qcontext = request.params
-        # Find default share
-        default_share = None
-        if 'finprod' in self.reqargs:
-            default_share = self.reqargs['finprod']
-        else:
-            default_shares = qcontext['share_products'].filtered(
-                'default_share_product'
+        form_context = {"struct": struct, "user": request.env.user}
+        if request.httprequest.method == "POST":
+            form = self.subscription_request_form(
+                data=request.params, context=form_context
             )
-            default_share = default_shares[0] if default_shares else None
-        # Set fields
-        if 'shareproduct' not in qcontext or force:
-            if default_share:
-                qcontext['shareproduct'] = default_share.id
-        # Set number according to the default share
-        if 'number' not in qcontext or force:
-            if default_share and default_share.force_min_qty:
-                qcontext['number'] = default_share.minimum_quantity
-            else:
-                qcontext['number'] = 0
-        if 'total_amount' not in qcontext or force:
-            if default_share:
-                qcontext['total_amount'] = (
-                    default_share.list_price * qcontext['number']
+            if form.is_valid():
+                self.process_subscription_request_form(
+                    form, context=form_context
                 )
-        return qcontext
+                return request.redirect(request.params.get("redirect", ""))
+        else:
+            form = self.subscription_request_form(context=form_context)
+        qcontext = {"form": form, "struct": struct}
+        return request.render("iwp_website.subscribe_to_structure", qcontext)
 
-    def normalize_form_data(self, qcontext=None):
-        """
-        Normalize data encoded by the user.
-        """
-        if qcontext is None:
-            qcontext = request.params
-        # Convert to int when needed
-        if 'number' in qcontext:
-            qcontext['number'] = int(qcontext['number'])
-        if 'shareproduct' in qcontext:
-            qcontext['shareproduct'] = int(qcontext['shareproduct'])
-        return qcontext
+    def subscription_request_form(self, data=None, context=None):
+        """Return Form object."""
+        form = SubscriptionRequestForm(
+            initial=self.subscription_request_form_initial(context=context),
+            data=data or None,
+            context=context,
+        )
+        return form
 
-    @property
-    def share_product_domain(self):
-        share_product_domain = [
-            ('is_share', '=', True),
-            ('sale_ok', '=', True),
-            ('display_on_website', '=', True)
-        ]
-        if 'struct' in self.reqargs:
-            share_product_domain.append(
-                ('structure', '=', self.reqargs['struct'].id)
+    def subscription_request_form_initial(self, context=None):
+        """Return initial for subscription request form."""
+        context = {} if context is None else context
+        initial = {}
+        user = context.get("user")
+        struct = context.get("struct")
+        # TODO: take the first share_type or the default one.
+        if struct:
+            default_share_types = struct.share_type_ids.filtered(
+                lambda r: r.display_on_website and r.default_share_product
             )
-        return share_product_domain
+            default_share_type = (
+                default_share_types[0] if default_share_types else None
+            )
+            if default_share_type:
+                initial["share_type"] = str(default_share_type.id)
+                initial["quantity"] = (
+                    max(
+                        1,
+                        round(
+                            default_share_type.can_buy_min_amount(
+                                user.partner_id
+                            ) / default_share_type.list_price
+                        )
+                    )
+                )
+                initial["total_amount"] = (
+                    default_share_type.list_price * initial["quantity"]
+                )
+        return initial
+
+    def process_subscription_request_form(self, form, context=None):
+        """Process subscription share form."""
+        user = context.get("user")
+        vals = self.subscription_request_vals(form, context=context)
+        if user.parent_id.is_company:
+            sub_req = (
+                request.env['subscription.request']
+                .sudo()
+                .create_comp_sub_req(vals)
+            )
+        else:
+            sub_req = request.env['subscription.request'].sudo().create(vals)
+        sub_req.onchange_partner()  # Set other field
+
+    def subscription_request_vals(self, form, context=None):
+        """Reutrn vals to create a new subscription request."""
+        partner = context.get("user").commercial_partner_id
+        struct = context.get("struct")
+        share_type = request.env["product.template"].sudo().browse(
+            int(form.cleaned_data["share_type"])
+        )
+        vals = {
+            "source": "website",
+            "partner_id": partner.id,
+            "name": partner.name,
+            "email": partner.email,
+            "address": partner.street,
+            "zip_code": partner.zip,
+            "city": partner.city,
+            "country_id": partner.country_id.id,
+            # "iban": partner.bank_ids[0].acc_number,
+            "share_product_id": share_type.product_variant_id.id,
+            "ordered_parts": form.cleaned_data["quantity"],
+            "structure": struct.id,
+        }
+        if partner.is_company:
+            vals["company_name"] = partner.name
+        return vals
