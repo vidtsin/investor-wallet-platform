@@ -151,6 +151,7 @@ class AuthSignupInvestor(AuthSignupHome):
         vals = {
             "company_type": "company",
             "name": form.cleaned_data["name"],
+            "email": form.cleaned_data["login"],
             "phone": form.cleaned_data["phone"],
             "street": form.cleaned_data["street"],
             "city": form.cleaned_data["city"],
