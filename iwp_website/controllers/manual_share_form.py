@@ -10,6 +10,7 @@ from datetime import date
 from odoo.http import request
 
 from .form import Choice, Field, Form, FormValidationError
+from .tools import monetary_to_text
 
 
 class ManualShareForm(Form):
@@ -74,7 +75,8 @@ class ManualShareForm(Form):
                 choices.append(
                     Choice(
                         value=str(st.id),
-                        display="%s - %s" % (st.name, st.list_price),
+                        display="%s - %s"
+                        % (st.name, monetary_to_text(st.list_price)),
                         att={"data-amount": st.list_price},
                         obj=st,
                     )
