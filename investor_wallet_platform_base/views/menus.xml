@@ -10,7 +10,7 @@
     </record>
 
     <record id="easy_my_coop.menu_easy_my_coop_config" model="ir.ui.menu">
-        <field name="groups_id" eval="[(4, ref('group_platform_wallet_manager'))]" />
+        <field name="groups_id" eval="[(4, ref('group_platform_wallet_user'))]" />
     </record>
 
     <menuitem name="Structures" id="menu_wallet_platform_structure" parent="easy_my_coop.menu_easy_my_coop_config" action="action_wallet_platform_structure_form" groups="group_platform_wallet_manager" sequence="401"/>

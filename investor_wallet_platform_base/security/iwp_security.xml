@@ -144,33 +144,7 @@
 	    </record>
 
 		<!-- Product Template -->
-
-<!--		fixme Je n'y arrive pas dans les droits car il ya des règles du modules-->
-<!--        product standard qui donnent accès. Je mets un filtre sur la vue-->
-<!--        pour avancer.-->
-<!--	    <record id="product_template_emc_user_cannot_create_share_rule" model="ir.rule">-->
-<!--	        <field name="name">todo</field>-->
-<!--	        <field name="model_id" ref="product.model_product_template"/>-->
-<!--	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user'))]"/>-->
-<!--			<field name="perm_read" eval="0"/>-->
-<!--			<field name="perm_write" eval="1"/>-->
-<!--			<field name="perm_create" eval="1"/>-->
-<!--			<field name="perm_unlink" eval="0"/>-->
-<!--	        <field name="domain_force">[('is_share', '=', False)]</field>-->
-<!--	    </record>-->
-		
-		<record id="product_template_emc_user_can_read_rule" model="ir.rule">
-	        <field name="name">todo</field>
-	        <field name="model_id" ref="product.model_product_template"/>
-	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user'))]"/>
-			<field name="perm_read" eval="1"/>
-			<field name="perm_write" eval="0"/>
-			<field name="perm_create" eval="0"/>
-			<field name="perm_unlink" eval="0"/>
-	        <field name="domain_force">[(1, "=", 1)]</field>
-	    </record>
-
-	    <record id="product_template_emc_user_own_product_template_rule" model="ir.rule">
+		<record id="product_template_emc_manager_own_share_type_rule" model="ir.rule">
 	        <field name="name">todo</field>
 	        <field name="model_id" ref="product.model_product_template"/>
 	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_manager'))]"/>
@@ -178,21 +152,10 @@
 			<field name="perm_write" eval="1"/>
 			<field name="perm_create" eval="1"/>
 			<field name="perm_unlink" eval="1"/>
-	        <field name="domain_force">[('is_share', '=', True),('structure','=',user.structure.id)]</field>
-	    </record>
+	        <field name="domain_force">[('structure','=',user.structure.id)]</field>
+		</record>
 
-	    <record id="product_template_iwp_user_access_not_share_product_template_rule" model="ir.rule">
-	        <field name="name">todo</field>
-	        <field name="model_id" ref="product.model_product_template"/>
-	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_manager'))]"/>
-			<field name="perm_read" eval="1"/>
-			<field name="perm_write" eval="1"/>
-			<field name="perm_create" eval="1"/>
-			<field name="perm_unlink" eval="1"/>
-	        <field name="domain_force">[('is_share', '=', False)]</field>
-	    </record>
-
-	    <record id="product_template_iwp_user_all_product_template_rule" model="ir.rule">
+		<record id="product_template_iwp_user_all_share_type_rule" model="ir.rule">
 	        <field name="name">todo</field>
 	        <field name="model_id" ref="product.model_product_template"/>
 	        <field name="groups" eval="[(4, ref('group_platform_wallet_user'))]"/>
@@ -201,33 +164,10 @@
 			<field name="perm_create" eval="1"/>
 			<field name="perm_unlink" eval="1"/>
 	        <field name="domain_force">[(1, "=", 1)]</field>
-	    </record>
+		</record>
 
 		<!-- Product Product -->
-
-<!--	    <record id="product_product_emc_user_cannot_create_share_rule" model="ir.rule">-->
-<!--	        <field name="name">todo</field>-->
-<!--	        <field name="model_id" ref="product.model_product_product"/>-->
-<!--	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user'))]"/>-->
-<!--			<field name="perm_read" eval="0"/>-->
-<!--			<field name="perm_write" eval="1"/>-->
-<!--			<field name="perm_create" eval="1"/>-->
-<!--			<field name="perm_unlink" eval="0"/>-->
-<!--	        <field name="domain_force">[('is_share', '=', False)]</field>-->
-<!--	    </record>-->
-
-		<record id="product_product_emc_user_can_read_rule" model="ir.rule">
-	        <field name="name">todo</field>
-	        <field name="model_id" ref="product.model_product_product"/>
-	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user'))]"/>
-			<field name="perm_read" eval="1"/>
-			<field name="perm_write" eval="0"/>
-			<field name="perm_create" eval="0"/>
-			<field name="perm_unlink" eval="0"/>
-	        <field name="domain_force">[(1, "=", 1)]</field>
-	    </record>
-
-	    <record id="product_product_emc_user_own_product_product_rule" model="ir.rule">
+		<record id="product_product_emc_manager_own_share_type_rule" model="ir.rule">
 	        <field name="name">todo</field>
 	        <field name="model_id" ref="product.model_product_product"/>
 	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_manager'))]"/>
@@ -235,21 +175,10 @@
 			<field name="perm_write" eval="1"/>
 			<field name="perm_create" eval="1"/>
 			<field name="perm_unlink" eval="1"/>
-	        <field name="domain_force">[('is_share', '=', True),('structure','=',user.structure.id)]</field>
-	    </record>
+	        <field name="domain_force">[('structure','=',user.structure.id)]</field>
+		</record>
 
-	    <record id="product_product_iwp_user_access_not_share_product_product_rule" model="ir.rule">
-	        <field name="name">todo</field>
-	        <field name="model_id" ref="product.model_product_product"/>
-	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_manager'))]"/>
-			<field name="perm_read" eval="1"/>
-			<field name="perm_write" eval="1"/>
-			<field name="perm_create" eval="1"/>
-			<field name="perm_unlink" eval="1"/>
-	        <field name="domain_force">[('is_share', '=', False)]</field>
-	    </record>
-
-	    <record id="product_product_iwp_user_all_product_product_rule" model="ir.rule">
+		<record id="product_product_iwp_user_all_share_type_rule" model="ir.rule">
 	        <field name="name">todo</field>
 	        <field name="model_id" ref="product.model_product_product"/>
 	        <field name="groups" eval="[(4, ref('group_platform_wallet_user'))]"/>
@@ -258,7 +187,7 @@
 			<field name="perm_create" eval="1"/>
 			<field name="perm_unlink" eval="1"/>
 	        <field name="domain_force">[(1, "=", 1)]</field>
-	    </record>
+		</record>
 
 		<!-- Account Invoice -->
 

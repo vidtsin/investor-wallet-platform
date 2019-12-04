@@ -419,65 +419,13 @@ class IWPIRulesCase(IWPBaseCase):
         partner = self.env["res.users"].browse(self.uid).partner_id
         partner.structure = self.coopiteasy
 
-        # share
         vals = {
             "name": "create passes",
             "is_share": True,
             "structure": self.coopiteasy.id,
         }
-        template = self.env["product.template"].create(vals)
-        _ = template.structure
-        template.write({"name": "write passes"})
         with self.assertRaises(AccessError):
-            template.unlink()
-
-        # not share
-        vals = {
-            "name": "create passes",
-            "is_share": False,
-            "structure": self.coopiteasy.id,
-        }
-        self.env["product.template"].create(vals)
-
-        # desk product
-        template = self.browse_ref("product.product_product_4_product_template")
-        _ = template.name
-        template.write({"name": "write passes"})
-        with self.assertRaises(AccessError):
-            template.unlink()
-
-        # share
-        template = self.browse_ref(
-            "investor_wallet_platform_base"
-            ".product_template_share_type_coopcity_1_demo"
-        )
-        # with self.assertRaises(AccessError):  # fixme
-        #     template.write({"name": "write fails"})
-        with self.assertRaises(AccessError):
-            template.unlink()
-
-        # vals = {
-        #     "name": "create fails",
-        #     "is_share": True,
-        #     "structure": self.coopcity.id,
-        # }
-        # with self.assertRaises(AccessError):
-        #     self.env["product.template"].create(vals)
-        # raises Validation Error in an  intricate read / cache chain
-        # of exceptions -> passing
-
-        # not share
-        vals = {
-            "name": "create passes",
-            "is_share": False,
-            "structure": self.coopcity.id,
-        }
-        self.env["product.template"].create(vals)
-        template = self.browse_ref("product.product_product_4_product_template")
-        _ = template.structure
-        template.write({"name": "write passes"})
-        with self.assertRaises(AccessError):
-            template.unlink()
+            self.env["product.template"].create(vals)
 
     def test_iwp_manager_access_to_all_product_templates(self):
         self.as_iwp_user()
