@@ -89,23 +89,31 @@ class ProductTemplate(models.Model):
         """
         self.ensure_one()
         company = self.env["res.company"]._company_default_get()
-        amount_owned_structure = sum(
-            sl.total_amount_line
-            for sl in partner_id.share_ids
-            if sl.structure == self.structure
-        )
+        amount_owned_structure = self.owned_structure_amount(partner_id)
         amount_owned_share = self.owned_amount(partner_id)
         max_subscription = (
             self.structure.subscription_maximum_amount
             or company.subscription_maximum_amount
         )
-        # First amount left regarding to the general max subscription
+        # Actual amount regarding to the general max subscription
+        actual_struct_max = None
         if max_subscription > 0:
-            left_amount = max_subscription - amount_owned_structure
-            # Then amount left for this type of share
-            if left_amount > 0:
-                return max(0, self.maximum_amount - amount_owned_share)
-            return 0
+            # Set actual structure max if there is a general maximum
+            actual_struct_max = max(
+                0, max_subscription - amount_owned_structure,
+            )
+        # Actual amount for this type of share
+        actual_share_max = None
+        if self.maximum_amount > 0:
+            # Set actual share max if there is one
+            actual_share_max = max(0, self.maximum_amount - amount_owned_share)
+        # Choose which maximum to return
+        if actual_struct_max is not None and actual_share_max is not None:
+            return min(actual_struct_max, actual_share_max)
+        if actual_share_max is not None:
+            return actual_share_max
+        if actual_struct_max is not None:
+            return actual_struct_max
         return -1  # No limit
 
     @api.multi
@@ -122,8 +130,44 @@ class ProductTemplate(models.Model):
         Return the amount of this type of share owned by the given
         partner.
         """
-        return sum(
+        self.ensure_one()
+        owned = sum(
             sl.total_amount_line
             for sl in partner_id.share_ids
             if sl.share_product_id == self.product_variant_id
         )
+        pending_sub = self.env["subscription.request"].search([
+            "&",
+            ("partner_id", "=", partner_id.id),
+            "&",
+            ("share_product_id", "=", self.product_variant_id.id),
+            "|",
+            ("state", "=", "draft"),
+            ("state", "=", "done"),
+        ])
+        pending = sum(sr.subscription_amount for sr in pending_sub)
+        return owned + pending
+
+    @api.multi
+    def owned_structure_amount(self, partner_id):
+        """
+        Return the amount of this type of share owned by the given
+        partner.
+        """
+        self.ensure_one()
+        owned = sum(
+            sl.total_amount_line
+            for sl in partner_id.share_ids
+            if sl.structure == self.structure
+        )
+        pending_sub = self.env["subscription.request"].search([
+            "&",
+            ("partner_id", "=", partner_id.id),
+            "&",
+            ("structure", "=", self.structure.id),
+            "|",
+            ("state", "=", "draft"),
+            ("state", "=", "done"),
+        ])
+        pending = sum(sr.subscription_amount for sr in pending_sub)
+        return owned + pending
