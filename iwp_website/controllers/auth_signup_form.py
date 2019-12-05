@@ -59,14 +59,20 @@ class SignupForm(Form):
         """Validate that confirmation field are correctly filled in."""
         cleaned_data = super().clean()
         # Login and confirmation
-        if cleaned_data.get("login") != cleaned_data.get("confirm_login"):
+        login = cleaned_data.get("login", self.data.get("login"))
+        confirm_login = cleaned_data.get(
+            "confirm_login", self.data.get("confirm_login")
+        )
+        if login != confirm_login:
             raise FormValidationError(
                 _("The email and confirmation email must be the same.")
             )
         # Password and confirmation
-        if cleaned_data.get("password") != cleaned_data.get(
-            "confirm_password"
-        ):
+        password = cleaned_data.get("password", self.data.get("password"))
+        confirm_password = cleaned_data.get(
+            "confirm_password", self.data.get("confirm_password")
+        )
+        if password != confirm_password:
             raise FormValidationError(
                 _("The password and confirmation password does not match.")
             )
