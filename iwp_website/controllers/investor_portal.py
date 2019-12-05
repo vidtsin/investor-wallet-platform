@@ -295,7 +295,7 @@ class InvestorPortal(CustomerPortal):
         user = context.get("user")
         initial = {}
         if user:
-            company = user.parent_id
+            company = user.commercial_partner_id
             initial.update(
                 {
                     "name": company.name,
@@ -304,18 +304,22 @@ class InvestorPortal(CustomerPortal):
                     "street": company.street,
                     "zip_code": company.zip,
                     "city": company.city,
-                    "country": str(company.country_id.id),
-
+                    "country": (
+                        company.country_id and str(company.country_id.id)
+                    ),
                     "rep_firstname": user.firstname,
                     "rep_lastname": user.lastname,
                     "rep_gender": str(user.gender),
-                    "rep_birthdate": user.birthdate_date.isoformat(),
+                    "rep_birthdate": (
+                        user.birthdate_date
+                        and user.birthdate_date.isoformat()
+                    ),
                     "rep_phone": user.phone,
                     "rep_lang": user.lang,
                     "rep_street": user.street,
                     "rep_zip_code": user.zip,
                     "rep_city": user.city,
-                    "rep_country": str(user.country_id.id),
+                    "rep_country": user.country_id and str(user.country_id.id),
                 }
             )
             if company.bank_ids:
@@ -324,7 +328,7 @@ class InvestorPortal(CustomerPortal):
 
     def process_company_form(self, form, context=None):
         user = context.get("user")
-        company = user.parent_id
+        company = user.commercial_partner_id
         user.sudo().write(self.representative_vals(form, context))
         company.sudo().write(self.company_vals(form, context))
 
@@ -353,6 +357,7 @@ class InvestorPortal(CustomerPortal):
         vals = {
             "company_type": "company",
             "name": form.cleaned_data["name"],
+            "lang": form.cleaned_data["lang"],
             "phone": form.cleaned_data["phone"],
             "street": form.cleaned_data["street"],
             "city": form.cleaned_data["city"],
