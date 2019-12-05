@@ -76,5 +76,6 @@ class ProductTemplate(models.Model):
         return self.search_count([
             ("is_share", "=", True),
             ("sale_ok", "=", True),
+            ("state", "=", "open"),
             ("display_on_website", "=", True),
         ])
