@@ -1,8 +1,17 @@
 <odoo>
 	<!-- <data noupdate="1"> fixme -->
 	<data>
-		<!-- Partners -->
-	    <record id="res_partner_emc_user_read_rule" model="ir.rule">
+		<!-- Partners  -->
+		<record id="base.res_partner_portal_public_rule" model="ir.rule">
+			<field name="active" eval="False"/>
+		</record>
+
+		<record id="base.res_partner_rule_private_employee" model="ir.rule">
+			<field name="active" eval="False"/>
+		</record>
+
+		<!-- group_easy_my_coop_user -->
+	    <record id="res_partner_emc_user_read_own_structure_rule_1" model="ir.rule">
 	        <field name="name">todo</field>
 	        <field name="model_id" ref="base.model_res_partner"/>
 	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user'))]"/>
@@ -10,30 +19,54 @@
 			<field name="perm_write" eval="0"/>
 			<field name="perm_create" eval="0"/>
 			<field name="perm_unlink" eval="0"/>
-			<field name="domain_force">[(1, '=', 1)]</field>
+			<field name="domain_force">[('is_platform_structure', '=', True), ('id','=',user.structure.id)]</field>
 	    </record>
 
-	    <record id="res_partner_emc_manager_create_write_rule" model="ir.rule">
+	    <record id="res_partner_emc_user_investor_rule" model="ir.rule">
 	        <field name="name">todo</field>
 	        <field name="model_id" ref="base.model_res_partner"/>
-	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_manager'))]"/>
-			<field name="perm_read" eval="0"/>
+	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user'))]"/>
+			<field name="perm_read" eval="1"/>
+			<field name="perm_write" eval="1"/>
 			<field name="perm_create" eval="1"/>
-			<field name="perm_write" eval="1"/>
 			<field name="perm_unlink" eval="0"/>
-			<field name="domain_force">[('is_platform_structure', '=', False)]</field>
+			<field name="domain_force">[
+				('is_platform_structure', '=', False),
+				'|', ('structure_ids', '=', user.structure.id),
+				     ('structure_ids', '=', False)
+			]
+			</field>
 	    </record>
 
-	    <record id="res_partner_emc_manager_modify_its_own_structure" model="ir.rule">
+		<!-- group_easy_my_coop_manager -->
+	    <record id="res_partner_emc_manager_read_write_own_structure_rule_1" model="ir.rule">
 	        <field name="name">todo</field>
 	        <field name="model_id" ref="base.model_res_partner"/>
 	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_manager'))]"/>
-			<field name="perm_read" eval="0"/>
-			<field name="perm_create" eval="0"/>
+			<field name="perm_read" eval="1"/>
 			<field name="perm_write" eval="1"/>
+			<field name="perm_create" eval="0"/>
 			<field name="perm_unlink" eval="0"/>
-			<field name="domain_force">[('id','=',user.structure.id)]</field>
+			<field name="domain_force">[('is_platform_structure', '=', True), ('id','=',user.structure.id)]</field>
 	    </record>
+
+	    <record id="res_partner_emc_manager_investor_rule" model="ir.rule">
+	        <field name="name">todo</field>
+	        <field name="model_id" ref="base.model_res_partner"/>
+	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_manager'))]"/>
+			<field name="perm_read" eval="1"/>
+			<field name="perm_write" eval="1"/>
+			<field name="perm_create" eval="1"/>
+			<field name="perm_unlink" eval="0"/>
+			<field name="domain_force">[
+				('is_platform_structure', '=', False),
+				'|', ('structure_ids', '=', user.structure.id),
+				     ('structure_ids', '=', False)
+			]
+			</field>
+		</record>
+
+		<!-- All Partners -->
 
 	    <record id="res_partner_iwp_user_access_to_all_partners" model="ir.rule">
 	        <field name="name">todo</field>
