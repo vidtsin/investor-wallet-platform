@@ -49,7 +49,7 @@ class SubscriptionRequestForm(Form):
             .browse(int(cleaned_data["share_type"]))
         )
         amount = share_type.list_price * cleaned_data["quantity"]
-        max_amount = share_type.can_buy_max_amount(user.parent_id)
+        max_amount = share_type.can_buy_max_amount(user.commercial_partner_id)
         if 0 < max_amount < amount:
             raise FormValidationError(
                 _(
@@ -57,7 +57,7 @@ class SubscriptionRequestForm(Form):
                     % max_amount
                 )
             )
-        min_amount = share_type.can_buy_min_amount(user.parent_id)
+        min_amount = share_type.can_buy_min_amount(user.commercial_partner_id)
         if min_amount > amount:
             raise FormValidationError(
                 _(
@@ -94,10 +94,10 @@ class SubscriptionRequestForm(Form):
                         att={
                             "data-price": st.list_price,
                             "data-max_amount": st.can_buy_max_amount(
-                                user.partner_id
+                                user.commercial_partner_id
                             ),
                             "data-min_amount": st.can_buy_min_amount(
-                                user.partner_id
+                                user.commercial_partner_id
                             ),
                         },
                         obj=st,
