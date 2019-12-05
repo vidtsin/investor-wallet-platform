@@ -353,7 +353,7 @@
             ]]></field>
         </record>
 
-        <record id="easy_my_coop_loan.loan_subscription_confirmation" model="mail.template">
+ <!--        <record id="easy_my_coop_loan.loan_subscription_confirmation" model="mail.template">
             <field name="name">Loan Subscription Confirmation Email</field>
             <field name="email_from">${(object.structure.email or object.loan_issue_id.user_id.email)|safe}</field>
             <field name="subject">${object.structure.name} Loan subscription confirmation (Ref ${object.loan_issue_id.name or 'n/a'})</field>
@@ -450,7 +450,7 @@
 </div>
             ]]></field>
         </record>
-        
+         -->
         <record id="email_template_notification" model="mail.template">
             <field name="name">Subscription Notification Email</field>
             <field name="email_from">${(object.structure.email or object.user_id.email)|safe}</field>
