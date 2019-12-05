@@ -35,6 +35,7 @@
         'views/res_company_view.xml',
         'views/ir_mail_server_view.xml',
         'views/menus.xml',
+        'report/report_templates.xml',
         'report/cooperator_certificat.xml',
         'report/cooperator_to_certificat.xml',
         'report/easy_my_coop_report.xml',
