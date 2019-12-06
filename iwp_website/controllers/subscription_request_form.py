@@ -88,7 +88,7 @@ class SubscriptionRequestForm(Form):
             for st in share_types:
                 choices.append(
                     Choice(
-                        value=str(st.id),
+                        value=st.id,
                         display="%s - %s"
                         % (st.name, monetary_to_text(st.list_price)),
                         att={

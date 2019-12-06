@@ -21,9 +21,9 @@ class Choice:
     """Choices for a select field."""
 
     def __init__(self, value, display, att=None, obj=None):
-        self.value = value
-        self.display = display
-        self.att = att if att is not None else {}
+        self.value = str(value)
+        self.display = str(display)
+        self.att = {key: str(val) for key, val in att.items()} if att else {}
         self.obj = obj
 
 
