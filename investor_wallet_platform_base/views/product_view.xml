@@ -7,6 +7,12 @@
            		<header position="inside">
            			<field name="state" widget="statusbar" statusbar_visible="open,close,waiting" options="{'clickable': '1'}"/>
            		</header>
+                <field name="force_min_qty" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="minimum_quantity" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
 	    		<xpath expr="//div[@name='options']/.." position="after">
 	    			<group attrs="{'invisible': [('is_share','=',False)]}">
 	    				<group>
