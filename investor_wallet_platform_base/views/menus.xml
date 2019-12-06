@@ -13,7 +13,7 @@
         <field name="groups_id" eval="[(4, ref('group_platform_wallet_user'))]" />
     </record>
 
-    <menuitem name="Structures" id="menu_wallet_platform_structure" parent="easy_my_coop.menu_easy_my_coop_config" action="action_wallet_platform_structure_form" groups="group_platform_wallet_manager" sequence="401"/>
+    <menuitem name="Structures" id="menu_wallet_platform_structure" parent="easy_my_coop.menu_easy_my_coop_config" action="action_wallet_platform_structure_form" groups="easy_my_coop.group_easy_my_coop_manager" sequence="401"/>
     <menuitem name="Structures to validate" id="menu_wallet_platform_structure_to_validate" parent="easy_my_coop.menu_easy_my_coop_config" action="action_iwp_structure_to_validate_form" groups="group_platform_wallet_manager" sequence="402"/>
     <menuitem name="Industry" id="partner_industry_config" action="base.res_partner_industry_action" parent="easy_my_coop.menu_easy_my_coop_config" groups="group_platform_wallet_manager" sequence="410" />
     <menuitem name="Activity Area" id="menu_wallet_platform_activity_area" action="action_wallet_platform_activity_area" parent="easy_my_coop.menu_easy_my_coop_config" groups="group_platform_wallet_manager" sequence="420"/>

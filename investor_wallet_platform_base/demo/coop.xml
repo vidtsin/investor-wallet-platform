@@ -75,4 +75,8 @@
         <field name="share_product_id" model="product.template" eval="obj(ref('product_template_share_type_coopcity_1_demo')).product_variant_id.id"/>
         <field name="lang">en_US</field>
     </record>
+
+    <record id="easy_my_coop_loan.loan_issue_1_demo" model="loan.issue">
+        <field name="structure" ref="res_partner_structure_coopiteasy_demo"/>
+    </record>
 </odoo>

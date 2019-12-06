@@ -2,7 +2,7 @@
 	<record id="group_platform_wallet_user" model="res.groups">
         <field name="name">Wallet Platform User</field>
     	<field name="category_id" ref="easy_my_coop.module_category_cooperator_management"/>
-        <field name="implied_ids" eval="[(6, 0, [ref('easy_my_coop.group_easy_my_coop_user')])]"/>
+        <field name="implied_ids" eval="[(6, 0, [ref('easy_my_coop.group_easy_my_coop_manager')])]"/>
         <field name="comment">Administrateur d'une structure de la plateforme</field>
     </record>
 

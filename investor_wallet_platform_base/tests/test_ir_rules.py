@@ -85,7 +85,8 @@ class IWPIRulesCase(IWPBaseCase):
         vals = self.request_values.copy()
         vals["structure"] = self.coopiteasy.id
         self.env["subscription.request"].create(self.request_values)
-        cie_request.unlink()
+        with self.assertRaises(AccessError):
+            cie_request.unlink()
 
         # other structure's request
         coop_city_request = self.browse_ref(
@@ -220,8 +221,7 @@ class IWPIRulesCase(IWPBaseCase):
         operation_request = self.env["operation.request"].create(vals)
         _ = operation_request.structure
         operation_request.write({"quantity": 666})
-        with self.assertRaises(AccessError):
-            operation_request.unlink()
+        operation_request.unlink()
 
     def test_emc_user_access_to_own_subscription_register(self):
         self.as_emc_user()
@@ -283,11 +283,10 @@ class IWPIRulesCase(IWPBaseCase):
             "taxes_rate": 0.03,
             "structure": self.coopiteasy.id,
         }
-        loan_issue = self.env["loan.issue"].create(vals)
-        _ = loan_issue.structure
-        loan_issue.write({"name": "write passes"})
         with self.assertRaises(AccessError):
-            loan_issue.unlink()
+            self.env["loan.issue"].create(vals)
+
+        loan_issue = self.env.ref('easy_my_coop_loan.loan_issue_1_demo')
 
         vals = {
             "loan_issue_id": loan_issue.id,
@@ -312,16 +311,6 @@ class IWPIRulesCase(IWPBaseCase):
         }
         with self.assertRaises(AccessError):
             loan_issue = self.env["loan.issue"].create(vals)
-
-        vals = {
-            "loan_issue_id": loan_issue.id,
-            "quantity": 3,
-            "partner_id": self.ref("easy_my_coop"
-                                   ".res_partner_cooperator_3_demo"),
-            "date": Date.today(),
-            "state": "subscribed",
-            "structure": self.coopcity.id,
-        }
 
         self.as_iwp_user()
         vals = {
@@ -440,8 +429,7 @@ class IWPIRulesCase(IWPBaseCase):
         template = self.env["product.template"].create(vals)
         _ = template.structure
         template.write({"name": "write passes"})
-        with self.assertRaises(AccessError):
-            template.unlink()
+        template.unlink()
 
         vals = {
             "name": "create passes",
@@ -451,64 +439,4 @@ class IWPIRulesCase(IWPBaseCase):
         template = self.env["product.template"].create(vals)
         _ = template.structure
         template.write({"name": "write passes"})
-        with self.assertRaises(AccessError):
-            template.unlink()
-
-    def test_emc_user_access_to_partners(self):
-        self.as_emc_user()
-        partner = self.env["res.users"].browse(self.uid).partner_id
-        partner.structure = self.coopiteasy
-
-        vals = {
-            "name": "create passes",
-            "is_platform_structure": False,
-        }
-        partner = self.env['res.partner'].create(vals)
-        _ = partner.name
-        partner.write({"name": "write passes"})
-        with self.assertRaises(AccessError):
-            partner.unlink()
-
-        vals = {
-            "name": "create fails",
-            "is_platform_structure": True,
-        }
-        # with self.assertRaises(AccessError):
-        #     self.env['res.partner'].create(vals)  # fixme
-        
-        coopiteasy = self.env['res.partner'].browse(self.coopiteasy.id)
-        _ = coopiteasy.name
-        coopiteasy.write({"name": "write passes"})
-        with self.assertRaises(AccessError):
-            coopiteasy.unlink()       
-            
-        coopcity = self.env['res.partner'].browse(self.coopcity.id)
-        # with self.assertRaises(AccessError):
-        #     coopcity.write({"name": "write fails"})  # fixme
-        with self.assertRaises(AccessError):
-            coopcity.unlink()
-
-    def test_iwp_manager_access_to_all_res_partner(self):
-        self.as_iwp_user()
-        partner = self.env["res.users"].browse(self.uid).partner_id
-        partner.structure = False
-
-        vals = {
-            "name": "create passes",
-            "is_platform_structure": False,
-        }
-        partner = self.env['res.partner'].create(vals)
-        _ = partner.name
-        partner.write({"name": "write passes"})
-        with self.assertRaises(AccessError):
-            partner.unlink()
-
-        vals = {
-            "name": "create passes",
-            "is_platform_structure": True,
-        }
-        partner = self.env['res.partner'].create(vals)
-        _ = partner.name
-        partner.write({"name": "write passes"})
-        with self.assertRaises(AccessError):
-            partner.unlink()
+        template.unlink()
