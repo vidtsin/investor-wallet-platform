@@ -3,7 +3,7 @@
 
     <template id="investor_wallet_platform_base.cooperator_certificat_document">
 
-        <t t-call="web.external_layout">
+        <t t-call="investor_wallet_platform_base.iwp_external_layout">
             <t t-set="address">
                 <address t-field="o.partner_id.commercial_partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />
             </t>
@@ -46,11 +46,11 @@
                                 <td t-attf-class="text-right {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}"
                                     name="share_unit_price">
                                     <span t-field="line.share_unit_price"
-                                        t-options='{"widget": "monetary", "display_currency": line.currency_id}'/>
+                                        t-options='{"widget": "monetary", "display_currency": line.company_currency_id}'/>
                                 </td>
                                 <td class="text-right" name="total_amount_line">
                                     <span t-field="line.total_amount_line"
-                                        t-options='{"widget": "monetary", "display_currency": line.currency_id}'/>
+                                        t-options='{"widget": "monetary", "display_currency": line.company_currency_id}'/>
                                 </td>
                             </tr>
                         </t>
@@ -69,7 +69,7 @@
                                     </td>
                                     <td class="text-right">
                                         <span t-esc="coop_membership.total_value"
-                                        t-options='{"widget": "monetary", "display_currency": o.share_product_currency_id}'/>
+                                        t-options='{"widget": "monetary", "display_currency": o.company_currency_id}'/>
                                     </td>
                                 </tr>
                             </table>
@@ -99,7 +99,7 @@
     </template>
 
 
-    <template id="investor_wallet_platform_base.iwp_cooperator_to_certificat">
+    <template id="investor_wallet_platform_base.iwp_cooperator_certificat">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="o">
                 <t t-call="investor_wallet_platform_base.cooperator_certificat_document" t-lang="o.partner_id.lang"/>

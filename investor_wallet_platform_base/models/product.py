@@ -40,14 +40,16 @@ class ProductTemplate(models.Model):
                               translate=True)
     fees = fields.Html(string="Subscription_fees",
                        translate=True)
-    minimum_amount = fields.Float(string="Minimum subscription amount",
-                                  digits=dp.get_precision('Product Price'))
-    maximum_amount = fields.Float(string="Maximum subscription amount",
-                                  digits=dp.get_precision('Product Price'))
+    minimum_amount = fields.Monetary(string="Minimum subscription amount",
+                                     currency_field='currency_id')
+    maximum_amount = fields.Monetary(string="Maximum subscription amount",
+                                     currency_field='currency_id')
     access_terms = fields.Char(string="Terms of access",
                                translate=True)
-    max_target_issue = fields.Float(string="Issue total amount")
-    min_target_issue = fields.Float(string="Issue minimal amount")
+    max_target_issue = fields.Monetary(string="Issue total amount",
+                                       currency_field='currency_id')
+    min_target_issue = fields.Monetary(string="Issue minimal amount",
+                                       currency_field='currency_id')
     subscription_start_date = fields.Date(string="Issue Start date")
     subscription_end_date = fields.Date(string="Issue End date")
     subscription_length = fields.Char(string="Subscription length",

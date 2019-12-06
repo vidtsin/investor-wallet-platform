@@ -1,4 +1,4 @@
-from odoo import fields, models, _
+from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
 
@@ -13,6 +13,13 @@ class SubscriptionRequest(models.Model):
                                 domain=[('is_platform_structure', '=', True)],
                                 default=default_structure)
 
+    def get_structure_email_template_notif(self, is_company=False):
+        if is_company:
+            mail_template = 'investor_wallet_platform_base.email_template_notification_company'
+        else:
+            mail_template = 'investor_wallet_platform_base.email_template_notification'
+        return self.env.ref(mail_template, False)
+
     def get_mail_template_notif(self, is_company=False):
         templ_obj = self.env['mail.template']
         if is_company:
@@ -26,6 +33,19 @@ class SubscriptionRequest(models.Model):
         template_obj = self.env['mail.template']
         return template_obj.get_email_template_by_key('rel_capital',
                                                       self.structure)
+    @api.model
+    def create(self, vals):
+        subscr_request = super(SubscriptionRequest, self).create(vals)
+        notification_template = subscr_request.get_structure_email_template_notif(False)
+        notification_template.send_mail(subscr_request.id)
+        return subscr_request
+
+    @api.model
+    def create_comp_sub_req(self, vals):
+        subscr_request = super(SubscriptionRequest, self).create_comp_sub_req(vals)
+        notification_template = subscr_request.get_structure_email_template_notif(True)
+        notification_template.send_mail(subscr_request.id)
+        return subscr_request
 
     def get_journal(self):
         if self.structure:

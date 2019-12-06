@@ -1,0 +1,12 @@
+<odoo>
+        <record model="ir.actions.act_window"
+        id="easy_my_coop.action_easy_my_coop_email_templates">
+        <field name="name">Mail Templates</field>
+        <field name="res_model">mail.template</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form,tree</field>
+        <field name="domain">[('iwp','=',True)]</field>
+        <field name="view_id" ref="mail.email_template_tree" />
+        <field name="search_view_id" ref="mail.view_email_template_search" />
+    </record>
+</odoo>

@@ -14,7 +14,17 @@ class ResPartner(models.Model):
     def default_structure(self):
         return self.env.user.structure
 
+    @api.multi
+    @api.depends('share_ids')
+    def _compute_cooperator_type(self):
+        for partner in self:
+            partner.cooperator_type = 'none'
+
     is_platform_structure = fields.Boolean(string="Is a Platform Structure")
+    cooperator_type = fields.Selection(selection=[('none', 'None')],
+                                       compute=_compute_cooperator_type,
+                                       string='Cooperator Type',
+                                       store=True)
     coop_membership = fields.One2many('coop.membership',
                                       'partner_id',
                                       string="Cooperative membership")
@@ -91,8 +101,13 @@ class ResPartner(models.Model):
                                   translate=True)
     susbidies_risk = fields.Html(string="Risks related to subsidies",
                                  translate=True)
-    subscription_maximum_amount = fields.Float(
-        string="Maximum authorised subscription amount")
+    subscription_maximum_amount = fields.Monetary(
+        string="Maximum authorised subscription amount",
+        currency_field='company_currency_id')
+    company_currency_id = fields.Many2one('res.currency',
+                                          related='company_id.currency_id',
+                                          string="Company Currency",
+                                          readonly=True)
     approval = fields.Char(string="Approval",
                            translate=True)
     activity_areas = fields.Many2many('activity.area',

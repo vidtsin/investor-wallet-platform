@@ -34,10 +34,13 @@
         'views/loan_issue_view.xml',
         'views/res_company_view.xml',
         'views/ir_mail_server_view.xml',
+        'views/mail_template.xml',
         'views/menus.xml',
+        'report/report_templates.xml',
         'report/cooperator_certificat.xml',
         'report/cooperator_to_certificat.xml',
         'report/easy_my_coop_report.xml',
+        'report/cooperator_invoice.xml',
         'data/mail_template_data.xml'
         ],
     'demo': [
