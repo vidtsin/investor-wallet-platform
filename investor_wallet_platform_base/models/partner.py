@@ -28,6 +28,11 @@ class ResPartner(models.Model):
     coop_membership = fields.One2many('coop.membership',
                                       'partner_id',
                                       string="Cooperative membership")
+    state = fields.Selection([('draft', 'draft'),
+                              ('to_validate', 'Need validation'),
+                              ('validated', 'Validated')],
+                             string="State",
+                             default='draft')
     initialized = fields.Boolean(string="Sequence initialized")
     structure_type = fields.Selection([('cooperative', 'Cooperative'),
                                        ('association', 'Association'),
@@ -121,6 +126,9 @@ class ResPartner(models.Model):
     mail_serveur_out = fields.Many2one('ir.mail_server',
                                        string="Mail serveur out")
     industry_char_list = fields.Char(compute='_return_industry_char_list')
+    total_outstanding_amount = fields.Monetary(
+        string="Total Outsanding Amount"
+    )
 
     @api.multi
     def _return_area_char_list(self):
@@ -144,20 +152,20 @@ class ResPartner(models.Model):
                 'code': 'subscription.register.' + self.name.replace(" ", "_"),
                 'number_next': 1,
                 'number_increment': 1,
-                }
+            }
             register_sequence = ir_sequence_obj.create(sequence_vals)
 
             sequence_vals = {
                 'name': 'Register Operation ' + self.name,
                 'code': 'register.operation.' + self.name.replace(" ", "_"),
-                }
+            }
             operation_sequence = ir_sequence_obj.create(sequence_vals)
             sequence_vals = {
                 'name': 'Account Default Subscription Journal ' + self.name,
                 'padding': 3,
                 'use_date_range': True,
                 'prefix': 'SUBJ/%(year)s/',
-                }
+            }
             journal_sequence = ir_sequence_obj.create(sequence_vals)
             # TODO create journal
             journal_vals = {
@@ -165,7 +173,7 @@ class ResPartner(models.Model):
                 'code': 'SUBJ_' + self.name.replace(" ", "_"),
                 'type': 'sale',
                 'sequence_id': journal_sequence.id,
-                }
+            }
             account_journal = journal_obj.create(journal_vals)
             self.register_sequence = register_sequence
             self.operation_sequence = operation_sequence
@@ -178,7 +186,8 @@ class ResPartner(models.Model):
 
     def get_membership(self, structure):
         return self.coop_membership.filtered(
-                        lambda record: record.structure == structure)
+            lambda record: record.structure == structure
+        )
 
     @api.multi
     def generate_mail_templates(self):
@@ -190,10 +199,20 @@ class ResPartner(models.Model):
                 for mt_key, mt_xml_id in mail_templ.items():
                     mail_template = self.env.ref(mt_xml_id, False)
                     struct_mail_template = mail_template.copy(default={
-                            'mail_server_id': self.mail_serveur_out.id,
-                            'structure': self.id,
-                            'template_key': mt_key
-                        })
+                        'mail_server_id': self.mail_serveur_out.id,
+                        'structure': self.id,
+                        'template_key': mt_key
+                    })
                     struct_mail_template.name = mail_template.name
         else:
             raise UserError(_('You need first to define a mail server out'))
+
+    @api.multi
+    def validation_request(self):
+        for partner in self:
+            partner.state = 'to_validate'
+
+    @api.multi
+    def validate(self):
+        for partner in self:
+            partner.state = 'validated'
