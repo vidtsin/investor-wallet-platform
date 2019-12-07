@@ -34,7 +34,7 @@
                     </field>
 
                     <field name="representative" position="before">
-                        <field name="cover_image" widget='image' options='{"preview_image": "image_medium"}'/>
+                        <field name="cover_image" widget='image'/>
                         <field name="is_platform_structure"/>
                         <field name="structure_type" attrs="{'invisible': [('is_platform_structure', '=', False)]}"/>
                         <field name="write_date" readonly="True"/>
