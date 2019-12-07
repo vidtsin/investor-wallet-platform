@@ -204,4 +204,22 @@
         </field>
     </record>
 
+    <record id="action_wallet_platform_structure_form" model="ir.actions.act_window">
+        <field name="name">Platform structures</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('is_platform_structure','=',True)]</field>
+        <field name="context">{'default_is_platform_structure':1}</field>
+    </record>
+
+    <record id="action_iwp_structure_to_validate_form" model="ir.actions.act_window">
+        <field name="name">Platform structures</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('is_platform_structure','=',True),('state','=','to_validate')]</field>
+    </record>
 </odoo>
