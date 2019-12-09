@@ -9,10 +9,10 @@
         <field name="model">loan.issue</field>
         <field name="inherit_id" ref="easy_my_coop_loan.view_loan_issue_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='name']" position="after">
+            <xpath expr="//field[@name='is_bond']" position="before">
                 <field name="structure"/>
             </xpath>
-            <field name="interest_payment" position="after">
+            <field name="interest_payment_info" position="after">
             	<field name="write_date"/>
             </field>
             <page name="lines" position="after">
