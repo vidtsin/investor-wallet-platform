@@ -46,6 +46,7 @@
     'demo': [
         'demo/account.xml',
         'demo/structure.xml',
+        'demo/mail_template_demo.xml',
         'demo/coop.xml',
         'demo/users.xml',
     ],

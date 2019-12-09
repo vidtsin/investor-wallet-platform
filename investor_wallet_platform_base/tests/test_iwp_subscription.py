@@ -43,6 +43,16 @@ class IWPSubscriptionCase(IWPBaseCase):
         structure = self.env["res.partner"].create(
             {"name": "test structure", "is_platform_structure": True}
         )
+        structure.account_journal = self.env["account.journal"].create(
+            {"name": "test journal", "type": "sale", "code": "TEST_"}
+        )
+        mail_server_out = self.env["ir.mail_server"].create({
+            "name": "Test Server OUT",
+            "smtp_host": "localhost",
+            "structure": structure.id,
+        })
+        structure.mail_serveur_out = mail_server_out
+        structure.generate_mail_templates()
 
         self.as_emc_manager()
         share = self.env["product.template"].create(
@@ -76,15 +86,6 @@ class IWPSubscriptionCase(IWPBaseCase):
             }
         )
 
-        request.put_on_waiting_list()
-        with self.assertRaises(ValidationError):
-            # There is no journal defined for this structure.
-            request.validate_subscription_request()
-
-        self.as_iwp_manager()
-        structure.account_journal = self.env["account.journal"].create(
-            {"name": "test journal", "type": "sale", "code": "TEST_"}
-        )
-
         self.as_emc_user()
+        request.put_on_waiting_list()
         request.validate_subscription_request()
