@@ -105,6 +105,49 @@ odoo.define('iwp_website.form', function (require) {
             compute_total_amount();
             compute_minmax_quantity();
         });
+
+        var operation_request_form = $(".oe_operation_request_form");
+
+        operation_request_form.each(function () {
+            var amount_elem = operation_request_form.find("#share_type");
+            var qty_elem = operation_request_form.find("#quantity");
+            var total_amount_elem = operation_request_form
+                .find("#total_amount");
+
+            function compute_total_amount() {
+                var price = amount_elem[0]
+                    .options[amount_elem.prop("selectedIndex")]
+                    .dataset
+                    .price;
+                var quantity = qty_elem[0].value;
+                total_amount_elem[0].value = quantity * price;
+            }
+
+            function compute_max_quantity() {
+                var price = amount_elem[0]
+                    .options[amount_elem.prop("selectedIndex")]
+                    .dataset
+                    .price;
+                var owned_amount = amount_elem[0]
+                    .options[amount_elem.prop("selectedIndex")]
+                    .dataset
+                    .owned_amount;
+                if (owned_amount >= 0) {
+                    var max_qty = Math.floor(owned_amount / price);
+                    qty_elem.attr("max", max_qty);
+                } else {
+                    qty_elem.removeAttr("max");
+                }
+            }
+
+            amount_elem.change(function() {
+                compute_total_amount();
+                compute_max_quantity();
+            });
+            qty_elem.change(compute_total_amount);
+            compute_total_amount();
+            compute_max_quantity();
+        });
     });
 
 });
