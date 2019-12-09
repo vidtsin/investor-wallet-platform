@@ -28,7 +28,6 @@
 	    				</group>
 	    				<group>
     						<field name="book_value" widget='monetary' options="{'currency_field': 'currency_id', 'field_digits': True}"/>
-	    					<field name="interest_payment_date"/>
 		    				<field name="info_note_url"/>
 		    				<field name="advantages"/>
 		    				<field name="oversubscription_policy"/>
