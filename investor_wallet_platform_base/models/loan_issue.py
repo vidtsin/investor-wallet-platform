@@ -25,7 +25,6 @@ class LoanIssue(models.Model):
                                string="Banking product")
     book_value = fields.Html(string="Book value",
                              translate=True)
-    interest_payment_date = fields.Date(string="Interest payment date")
     advantages = fields.Html(string="Other advantages",
                              translate=True)
     tax_policy = fields.Char(string="Tax policy",
