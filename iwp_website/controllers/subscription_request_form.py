@@ -42,6 +42,10 @@ class SubscriptionRequestForm(Form):
     def clean(self):
         """Check that user does not buy to much shares."""
         cleaned_data = super().clean()
+        if "share_type" not in cleaned_data:
+            return cleaned_data
+        if "quantity" not in cleaned_data:
+            return cleaned_data
         user = self.context.get("user")
         share_type = (
             request.env["product.template"]
@@ -67,10 +71,9 @@ class SubscriptionRequestForm(Form):
             )
         return cleaned_data
 
-    def _validate_quantity(self, value, field):
-        minimum = field.att.get("min")
-        if minimum and value < minimum:
-            raise FormValidationError("Minimun %d." % minimum)
+    def _validate_quantity(self, value):
+        if value <= 0:
+            raise FormValidationError("Quantity can not be nul or negative.")
 
     def _choices_share_type(self):
         user = self.context.get("user")
