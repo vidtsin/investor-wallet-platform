@@ -232,7 +232,7 @@ class InvestorPortal(CustomerPortal):
                 return request.redirect('/my/home')
         else:
             form = self.user_form(context={"user": user})
-        qcontext = {"form": form}
+        qcontext = {"form": form, "page_name": "investor_details"}
         if is_company:
             return request.render(
                 "iwp_website.investor_company_details", qcontext

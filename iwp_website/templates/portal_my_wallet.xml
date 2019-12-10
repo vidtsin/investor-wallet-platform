@@ -46,6 +46,10 @@
                 t-attf-class="breadcrumb-item active">
                 Loan Wallet
             </li>
+            <li t-if="page_name == 'investor_details'"
+                t-attf-class="breadcrumb-item active">
+                Investor Details
+            </li>
         </xpath>
     </template>
 
@@ -360,34 +364,31 @@
                 <thead>
                     <tr class="active">
                         <th>Name</th>
-                        <th class="text-right">Structure Type</th>
-                        <th class="text-right">Subscribe to share</th>
-                        <th class="text-right">Encode already owned shares</th>
-                        <th class="text-right">Subscribe to loan</th>
+                        <th>Structure Type</th>
+                        <th class="text-right">Invest</th>
+                        <th class="text-right">Wallet</th>
                     </tr>
                 </thead>
                 <t t-foreach="structures" t-as="struct">
                     <tr>
                         <td><t t-esc="struct.name"/></td>
-                        <td class="text-right">
+                        <td>
                             <span t-field="struct.structure_type"/>
                         </td>
                         <td class="text-right">
                             <a t-attf-href="/struct/{{ struct.id }}/share/subscription"
-                                class="btn btn-primary btn-sm">
-                                Subscribe to new shares
+                                class="btn btn-secondary btn-sm">
+                                Shares
+                            </a>
+                            <a t-attf-href="/struct/{{ struct.id }}/loan/subscription"
+                                class="btn btn-secondary btn-sm">
+                                Loans
                             </a>
                         </td>
                         <td class="text-right">
                             <a t-attf-href="/struct/{{ struct.id }}/share/manual/new"
-                                class="btn btn-primary btn-sm">
-                                Add existing shares
-                            </a>
-                        </td>
-                        <td class="text-right">
-                            <a t-attf-href="/struct/{{ struct.id }}/loan/subscription"
-                                class="btn btn-primary btn-sm">
-                                Subscribe to new loans
+                                class="btn btn-secondary btn-sm">
+                                Existing shares
                             </a>
                         </td>
                     </tr>
@@ -401,7 +402,7 @@
         inherit_id="portal.portal_my_home">
         <xpath expr="//div[hasclass('o_portal_my_home')]" position="after">
             <a href="/structure" class="btn btn-primary mt-2">
-                Show actions on structures
+                Invest
             </a>
         </xpath>
     </template>
