@@ -15,6 +15,7 @@
     ],
     'data': [
         'templates/assets.xml',
+        'templates/showcase_website_links.xml',
         'templates/form.xml',
         'templates/auth_signup_form.xml',
         'templates/portal_my_wallet.xml',
