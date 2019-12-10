@@ -29,7 +29,12 @@ class WebsiteSubscriptionRequest(http.Controller):
         struct = request.env["res.partner"].sudo().browse(struct_id)
         if not struct or not struct.is_platform_structure:
             raise NotFound
+        share_type = struct.share_type_ids.filtered(
+            lambda r: r.id == finprod_id
+        )
         form_context = {"struct": struct, "user": request.env.user}
+        if share_type:
+            form_context["share_type"] = share_type
         if request.httprequest.method == "POST":
             form = self.subscription_request_form(
                 data=request.params, context=form_context
@@ -59,14 +64,18 @@ class WebsiteSubscriptionRequest(http.Controller):
         initial = {}
         user = context.get("user")
         struct = context.get("struct")
+        share_type = context.get("share_type")
         # TODO: take the first share_type or the default one.
         if struct:
-            default_share_types = struct.share_type_ids.filtered(
-                lambda r: r.display_on_website and r.default_share_product
-            )
-            default_share_type = (
-                default_share_types[0] if default_share_types else None
-            )
+            if share_type:
+                default_share_type = share_type
+            else:
+                default_share_types = struct.share_type_ids.filtered(
+                    lambda r: r.display_on_website and r.default_share_product
+                )
+                default_share_type = (
+                    default_share_types[0] if default_share_types else None
+                )
             if default_share_type:
                 initial["share_type"] = str(default_share_type.id)
                 initial["quantity"] = (
