@@ -24,11 +24,12 @@
             </button>
             <button id="action_view_update_partner_info" position="after">
                 <button name="validation_request" type="object" string="Request validation"  attrs="{'invisible':['|',('state','not in',['draft','validated']),('is_platform_structure','=',False)]}"
+                    groups="easy_my_coop.group_easy_my_coop_manager"/>
+                <button name="validate" type="object" string="Validate" attrs="{'invisible':['|',('state','not in',['to_validate','validated']),('is_platform_structure','=',False)]}"
                     groups="investor_wallet_platform_base.group_platform_wallet_manager"/>
-                    <button name="validate" type="object" string="Validate" attrs="{'invisible':['|',('state','not in',['to_validate','validated']),('is_platform_structure','=',False)]}"
-                        groups="easy_my_coop.group_easy_my_coop_manager"/>
-                        <field name="state" widget="statusbar" attrs="{'invisible':[('is_platform_structure','=',False)]}"/>
-                    </button>
+                <field name="state" widget="statusbar" attrs="{'invisible':[('is_platform_structure','=',False)]}"/>
+            </button>
+            
                     <field name="email" position="attributes">
                         <attribute name="attrs">{'required': [('is_platform_structure', '=', True)]}</attribute>
                     </field>
