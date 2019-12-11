@@ -1,8 +1,7 @@
 # Copyright 2019 Coop IT Easy SCRL fs
 #   Robin Keunen <robin@coopiteasy.be>
+#   Houssine Bakkali <houssine@coopiteasy.be>
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-
-
 from odoo import api, fields, models, _
 
 from odoo.exceptions import UserError
@@ -28,11 +27,15 @@ class ResPartner(models.Model):
     coop_membership = fields.One2many('coop.membership',
                                       'partner_id',
                                       string="Cooperative membership")
-    state = fields.Selection([('draft', 'draft'),
+    state = fields.Selection([('draft', 'Draft'),
+                              ('refused', 'Refused'),
                               ('to_validate', 'Need validation'),
                               ('validated', 'Validated')],
                              string="State",
                              default='draft')
+    validation_date = fields.Date(string="Validation date")
+    validated_by = fields.Many2one('res.users',
+                                   string="Validated by")
     initialized = fields.Boolean(string="Sequence initialized")
     structure_type = fields.Selection([('cooperative', 'Cooperative'),
                                        ('association', 'Association'),
@@ -215,4 +218,13 @@ class ResPartner(models.Model):
     @api.multi
     def validate(self):
         for partner in self:
-            partner.state = 'validated'
+            partner.write({'state': 'validated',
+                           'display_on_website': True,
+                           'validation_date': fields.Date.today(),
+                           'validated_by': self.env.user.id
+                           })
+
+    @api.multi
+    def refuse(self):
+        for partner in self:
+            partner.state = 'refused'

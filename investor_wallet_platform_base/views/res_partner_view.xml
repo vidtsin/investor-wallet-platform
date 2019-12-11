@@ -23,9 +23,11 @@
                 <attribute name="invisible">True</attribute>
             </button>
             <button id="action_view_update_partner_info" position="after">
-                <button name="validation_request" type="object" string="Request validation"  attrs="{'invisible':['|',('state','not in',['draft','validated']),('is_platform_structure','=',False)]}"
+                <button name="validation_request" type="object" string="Request validation"  attrs="{'invisible':['|',('state','not in',['draft','refused']),('is_platform_structure','=',False)]}"
                     groups="easy_my_coop.group_easy_my_coop_manager"/>
-                <button name="validate" type="object" string="Validate" attrs="{'invisible':['|',('state','not in',['to_validate','validated']),('is_platform_structure','=',False)]}"
+                <button name="validate" type="object" string="Validate" attrs="{'invisible':['|',('state','not in',['to_validate']),('is_platform_structure','=',False)]}"
+                    groups="investor_wallet_platform_base.group_platform_wallet_manager"/>
+                 <button name="refuse" type="object" string="Refuse" attrs="{'invisible':['|',('state','not in',['to_validate']),('is_platform_structure','=',False)]}"
                     groups="investor_wallet_platform_base.group_platform_wallet_manager"/>
                 <field name="state" widget="statusbar" attrs="{'invisible':[('is_platform_structure','=',False)]}"/>
             </button>
@@ -36,9 +38,8 @@
 
                     <field name="representative" position="before">
                         <field name="cover_image" widget='image'/>
-                        <field name="is_platform_structure"/>
+                        <field name="is_platform_structure" groups="investor_wallet_platform_base.group_platform_wallet_manager"/>
                         <field name="structure_type" attrs="{'invisible': [('is_platform_structure', '=', False)]}"/>
-                        <field name="write_date" readonly="True"/>
                     </field>
 
                     <field name="cooperator_register_number" position="replace"/>
@@ -90,7 +91,7 @@
                         <page name="structure_info" string="Structure info" attrs="{'invisible': [('is_platform_structure', '=', False)]}">
                             <group>
                                 <group>
-                                    <field name="display_on_website"/>
+                                    <field name="display_on_website" groups="investor_wallet_platform_base.group_platform_wallet_manager"/>
                                     <field name="employee_number"/>
                                     <field name="industry_id" attrs="{'invisible': [('is_company', '=', False)]}" options="{'no_create': True}"/>
                                     <field name="board_representative"/>
@@ -151,6 +152,11 @@
                                     <field name="account_journal"/>
                                     <field name="register_sequence"/>
                                     <field name="operation_sequence"/>
+                                </group>
+                                <group>
+                                    <field name="write_date" readonly="True"/>
+                                    <field name="validation_date" readonly="True"/>
+                                    <field name="validated_by" readonly="True"/>
                                 </group>
                             </group>
                             <group>
