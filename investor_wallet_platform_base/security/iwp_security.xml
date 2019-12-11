@@ -294,6 +294,30 @@
 			<field name="perm_unlink" eval="1"/>
 	        <field name="domain_force">[(1, "=", 1)]</field>
 	    </record>
-		
+
+		<!-- Mail Templates -->
+
+	    <record id="mail_template_emc_manager_own_mail_template_rule" model="ir.rule">
+	        <field name="name">mail_template_emc_manager_own_loan_issue_line_rule</field>
+	        <field name="model_id" ref="mail.model_mail_template"/>
+	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_manager'))]"/>
+			<field name="perm_read" eval="1"/>
+			<field name="perm_write" eval="1"/>
+			<field name="perm_create" eval="1"/>
+			<field name="perm_unlink" eval="1"/>
+	        <field name="domain_force">[('structure','=',user.structure.id)]</field>
+	    </record>
+
+	    <record id="mail_template_iwp_user_all_mail_template_rule" model="ir.rule">
+	        <field name="name">mail_template_iwp_user_all_loan_issue_line_rule</field>
+	        <field name="model_id" ref="mail.model_mail_template"/>
+	        <field name="groups" eval="[(4, ref('group_platform_wallet_user'))]"/>
+			<field name="perm_read" eval="1"/>
+			<field name="perm_write" eval="1"/>
+			<field name="perm_create" eval="1"/>
+			<field name="perm_unlink" eval="1"/>
+	        <field name="domain_force">[(1, "=", 1)]</field>
+	    </record>
+
 	</data>
 </odoo>
