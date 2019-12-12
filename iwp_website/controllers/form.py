@@ -35,6 +35,7 @@ class Field:
         label=None,
         required=False,
         readonly=False,
+        hidden=False,
         att=None,
         content=None,
         input_type=None,
@@ -45,6 +46,7 @@ class Field:
         self.label = label
         self.required = required
         self.readonly = readonly
+        self.hidden = hidden
         self.att = att
         self.content = content
         self.input_type = input_type

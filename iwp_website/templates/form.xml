@@ -9,7 +9,8 @@
         should be set.
         -->
 
-        <div t-attf-class="form-group field-{{name}}">
+        <div t-attf-class="form-group field-{{name}}"
+            t-att-style="'display: none;' if field.hidden else None">
             <label t-attf-for="{{name}}"><t t-esc="field.label"/></label>
             <select t-attf-id="{{name}}"
                 class="form-control form-control-sm"
@@ -40,7 +41,8 @@
         should be set.
         -->
 
-        <div t-attf-class="form-group field-{{name}}">
+        <div t-attf-class="form-group field-{{name}}"
+            t-att-style="'display: none;' if field.hidden else None">
             <label t-attf-for="{{name}}"><t t-esc="field.label" /></label>
             <input t-attf-id="{{name}}"
                 class="form-control form-control-sm"
@@ -68,7 +70,8 @@
         should be set.
         -->
 
-        <div t-attf-class="form-group form-check field-{{name}}">
+        <div t-attf-class="form-group form-check field-{{name}}"
+            t-att-style="'display: none;' if field.hidden else None">
             <input t-attf-id="{{name}}"
                 class="form-check-input"
                 type="checkbox"
