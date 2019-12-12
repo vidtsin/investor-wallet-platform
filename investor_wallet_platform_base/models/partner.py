@@ -359,3 +359,49 @@ class ResPartner(models.Model):
     def refuse(self):
         for partner in self:
             partner.state = 'refused'
+
+    @api.multi
+    def owned_amount(self, share_type):
+        """
+        Return the amount of share_type owned by this cooperator.
+        """
+        self.ensure_one()
+        owned = sum(
+            sl.total_amount_line
+            for sl in self.share_ids
+            if sl.share_product_id == share_type.product_variant_id
+        )
+        pending_sub = self.env["subscription.request"].search([
+            "&",
+            ("partner_id", "=", self.id),
+            "&",
+            ("share_product_id", "=", share_type.product_variant_id.id),
+            "|",
+            ("state", "=", "draft"),
+            ("state", "=", "done"),
+        ])
+        pending = sum(sr.subscription_amount for sr in pending_sub)
+        return owned + pending
+
+    @api.multi
+    def owned_structure_amount(self, structure):
+        """
+        Return the amount owned by this cooperator in the given structure.
+        """
+        self.ensure_one()
+        owned = sum(
+            sl.total_amount_line
+            for sl in self.share_ids
+            if sl.structure == structure
+        )
+        pending_sub = self.env["subscription.request"].search([
+            "&",
+            ("partner_id", "=", self.id),
+            "&",
+            ("structure", "=", structure.id),
+            "|",
+            ("state", "=", "draft"),
+            ("state", "=", "done"),
+        ])
+        pending = sum(sr.subscription_amount for sr in pending_sub)
+        return owned + pending
