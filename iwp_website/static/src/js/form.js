@@ -10,12 +10,15 @@ odoo.define('iwp_website.form', function (require) {
             var total_amount_elem = manual_share_form.find("#total_amount");
 
             function compute_total_amount() {
-                var amount = amount_elem[0]
-                    .options[amount_elem.prop("selectedIndex")]
-                    .dataset
-                    .amount;
-                var quantity = qty_elem[0].value;
-                total_amount_elem[0].value = quantity * amount;
+                var selected_index = amount_elem.prop("selectedIndex")
+                if (selected_index >= 0) {
+                    var amount = amount_elem[0]
+                        .options[selected_index]
+                        .dataset
+                        .amount;
+                    var quantity = qty_elem[0].value;
+                    total_amount_elem[0].value = quantity * amount;
+                }
             }
 
             amount_elem.change(compute_total_amount);
@@ -53,38 +56,44 @@ odoo.define('iwp_website.form', function (require) {
                 .find("#total_amount");
 
             function compute_total_amount() {
-                var price = amount_elem[0]
-                    .options[amount_elem.prop("selectedIndex")]
-                    .dataset
-                    .price;
-                var quantity = qty_elem[0].value;
-                total_amount_elem[0].value = quantity * price;
+                var selected_index = amount_elem.prop("selectedIndex")
+                if (selected_index >= 0) {
+                    var price = amount_elem[0]
+                        .options[selected_index]
+                        .dataset
+                        .price;
+                    var quantity = qty_elem[0].value;
+                    total_amount_elem[0].value = quantity * price;
+                }
             }
 
             function compute_minmax_quantity() {
-                var price = amount_elem[0]
-                    .options[amount_elem.prop("selectedIndex")]
-                    .dataset
-                    .price;
-                var min_amount = amount_elem[0]
-                    .options[amount_elem.prop("selectedIndex")]
-                    .dataset
-                    .min_amount;
-                var max_amount = amount_elem[0]
-                    .options[amount_elem.prop("selectedIndex")]
-                    .dataset
-                    .max_amount;
-                if (min_amount) {
-                    var min_qty = Math.ceil(min_amount / price);
-                    qty_elem.attr("min", min_qty);
-                } else {
-                    qty_elem.attr("min", 1);
-                }
-                if (max_amount >= 0) {
-                    var max_qty = Math.floor(max_amount / price);
-                    qty_elem.attr("max", max_qty);
-                } else {
-                    qty_elem.removeAttr("max");
+                var selected_index = amount_elem.prop("selectedIndex")
+                if (selected_index >= 0) {
+                    var price = amount_elem[0]
+                        .options[selected_index]
+                        .dataset
+                        .price;
+                    var min_amount = amount_elem[0]
+                        .options[selected_index]
+                        .dataset
+                        .min_amount;
+                    var max_amount = amount_elem[0]
+                        .options[selected_index]
+                        .dataset
+                        .max_amount;
+                    if (min_amount) {
+                        var min_qty = Math.ceil(min_amount / price);
+                        qty_elem.attr("min", min_qty);
+                    } else {
+                        qty_elem.attr("min", 1);
+                    }
+                    if (max_amount >= 0) {
+                        var max_qty = Math.floor(max_amount / price);
+                        qty_elem.attr("max", max_qty);
+                    } else {
+                        qty_elem.removeAttr("max");
+                    }
                 }
             }
 
