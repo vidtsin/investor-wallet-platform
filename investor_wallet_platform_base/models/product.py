@@ -1,7 +1,5 @@
 from odoo import api, fields, models
 
-from odoo.addons import decimal_precision as dp
-
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
@@ -13,6 +11,15 @@ class ProductTemplate(models.Model):
                                 string="Platform Structure",
                                 domain=[('is_platform_structure', '=', True)],
                                 default=default_structure)
+    validation_requested = fields.Boolean(string="Validation requested",
+                                          readonly=True)
+    validated = fields.Boolean(string="Validation request",
+                               readonly=True)
+    validation_date = fields.Date(string="Validation date",
+                                  readonly=True)
+    validated_by = fields.Many2one('res.users',
+                                   string="Validated by",
+                                   readonly=True)
     state = fields.Selection([('open', 'Open'),
                               ('close', 'Close'),
                               ('waiting', 'Waiting list')],
@@ -78,6 +85,25 @@ class ProductTemplate(models.Model):
             ("state", "=", "open"),
             ("display_on_website", "=", True),
         ])
+
+    @api.multi
+    def validation_request(self):
+        for product in self:
+            product.validation_requested = True
+
+    @api.multi
+    def validate(self):
+        for product in self:
+            product.write({'validated': True,
+                           'display_on_website': True,
+                           'validation_date': fields.Date.today(),
+                           'validated_by': self.env.user.id
+                           })
+
+    @api.multi
+    def refuse(self):
+        for product in self:
+            product.validation_requested = False
 
     @api.multi
     def can_buy_max_amount(self, partner_id):
