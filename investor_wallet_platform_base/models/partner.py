@@ -33,9 +33,11 @@ class ResPartner(models.Model):
                               ('validated', 'Validated')],
                              string="State",
                              default='draft')
-    validation_date = fields.Date(string="Validation date")
+    validation_date = fields.Date(string="Validation date",
+                                  readonly=True)
     validated_by = fields.Many2one('res.users',
-                                   string="Validated by")
+                                   string="Validated by",
+                                   readonly=True)
     initialized = fields.Boolean(string="Sequence initialized")
     structure_type = fields.Selection([('cooperative', 'Cooperative'),
                                        ('association', 'Association'),

@@ -154,9 +154,9 @@
                                     <field name="operation_sequence"/>
                                 </group>
                                 <group>
-                                    <field name="write_date" readonly="True"/>
-                                    <field name="validation_date" readonly="True"/>
-                                    <field name="validated_by" readonly="True"/>
+                                    <field name="write_date"/>
+                                    <field name="validation_date"/>
+                                    <field name="validated_by"/>
                                 </group>
                             </group>
                             <group>
