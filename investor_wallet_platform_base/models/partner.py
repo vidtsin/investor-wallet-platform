@@ -135,6 +135,116 @@ class ResPartner(models.Model):
         string="Total Outsanding Amount"
     )
 
+    structure_ids = fields.Many2many(
+        comodel_name='res.partner',
+        relation='iwp_res_partner_structure_rel',
+        column1='partner_id',
+        column2='structure_id',
+        string='Linked to Structures',
+        compute='_compute_linked_structure',
+        store=True,
+        help="Used to restrict access in views",
+    )
+    membership_structure_ids = fields.Many2many(
+        comodel_name='res.partner',
+        relation='iwp_res_partner_membership_rel',
+        column1='partner_id',
+        column2='structure_id',
+        string='Member of Structures',
+        compute='_compute_structure_membership',
+        store=True,
+        help="Used to restrict access in views",
+    )
+    candidate_structure_ids = fields.Many2many(
+        comodel_name='res.partner',
+        relation='iwp_res_partner_candidate_rel',
+        column1='partner_id',
+        column2='structure_id',
+        string='Candidate for Structures',
+        compute='_compute_structure_membership',
+        store=True,
+        help="Used to restrict access in views",
+    )
+    old_member_structure_ids = fields.Many2many(
+        comodel_name='res.partner',
+        relation='iwp_res_partner_old_member_rel',
+        column1='partner_id',
+        column2='structure_id',
+        string='Old Member of Structures',
+        compute='_compute_structure_membership',
+        store=True,
+        help="Used to restrict access in views",
+    )
+    loan_structure_ids = fields.Many2many(
+        comodel_name='res.partner',
+        relation='iwp_res_partner_loan_rel',
+        column1='partner_id',
+        column2='structure_id',
+        string='Loaned to Structures',
+        compute='_compute_structure_loans',
+        store=True,
+        help="Used to restrict access in views",
+    )
+
+    @api.multi
+    @api.depends('coop_membership.structure',
+                 'loan_line_ids.structure')
+    def _compute_linked_structure(self):
+        for partner in self:
+            coop_structure_ids = (
+                partner.coop_membership
+                       .mapped('structure')
+                       .ids
+            )
+            loan_structure_ids = (
+                partner
+                .loan_line_ids
+                .mapped('structure')
+                .ids
+            )
+            partner.structure_ids = coop_structure_ids + loan_structure_ids
+
+    @api.multi
+    @api.depends('coop_membership.structure',
+                 'coop_membership.member',
+                 'coop_membership.coop_candidate',
+                 'coop_membership.old_member')
+    def _compute_structure_membership(self):
+        for partner in self:
+            member_structure_ids = (
+                partner.coop_membership
+                       .filtered(lambda cm: cm.member)
+                       .mapped('structure')
+                       .ids
+            )
+            partner.membership_structure_ids = member_structure_ids
+            candidate_structure_ids = (
+                partner.coop_membership
+                       .filtered(lambda cm: cm.coop_candidate)
+                       .mapped('structure')
+                       .ids
+            )
+            partner.candidate_structure_ids = candidate_structure_ids
+            old_member_structure_ids = (
+                partner.coop_membership
+                       .filtered(lambda cm: cm.old_member)
+                       .mapped('structure')
+                       .ids
+            )
+            partner.old_member_structure_ids = old_member_structure_ids
+
+    @api.multi
+    @api.depends('loan_line_ids.structure')
+    def _compute_structure_loans(self):
+        for partner in self:
+            loan_structure_ids = (
+                partner
+                .loan_line_ids
+                .mapped('structure')
+                .ids
+            )
+            partner.loan_structure_ids = loan_structure_ids
+
     @api.multi
     def _return_area_char_list(self):
         for partner in self:
@@ -143,7 +253,11 @@ class ResPartner(models.Model):
     @api.multi
     def _return_industry_char_list(self):
         for partner in self:
-            partner.industry_char_list = partner.industry_id.mapped('full_name') # noqa
+            partner.industry_char_list = (
+                    partner
+                    .industry_id
+                    .mapped('full_name')
+            )
 
     @api.multi
     def generate_sequence(self):

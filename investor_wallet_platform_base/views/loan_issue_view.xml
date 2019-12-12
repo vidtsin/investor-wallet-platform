@@ -91,4 +91,26 @@
             </filter>
         </field>
     </record>
+
+    <record id="view_loan_issue_tree" model="ir.ui.view">
+		<field name="name">view_loan_issue_tree</field>
+		<field name="model">loan.issue</field>
+        <field name="inherit_id" ref="easy_my_coop_loan.view_loan_issue_tree"/>
+		<field name="arch" type="xml">
+            <field name="name" position="before">
+                <field name="structure" groups="investor_wallet_platform_base.group_platform_wallet_user"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="loan_issue_line_view_tree" model="ir.ui.view">
+		<field name="name">loan_issue_line_view_tree</field>
+		<field name="model">loan.issue.line</field>
+        <field name="inherit_id" ref="easy_my_coop_loan.loan_issue_line_view_tree"/>
+		<field name="arch" type="xml">
+            <field name="name" position="before">
+                <field name="structure" groups="investor_wallet_platform_base.group_platform_wallet_user"/>
+            </field>
+        </field>
+    </record>
 </odoo>

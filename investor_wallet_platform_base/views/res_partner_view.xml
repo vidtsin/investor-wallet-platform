@@ -1,19 +1,5 @@
 <odoo>
 
-    <record id="view_partner_form_wallet_platform_bis" model="ir.ui.view">
-        <field name="name">res.partner.form.iwp_bis</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="easy_my_coop_loan.view_partner_form_loan_issue"/>
-        <field name="arch" type="xml">
-            <page name="loan_issue_lines" position="before">
-                <field name="is_platform_structure" attrs="{'invisible': 1}"/>
-            </page>
-            <page name="loan_issue_lines" position="attributes">
-                <attribute name="attrs">{'invisible': [('is_platform_structure', '=', True)]}</attribute>
-            </page>
-        </field>
-    </record>
-
     <record id="view_partner_form_wallet_platform" model="ir.ui.view">
         <field name="name">res.partner.form.iwp</field>
         <field name="model">res.partner</field>
@@ -31,7 +17,7 @@
                     groups="investor_wallet_platform_base.group_platform_wallet_manager"/>
                 <field name="state" widget="statusbar" attrs="{'invisible':[('is_platform_structure','=',False)]}"/>
             </button>
-            
+
                     <field name="email" position="attributes">
                         <attribute name="attrs">{'required': [('is_platform_structure', '=', True)]}</attribute>
                     </field>
@@ -181,6 +167,20 @@
                 </field>
             </record>
 
+    <record id="view_partner_form_wallet_platform_bis" model="ir.ui.view">
+        <field name="name">res.partner.form.iwp_bis</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="easy_my_coop_loan.view_partner_form_loan_issue"/>
+        <field name="arch" type="xml">
+            <page name="loan_issue_lines" position="before">
+                <field name="is_platform_structure" attrs="{'invisible': 1}"/>
+            </page>
+            <page name="loan_issue_lines" position="attributes">
+                <attribute name="attrs">{'invisible': [('is_platform_structure', '=', True)]}</attribute>
+            </page>
+        </field>
+    </record>
+
     <record id="view_partner_filter" model="ir.ui.view">
         <field name="name">res.partner.search</field>
         <field name="model">res.partner</field>
@@ -228,5 +228,40 @@
         <field name="view_type">form</field>
         <field name="view_mode">kanban,tree,form</field>
         <field name="domain">[('is_platform_structure','=',True),('state','=','to_validate')]</field>
+    </record>
+
+    <record id="view_res_partner_filter_coop" model="ir.ui.view">
+        <field name="name">res.partner.select</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="easy_my_coop.view_res_partner_filter_coop"/>
+        <field name="arch" type="xml">
+            <filter name="cooperators" position="attributes">
+                <attribute name="domain">[('membership_structure_ids', '!=', False)]</attribute>
+            </filter>
+            <filter name="old_cooperators" position="attributes">
+                <attribute name="domain">[('old_member_structure_ids', '!=', False)]</attribute>
+            </filter>
+            <filter name="cooperator_candidates" position="attributes">
+                <attribute name="domain">[('candidate_structure_ids', '!=', False)]</attribute>
+            </filter>
+            <filter name="group_by_cooperator_type" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </filter>
+        </field>
+    </record>
+
+    <record id="easy_my_coop.action_partner_cooperator_form" model="ir.actions.act_window">
+        <field name="domain">[]</field>
+    </record>
+
+    <record id="view_res_partner_loaner_filter" model="ir.ui.view">
+        <field name="name">res.partner.form.loan.issue</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="easy_my_coop_loan.view_res_partner_loaner_filter"/>
+        <field name="arch" type="xml">
+            <filter name="loaners" position="attributes">
+                <attribute name="domain">[('loan_structure_ids', '!=', False)]</attribute>
+            </filter>
+        </field>
     </record>
 </odoo>

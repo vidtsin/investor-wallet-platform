@@ -65,7 +65,8 @@ class CoopMembership(models.Model):
     old_member = fields.Boolean(string='Old cooperator',
                                 help="Check this box if this cooperator is"
                                 " no more an effective member.")
-    subscription_request_ids = fields.One2many(related='partner_id.subscription_request_ids') # noqa
+    subscription_request_ids = fields.One2many(
+        related='partner_id.subscription_request_ids')
     effective_date = fields.Date(string="Effective date",
                                  compute=_compute_effective_date,
                                  store=True)

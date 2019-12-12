@@ -95,6 +95,7 @@
 	    		</page>
 		   </field>
 	</record>
+
 	<record id="view_product_template_form_iwp" model="ir.ui.view">
 	    <field name="name">product.template.share.form</field>
            <field name="model">product.template</field>
