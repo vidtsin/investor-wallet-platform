@@ -5,6 +5,15 @@
            <field name="inherit_id" ref="easy_my_coop.product_template_share_form_view"/>
            <field name="arch" type="xml">
            		<header position="inside">
+                    <button name="validation_request" string="Validation request"
+                            type="object" attrs="{'invisible':[('validation_requested','=',True)]}"
+                            groups="easy_my_coop.group_easy_my_coop_manager"/>
+                    <button name="validate" string="Validate"
+                            type="object" attrs="{'invisible':['|',('validation_requested','=',False),('validated','=',True)]}"
+                            groups="investor_wallet_platform_base.group_platform_wallet_manager"/>
+                    <button name="refuse" string="Refused"
+                            type="object" attrs="{'invisible':['|',('validation_requested','=',False),('validated','=',True)]}"
+                            groups="investor_wallet_platform_base.group_platform_wallet_manager"/>
            			<field name="state" widget="statusbar" statusbar_visible="open,close,waiting" options="{'clickable': '1'}"/>
            		</header>
                 <field name="force_min_qty" position="attributes">
@@ -18,12 +27,16 @@
 	    				<group>
 	    					<field name="lst_price" readonly="True"/>
 	    					<field name="book_value" readonly="True"/>
-	    					<field name="write_date"/>
+                            <field name="subscription_start_date" readonly="True"/>
+                            <field name="subscription_end_date" readonly="True"/>
+                            <field name="subscription_length" readonly="True"/>
 	    				</group>
 	    				<group>
-		    				<field name="subscription_start_date" readonly="True"/>
-		    				<field name="subscription_end_date" readonly="True"/>
-		    				<field name="subscription_length" readonly="True"/>
+                            <field name="write_date"/>
+                            <field name="validation_requested"/>
+                            <field name="validated"/>
+                            <field name="validation_date"/>
+                            <field name="validated_by"/>
 	    				</group>
 	    			</group>
 	    		</xpath>
@@ -65,7 +78,6 @@
 	    			<page string="Issue Information" name="issue_information" attrs="{'invisible':[('is_share','=',False)]}">
 	    				<group>
 	    					<group>
-		    					<field name="dividend_date"/>
 			    				<field name="tax_benefit"/>
 			    				<field name="tax_policy"/>
 			    				<field name="fees"/>

@@ -9,11 +9,26 @@
         <field name="model">loan.issue</field>
         <field name="inherit_id" ref="easy_my_coop_loan.view_loan_issue_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='name']" position="after">
+        	<button name="compute_loan_interest" position="after">
+				<button name="validation_request" string="Validation request"
+						type="object" attrs="{'invisible':[('validation_requested','=',True)]}"
+						groups="easy_my_coop.group_easy_my_coop_manager"/>
+				<button name="validate" string="Validate"
+						type="object" attrs="{'invisible':['|',('validation_requested','=',False),('validated','=',True)]}"
+						groups="investor_wallet_platform_base.group_platform_wallet_manager"/>
+				<button name="refuse" string="Refused"
+						type="object" attrs="{'invisible':['|',('validation_requested','=',False),('validated','=',True)]}"
+						groups="investor_wallet_platform_base.group_platform_wallet_manager"/>
+        	</button>
+            <xpath expr="//field[@name='default_issue']" position="before">
                 <field name="structure"/>
             </xpath>
-            <field name="interest_payment" position="after">
+            <field name="interest_payment_info" position="after">
             	<field name="write_date"/>
+            	<field name="validation_requested"/>
+            	<field name="validated"/>
+                <field name="validation_date"/>
+                <field name="validated_by"/>
             </field>
             <page name="lines" position="after">
             	<page string="Issue Information" name="issue_information">
@@ -28,7 +43,6 @@
 	    				</group>
 	    				<group>
     						<field name="book_value" widget='monetary' options="{'currency_field': 'currency_id', 'field_digits': True}"/>
-	    					<field name="interest_payment_date"/>
 		    				<field name="info_note_url"/>
 		    				<field name="advantages"/>
 		    				<field name="oversubscription_policy"/>

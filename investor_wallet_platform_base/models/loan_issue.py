@@ -17,6 +17,15 @@ class LoanIssue(models.Model):
                                 domain=[("is_platform_structure", "=", True)],
                                 default=default_structure,
                                 )
+    validation_requested = fields.Boolean(string="Validation requested",
+                                          readonly=True)
+    validated = fields.Boolean(string="Validation request",
+                               readonly=True)
+    validation_date = fields.Date(string="Validation date",
+                                  readonly=True)
+    validated_by = fields.Many2one('res.users',
+                                   string="Validated by",
+                                   readonly=True)
     solidary = fields.Selection([('yes', 'Yes'),
                                  ('no', 'No')],
                                 string="Solidary product")
@@ -25,7 +34,6 @@ class LoanIssue(models.Model):
                                string="Banking product")
     book_value = fields.Html(string="Book value",
                              translate=True)
-    interest_payment_date = fields.Date(string="Interest payment date")
     advantages = fields.Html(string="Other advantages",
                              translate=True)
     tax_policy = fields.Char(string="Tax policy",
@@ -59,6 +67,25 @@ class LoanIssue(models.Model):
             ("state", "=", "ongoing"),
             ("display_on_website", "=", True),
         ])
+
+    @api.multi
+    def validation_request(self):
+        for issue in self:
+            issue.validation_requested = True
+
+    @api.multi
+    def validate(self):
+        for issue in self:
+            issue.write({'validated': True,
+                         'display_on_website': True,
+                         'validation_date': fields.Date.today(),
+                         'validated_by': self.env.user.id
+                         })
+
+    @api.multi
+    def refuse(self):
+        for issue in self:
+            issue.validation_requested = False
 
 
 class LoanIssueLine(models.Model):
