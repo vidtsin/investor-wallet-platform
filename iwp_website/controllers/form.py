@@ -56,9 +56,9 @@ class Field:
 
     def to_python(self, value):
         """Transform the value to a python type value"""
-        if self.input_type == "number":
-            return int(value)
-        if self.input_type == "date":
+        if self.input_type == "number" and value:
+            return int(value)  # TODO: protect this by try except
+        if self.input_type == "date" and value:
             return datetime.strptime(value, "%Y-%m-%d").date()
         return value
 
