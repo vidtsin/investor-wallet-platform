@@ -2,9 +2,6 @@
 	<!-- <data noupdate="1"> fixme -->
 	<data>
 		<!-- Partners  -->
-		<record id="base.res_partner_portal_public_rule" model="ir.rule">
-			<field name="active" eval="False"/>
-		</record>
 
 		<record id="base.res_partner_rule_private_employee" model="ir.rule">
 			<field name="active" eval="False"/>
@@ -12,7 +9,7 @@
 
 		<!-- group_easy_my_coop_user -->
 	    <record id="res_partner_emc_user_read_own_structure_rule_1" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">res_partner_emc_user_read_own_structure_rule_1</field>
 	        <field name="model_id" ref="base.model_res_partner"/>
 	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -23,7 +20,7 @@
 	    </record>
 
 	    <record id="res_partner_emc_user_investor_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">res_partner_emc_user_investor_rule</field>
 	        <field name="model_id" ref="base.model_res_partner"/>
 	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -40,7 +37,7 @@
 
 		<!-- group_easy_my_coop_manager -->
 	    <record id="res_partner_emc_manager_read_write_own_structure_rule_1" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">res_partner_emc_manager_read_write_own_structure_rule_1</field>
 	        <field name="model_id" ref="base.model_res_partner"/>
 	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_manager'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -51,7 +48,7 @@
 	    </record>
 
 	    <record id="res_partner_emc_manager_investor_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">res_partner_emc_manager_investor_rule</field>
 	        <field name="model_id" ref="base.model_res_partner"/>
 	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_manager'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -69,7 +66,7 @@
 		<!-- All Partners -->
 
 	    <record id="res_partner_iwp_user_access_to_all_partners" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">res_partner_iwp_user_access_to_all_partners</field>
 	        <field name="model_id" ref="base.model_res_partner"/>
 	        <field name="groups" eval="[(4, ref('group_platform_wallet_user'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -82,7 +79,7 @@
 		<!-- Subscription Request -->
 
 	    <record id="subscription_request_emc_user_own_subscription_request_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">subscription_request_emc_user_own_subscription_request_rule</field>
 	        <field name="model_id" ref="easy_my_coop.model_subscription_request"/>
 	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -93,7 +90,7 @@
 	    </record>
 
 	    <record id="subscription_request_iwp_user_all_subscription_request_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">subscription_request_iwp_user_all_subscription_request_rule</field>
 	        <field name="model_id" ref="easy_my_coop.model_subscription_request"/>
 	        <field name="groups" eval="[(4, ref('group_platform_wallet_user'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -102,11 +99,11 @@
 			<field name="perm_unlink" eval="1"/>
 	        <field name="domain_force">[(1, "=", 1)]</field>
 	    </record>
-		
+
 		<!-- Operation Request -->
-		
+
 	    <record id="operation_request_emc_user_own_operation_request_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">operation_request_emc_user_own_operation_request_rule</field>
 	        <field name="model_id" ref="easy_my_coop.model_operation_request"/>
 	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -117,7 +114,7 @@
 	    </record>
 
 	    <record id="operation_request_iwp_user_all_operation_request_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">operation_request_iwp_user_all_operation_request_rule</field>
 	        <field name="model_id" ref="easy_my_coop.model_operation_request"/>
 	        <field name="groups" eval="[(4, ref('group_platform_wallet_user'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -130,7 +127,7 @@
 		<!-- Share Line -->
 
 	    <record id="share_line_emc_user_own_share_line_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">share_line_emc_user_own_share_line_rule</field>
 	        <field name="model_id" ref="easy_my_coop.model_share_line"/>
 	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -141,7 +138,7 @@
 	    </record>
 
 	    <record id="share_line_iwp_user_all_share_line_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">share_line_iwp_user_all_share_line_rule</field>
 	        <field name="model_id" ref="easy_my_coop.model_share_line"/>
 	        <field name="groups" eval="[(4, ref('group_platform_wallet_user'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -154,7 +151,7 @@
 		<!-- Subscription Register -->
 
 	    <record id="subscription_register_emc_user_own_subscription_register_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">subscription_register_emc_user_own_subscription_register_rule</field>
 	        <field name="model_id" ref="easy_my_coop.model_subscription_register"/>
 	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -165,7 +162,7 @@
 	    </record>
 
 	    <record id="subscription_register_iwp_user_all_subscription_register_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">subscription_register_iwp_user_all_subscription_register_rule</field>
 	        <field name="model_id" ref="easy_my_coop.model_subscription_register"/>
 	        <field name="groups" eval="[(4, ref('group_platform_wallet_user'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -178,7 +175,7 @@
 		<!-- Product Template -->
 
 		<record id="product_template_emc_manager_own_share_type_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">product_template_emc_manager_own_share_type_rule</field>
 	        <field name="model_id" ref="product.model_product_template"/>
 	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_manager'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -189,7 +186,7 @@
 		</record>
 
 		<record id="product_template_iwp_user_all_share_type_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">product_template_iwp_user_all_share_type_rule</field>
 	        <field name="model_id" ref="product.model_product_template"/>
 	        <field name="groups" eval="[(4, ref('group_platform_wallet_user'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -202,7 +199,7 @@
 		<!-- Product Product -->
 
 		<record id="product_product_emc_manager_own_share_type_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">product_product_emc_manager_own_share_type_rule</field>
 	        <field name="model_id" ref="product.model_product_product"/>
 	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_manager'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -213,7 +210,7 @@
 		</record>
 
 		<record id="product_product_iwp_user_all_share_type_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">product_product_iwp_user_all_share_type_rule</field>
 	        <field name="model_id" ref="product.model_product_product"/>
 	        <field name="groups" eval="[(4, ref('group_platform_wallet_user'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -226,7 +223,7 @@
 		<!-- Account Invoice -->
 
 	    <record id="account_invoice_emc_user_own_account_invoice_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">account_invoice_emc_user_own_account_invoice_rule</field>
 	        <field name="model_id" ref="account.model_account_invoice"/>
 	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -237,7 +234,7 @@
 	    </record>
 
 	    <record id="account_invoice_iwp_user_all_account_invoice_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">account_invoice_iwp_user_all_account_invoice_rule</field>
 	        <field name="model_id" ref="account.model_account_invoice"/>
 	        <field name="groups" eval="[(4, ref('group_platform_wallet_user'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -250,7 +247,7 @@
 		<!-- Loan Issue -->
 
 	    <record id="loan_issue_emc_user_own_loan_issue_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">loan_issue_emc_user_own_loan_issue_rule</field>
 	        <field name="model_id" ref="easy_my_coop_loan.model_loan_issue"/>
 	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -261,7 +258,7 @@
 	    </record>
 
 	    <record id="loan_issue_iwp_user_all_loan_issue_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">loan_issue_iwp_user_all_loan_issue_rule</field>
 	        <field name="model_id" ref="easy_my_coop_loan.model_loan_issue"/>
 	        <field name="groups" eval="[(4, ref('group_platform_wallet_user'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -274,7 +271,7 @@
 		<!-- Loan Issue Line -->
 
 	    <record id="loan_issue_line_emc_user_own_loan_issue_line_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">loan_issue_line_emc_user_own_loan_issue_line_rule</field>
 	        <field name="model_id" ref="easy_my_coop_loan.model_loan_issue_line"/>
 	        <field name="groups" eval="[(4, ref('easy_my_coop.group_easy_my_coop_user'))]"/>
 			<field name="perm_read" eval="1"/>
@@ -285,7 +282,7 @@
 	    </record>
 
 	    <record id="loan_issue_line_iwp_user_all_loan_issue_line_rule" model="ir.rule">
-	        <field name="name">todo</field>
+	        <field name="name">loan_issue_line_iwp_user_all_loan_issue_line_rule</field>
 	        <field name="model_id" ref="easy_my_coop_loan.model_loan_issue_line"/>
 	        <field name="groups" eval="[(4, ref('group_platform_wallet_user'))]"/>
 			<field name="perm_read" eval="1"/>
