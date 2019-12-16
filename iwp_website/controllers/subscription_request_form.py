@@ -18,6 +18,7 @@ class SubscriptionRequestForm(Form):
 
     def __init__(self, **kw):
         super().__init__(**kw)
+        context = kw["context"]
         self.fields["share_type"] = Field(
             label="Share Type",
             required=True,
@@ -37,6 +38,24 @@ class SubscriptionRequestForm(Form):
             readonly=True,
             template="iwp_website.input_field",
             input_type="text",
+        )
+        self.fields["data_policy_approval"] = Field(
+            label="Data Policy",
+            content=context["struct"].data_policy_approval_text,
+            required=True,
+            template="iwp_website.checkbox_field",
+        )
+        self.fields["internal_rules_approval"] = Field(
+            label="Internal Rules",
+            content=context["struct"].internal_rules_approval_text,
+            required=True,
+            template="iwp_website.checkbox_field",
+        )
+        self.fields["financial_risk_approval"] = Field(
+            label="Financial Risks",
+            content=context["struct"].financial_risk_approval_text,
+            required=True,
+            template="iwp_website.checkbox_field",
         )
 
     def clean(self):
