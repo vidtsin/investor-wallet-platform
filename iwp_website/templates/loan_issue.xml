@@ -44,6 +44,51 @@
                 readonly="readonly"/>
         </div>
 
+        <div t-attf-class="form-group form-check field-data_policy_approval">
+            <input t-attf-id="data_policy_approval"
+                class="form-check-input"
+                type="checkbox"
+                t-attf-name="data_policy_approval"
+                t-att-checked="'checked' if data_policy_approval else None"
+                required="required"/>
+            <label t-attf-for="data_policy_approval" class="form-check-label">
+                Data Policy
+            </label>
+            <div t-attf-class="field-data_policy_approval-content">
+                <t t-raw="struct.data_policy_approval_text"/>
+            </div>
+        </div>
+
+        <div t-attf-class="form-group form-check field-internal_rules_approval">
+            <input t-attf-id="internal_rules_approval"
+                class="form-check-input"
+                type="checkbox"
+                t-attf-name="internal_rules_approval"
+                t-att-checked="'checked' if internal_rules_approval else None"
+                required="required"/>
+            <label t-attf-for="internal_rules_approval" class="form-check-label">
+                Internal rules
+            </label>
+            <div t-attf-class="field-internal_rules_approval-content">
+                <t t-raw="struct.internal_rules_approval_text"/>
+            </div>
+        </div>
+
+        <div t-attf-class="form-group form-check field-financial_risk_approval">
+            <input t-attf-id="financial_risk_approval"
+                class="form-check-input"
+                type="checkbox"
+                t-attf-name="financial_risk_approval"
+                t-att-checked="'checked' if financial_risk_approval else None"
+                required="required"/>
+            <label t-attf-for="financial_risk_approval" class="form-check-label">
+                Financial Risks
+            </label>
+            <div t-attf-class="field-financial_risk_approval-content">
+                <t t-raw="struct.financial_risk_approval_text"/>
+            </div>
+        </div>
+
         <script>
 function compute_total_amount() {
     var loan_issue = document.getElementById('loan_issue')
