@@ -86,7 +86,7 @@ class InvestorPortal(CustomerPortal):
             values
         )
 
-    @http.route('/my/history/share', type='http', auth="public", website=True)
+    @http.route('/my/history/share', type='http', auth="user", website=True)
     def my_history_share(self, sortby=None, **kw):
         values = self._prepare_portal_layout_values()
         register_mgr = request.env['subscription.register']
@@ -183,6 +183,42 @@ class InvestorPortal(CustomerPortal):
         })
         return request.render(
             'iwp_website.portal_my_wallet_loan',
+            values
+        )
+
+    @http.route('/my/history/loan', type='http', auth="user", website=True)
+    def my_history_loan(self, sortby=None, **kw):
+        """Wallet of loan owned by the connected user."""
+        values = self._prepare_portal_layout_values()
+        loanline_mgr = request.env['loan.issue.line']
+
+        # Order by
+        searchbar_sortings = {
+            'date': {'label': _('Date'), 'order': 'date desc'},
+            'state': {'label': _('State'), 'order': 'state'},
+            'struct': {'label': _('Structure Name'), 'order': 'date desc'},
+        }
+        if not sortby:
+            sortby = 'struct'
+        sort_order = searchbar_sortings[sortby]['order']
+
+        # Loan issue lines owned by an investor
+        issuelines = loanline_mgr.sudo().search(
+            self.loan_issue_line_domain, order=sort_order,
+        )
+
+        if sortby == 'struct':
+            issuelines = issuelines.sorted(key=lambda r: r.structure.name)
+
+        values.update({
+            'issuelines': issuelines,
+            'searchbar_sortings': searchbar_sortings,
+            'sortby': sortby,
+            'page_name': 'loan_history',
+            'default_url': '/my/history/loan',
+        })
+        return request.render(
+            'iwp_website.portal_my_history_loan',
             values
         )
 
@@ -417,7 +453,7 @@ class InvestorPortal(CustomerPortal):
         # Loans
         loanline_mgr = request.env['loan.issue.line']
         loan_domain = self.loan_issue_line_domain
-        loan_domain += [("state", "=", "waiting"), ("state", "=", "paid")]
+        loan_domain += [("state", "!=", "cancelled"), ("state", "!=", "ended")]
         loanline_amount = sum(
             r.amount
             for r in (

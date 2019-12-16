@@ -21,6 +21,10 @@
                 <t t-set="title">Share History</t>
                 <t t-set="url" t-value="'/my/history/share'"/>
             </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Loan History</t>
+                <t t-set="url" t-value="'/my/history/loan'"/>
+            </t>
         </xpath>
     </template>
 
@@ -45,6 +49,10 @@
             <li t-if="page_name == 'loan_wallet'"
                 t-attf-class="breadcrumb-item active">
                 Loan Wallet
+            </li>
+            <li t-if="page_name == 'loan_history'"
+                t-attf-class="breadcrumb-item active">
+                Loan History
             </li>
             <li t-if="page_name == 'investor_details'"
                 t-attf-class="breadcrumb-item active">
@@ -446,6 +454,56 @@
                 </t>
             </t>
         </div>
+    </template>
+
+
+    <template id="portal_my_history_loan" name="My Loan History">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar"/>
+
+            <t t-if="not issuelines">
+                <p>
+                    There are currently no loan for your account.
+                </p>
+            </t>
+            <t t-if="issuelines" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Structure</th>
+                        <th class="text-right">Loan issue</th>
+                        <th class="text-right">Subscription Date</th>
+                        <th class="text-right">Quantity</th>
+                        <th class="text-right">Facial Value</th>
+                        <th class="text-right">Amount</th>
+                        <th class="text-right">State</th>
+                    </tr>
+                </thead>
+                <t t-foreach="issuelines" t-as="lil">
+                    <tr>
+                        <td><t t-esc="lil.structure.name"/></td>
+                        <td class="text-right">
+                            <t t-esc="lil.loan_issue_id.name"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="lil.date"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="lil.quantity"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="lil.face_value"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="lil.amount"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="lil.state"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
     </template>
 
 
