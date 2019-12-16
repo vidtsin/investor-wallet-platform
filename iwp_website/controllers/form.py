@@ -36,6 +36,7 @@ class Field:
         required=False,
         readonly=False,
         att=None,
+        content=None,
         input_type=None,
         choices=None,
         validators=None,
@@ -45,6 +46,7 @@ class Field:
         self.required = required
         self.readonly = readonly
         self.att = att
+        self.content = content
         self.input_type = input_type
         self.choices = choices  # A callable that return choices
         self.validators = [] if validators is None else validators

@@ -23,6 +23,9 @@
                     <t t-raw="choice.display"/>
                 </option>
             </select>
+            <div t-if="field.content" t-attf-class="field-{{name}}-content">
+                <t t-raw="field.content"/>
+            </div>
         </div>
         <p class="alert alert-danger" t-if="name in form.errors" role="alert">
             <t t-esc="str(form.errors[name])"/>
@@ -48,6 +51,9 @@
                 t-att-value="form.data.get(name, form.initial.get(name))"
                 t-att-required="'required' if field.required else None"
                 t-att-readonly="'readonly' if field.readonly else None"/>
+            <div t-if="field.content" t-attf-class="field-{{name}}-content">
+                <t t-raw="field.content"/>
+            </div>
         </div>
         <p class="alert alert-danger" t-if="name in form.errors" role="alert">
             <t t-esc="str(form.errors[name])"/>
@@ -75,6 +81,9 @@
             <label t-attf-for="{{name}}" class="form-check-label">
                 <t t-esc="field.label" />
             </label>
+            <div t-if="field.content" t-attf-class="field-{{name}}-content">
+                <t t-raw="field.content"/>
+            </div>
         </div>
         <p class="alert alert-danger" t-if="name in form.errors" role="alert">
             <t t-esc="str(form.errors[name])"/>
