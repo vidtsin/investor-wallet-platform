@@ -134,6 +134,21 @@ class ResPartner(models.Model):
     total_outstanding_amount = fields.Monetary(
         string="Total Outsanding Amount"
     )
+    data_policy_approval_text = fields.Html(
+        translate=True,
+        default="I approve the data policy.",
+        help="Text to display aside the checkbox to approve data policy."
+    )
+    internal_rules_approval_text = fields.Html(
+        translate=True,
+        default="I approve internal rules.",
+        help="Text to display aside the checkbox to approve internal rules."
+    )
+    financial_risk_approval_text = fields.Html(
+        translate=True,
+        default="I aware of financial risk.",
+        help="Text to display aside the checkbox to approve financial risk."
+    )
 
     structure_ids = fields.Many2many(
         comodel_name='res.partner',

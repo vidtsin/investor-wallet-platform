@@ -166,6 +166,13 @@
                                 </group>
                             </group>
                         </page>
+                        <page name="required_approvals" string="Required Approvals" attrs="{'invisible': [('is_platform_structure', '=', False)]}">
+                            <group>
+                                <field name="data_policy_approval_text"/>
+                                <field name="internal_rules_approval_text"/>
+                                <field name="financial_risk_approval_text"/>
+                            </group>
+                        </page>
                     </page>
                 </field>
             </record>
