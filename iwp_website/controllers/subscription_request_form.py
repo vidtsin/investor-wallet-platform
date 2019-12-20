@@ -78,7 +78,7 @@ class SubscriptionRequestForm(Form):
     def _choices_share_type(self):
         user = self.context.get("user")
         struct = self.context.get("struct")
-        if user.is_company:
+        if user.commercial_partner_id.is_company:
             share_types = struct.share_type_ids.filtered(
                 lambda r: r.display_on_website and r.by_company
             )

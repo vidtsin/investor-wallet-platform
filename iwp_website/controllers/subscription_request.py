@@ -97,37 +97,57 @@ class WebsiteSubscriptionRequest(http.Controller):
         """Process subscription share form."""
         user = context.get("user")
         vals = self.subscription_request_vals(form, context=context)
+        # INFO:
+        # Calling onchange_partner() does not work as creating a
+        # subscription request send a email. This email is empty, if we
+        # call onchange_partner after the creation of the subscription
+        # request. Perhaps another way to do this is to create an empty
+        # subscription request, insert data into it and then write it to
+        # the database.
         if user.parent_id.is_company:
-            sub_req = (
+            (
                 request.env['subscription.request']
                 .sudo()
                 .create_comp_sub_req(vals)
             )
         else:
-            sub_req = request.env['subscription.request'].sudo().create(vals)
-        sub_req.onchange_partner()  # Set other field
+            request.env['subscription.request'].sudo().create(vals)
 
     def subscription_request_vals(self, form, context=None):
         """Reutrn vals to create a new subscription request."""
-        partner = context.get("user").commercial_partner_id
+        user = context.get("user")
         struct = context.get("struct")
         share_type = request.env["product.template"].sudo().browse(
             int(form.cleaned_data["share_type"])
         )
         vals = {
             "source": "website",
-            "partner_id": partner.id,
-            "name": partner.name,
-            "email": partner.email,
-            "address": partner.street,
-            "zip_code": partner.zip,
-            "city": partner.city,
-            "country_id": partner.country_id.id,
-            # "iban": partner.bank_ids[0].acc_number,
+            "partner_id": user.commercial_partner_id.id,
+            "already_cooperator": user.member,
+            "email": user.email,
+            "name": user.name,
+            "firstname": user.firstname,
+            "lastname": user.lastname,
+            "birthdate": user.birthdate_date,
+            "gender": user.gender,
+            "phone": user.phone,
+            "lang": user.lang,
+            "address": user.street,
+            "zip_code": user.zip,
+            "city": user.city,
+            "country_id": user.country_id.id,
+            "iban": user.commercial_partner_id.bank_ids[0].acc_number,
             "share_product_id": share_type.product_variant_id.id,
             "ordered_parts": form.cleaned_data["quantity"],
             "structure": struct.id,
         }
-        if partner.is_company:
-            vals["company_name"] = partner.name
+        if user.member:
+            vals["type"] = "increase"
+        if user.commercial_partner_id.is_company:
+            company = user.commercial_partner_id
+            vals["is_company"] = True
+            vals["company_name"] = company.name
+            vals["company_email"] = company.email
+            vals["company_register_number"] = company.company_register_number
+            vals["contact_person_function"] = user.function
         return vals
