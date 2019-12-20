@@ -222,7 +222,7 @@ class InvestorPortal(CustomerPortal):
             values
         )
 
-    @http.route('/structure', type='http', auth="public", website=True)
+    @http.route('/structure', type='http', auth="user", website=True)
     def structures(self, page=1, sortby=None, **kw):
         values = self._prepare_portal_layout_values()
         struct_mgr = request.env['res.partner']
