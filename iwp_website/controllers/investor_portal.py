@@ -155,6 +155,15 @@ class InvestorPortal(CustomerPortal):
         if sortby == 'struct':
             issuelines = issuelines.sorted(key=lambda r: r.structure.name)
 
+        # Manual loan suppression
+        values["back_from_delete_loan"] = False
+        if "delete_loan_success" in request.session:
+            values["back_from_delete_loan"] = True
+            values["delete_loan_success"] = request.session[
+                "delete_loan_success"
+            ]
+            del request.session["delete_loan_success"]
+
         values.update({
             'finproducts': issuelines,
             'searchbar_sortings': searchbar_sortings,

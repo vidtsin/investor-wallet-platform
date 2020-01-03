@@ -24,6 +24,7 @@
         'templates/operation_request.xml',
         'templates/loan_issue.xml',
         'templates/manual_share_form.xml',
+        'templates/manual_loan_form.xml',
     ],
     'demo': [
         'demo/users.xml',

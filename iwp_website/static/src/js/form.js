@@ -23,6 +23,27 @@ odoo.define('iwp_website.form', function (require) {
             compute_total_amount();
         });
 
+        var manual_loan_form = $(".oe_manual_loan_form");
+
+        manual_loan_form.each(function () {
+            var amount_elem = manual_loan_form.find("#loan_issue");
+            var qty_elem = manual_loan_form.find("#quantity");
+            var total_amount_elem = manual_loan_form.find("#total_amount");
+
+            function compute_total_amount() {
+                var amount = amount_elem[0]
+                    .options[amount_elem.prop("selectedIndex")]
+                    .dataset
+                    .face_value;
+                var quantity = qty_elem[0].value;
+                total_amount_elem[0].value = quantity * amount;
+            }
+
+            amount_elem.change(compute_total_amount);
+            qty_elem.change(compute_total_amount);
+            compute_total_amount();
+        });
+
         var subscription_request_form = $(".oe_subscription_request_form");
 
         subscription_request_form.each(function () {
