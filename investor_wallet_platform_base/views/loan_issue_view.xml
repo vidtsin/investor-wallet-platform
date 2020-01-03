@@ -23,6 +23,9 @@
             <xpath expr="//field[@name='default_issue']" position="before">
                 <field name="structure"/>
             </xpath>
+            <xpath expr="//field[@name='date']" position="after">
+                <field name="creation_mode"/>
+            </xpath>
             <field name="interest_payment_info" position="after">
             	<field name="write_date"/>
             	<field name="validation_requested"/>
@@ -110,6 +113,9 @@
 		<field name="arch" type="xml">
             <field name="name" position="before">
                 <field name="structure" groups="investor_wallet_platform_base.group_platform_wallet_user"/>
+            </field>
+            <field name="date" position="after">
+                <field name="creation_mode"/>
             </field>
         </field>
     </record>

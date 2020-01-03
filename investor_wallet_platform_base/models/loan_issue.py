@@ -97,6 +97,16 @@ class LoanIssueLine(models.Model):
         related="loan_issue_id.structure",
         store=True,
     )
+    creation_mode = fields.Selection(
+        [('auto', 'Automatic'), ('manual', 'Manual')],
+        string="Creation mode",
+        default='auto',
+        readonly=True,
+        help=(
+            "'auto' means created by system, 'manual' means manually "
+            "created by a user."
+        ),
+    )
 
     def get_loan_sub_mail_template(self):
         template_obj = self.env['mail.template']

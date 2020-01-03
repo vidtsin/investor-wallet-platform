@@ -49,6 +49,9 @@
                     <page name="share" position="attributes">
                         <attribute name="attrs">{'invisible': [('is_platform_structure', '=', True)]}</attribute>
                     </page>
+                    <xpath expr="//page[@name='loan_issue_lines']/field[@name='loan_line_ids']/tree/field[@name='date']" position="after">
+                        <field name="creation_mode"/>
+                    </xpath>
                     <!-- page contact don't have name so we get it through another attribute -->
                     <page autofocus="autofocus" position="attributes">
                         <attribute name="invisible">True</attribute>
