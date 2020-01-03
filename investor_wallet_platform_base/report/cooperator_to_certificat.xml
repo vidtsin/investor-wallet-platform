@@ -12,6 +12,7 @@
                     <span>Cooperator Certificate</span>
                 </h2>
 
+                <t t-set="coop_membership" t-value="o.partner_id_to.coop_membership.filtered(lambda record: record.structure == o.structure)"/>
                 <!--<p name="label_coop_number" class="mt16">
                     <span t-field="o.partner_id_to.name"/>
                     is recorded in the register of cooperators under number
