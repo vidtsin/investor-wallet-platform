@@ -19,25 +19,25 @@ class AddressForm(Form):
 
     def add_fields(self, prefix=""):
         self.fields[prefix + "street"] = Field(
-            label="Address",
+            label=_("Address"),
             required=True,
             template="iwp_website.input_field",
             input_type="text",
         )
         self.fields[prefix + "zip_code"] = Field(
-            label="Zip / Postal Code",
+            label=_("Zip / Postal Code"),
             required=True,
             template="iwp_website.input_field",
             input_type="text",
         )
         self.fields[prefix + "city"] = Field(
-            label="City",
+            label=_("City"),
             required=True,
             template="iwp_website.input_field",
             input_type="text",
         )
         self.fields[prefix + "country"] = Field(
-            label="Country",
+            label=_("Country"),
             required=True,
             template="iwp_website.selection_field",
             choices=self._choices_country,
@@ -60,7 +60,7 @@ class BankAccountForm(Form):
 
     def add_fields(self, prefix=""):
         self.fields[prefix + "bank_account"] = Field(
-            label="Bank Account Number",
+            label=_("Bank Account Number"),
             required=True,
             validators=[self._validate_bank_account],
             template="iwp_website.input_field",
@@ -79,7 +79,7 @@ class LanguageForm(Form):
 
     def add_fields(self, prefix=""):
         self.fields[prefix + "lang"] = Field(
-            label="Language",
+            label=_("Language"),
             required=True,
             template="iwp_website.selection_field",
             choices=self._choices_lang,
@@ -100,26 +100,26 @@ class PersonForm(Form):
 
     def add_fields(self, prefix=""):
         self.fields[prefix + "firstname"] = Field(
-            label="Firstname",
+            label=_("Firstname"),
             required=True,
             att={"autofocus": "autofocus"},
             template="iwp_website.input_field",
             input_type="text",
         )
         self.fields[prefix + "lastname"] = Field(
-            label="Lastname",
+            label=_("Lastname"),
             required=True,
             template="iwp_website.input_field",
             input_type="text",
         )
         self.fields[prefix + "gender"] = Field(
-            label="Gender",
+            label=_("Gender"),
             required=True,
             template="iwp_website.selection_field",
             choices=self._choices_gender,
         )
         self.fields[prefix + "birthdate"] = Field(
-            label="Birthdate",
+            label=_("Birthdate"),
             required=True,
             att={"max": date.today().isoformat()},
             validators=[self._validate_birthdate],
@@ -127,7 +127,7 @@ class PersonForm(Form):
             input_type="date",
         )
         self.fields[prefix + "phone"] = Field(
-            label="Phone",
+            label=_("Phone"),
             required=True,
             template="iwp_website.input_field",
             input_type="tel",
@@ -155,14 +155,14 @@ class CompanyForm(Form):
 
     def add_fields(self, prefix=""):
         self.fields[prefix + "name"] = Field(
-            label="Company Name",
+            label=_("Company Name"),
             required=True,
             att={"autofocus": "autofocus"},
             template="iwp_website.input_field",
             input_type="text",
         )
         self.fields[prefix + "phone"] = Field(
-            label="Phone",
+            label=_("Phone"),
             required=True,
             template="iwp_website.input_field",
             input_type="tel",

@@ -8,6 +8,7 @@ from collections import OrderedDict
 from datetime import date
 
 from odoo.http import request
+from odoo.tools.translate import _
 
 from .form import Choice, Field, Form, FormValidationError
 from .tools import monetary_to_text
@@ -20,13 +21,13 @@ class ManualShareForm(Form):
         super().__init__(**kw)
         self.fields = OrderedDict()
         self.fields["share_type"] = Field(
-            label="Share Type",
+            label=_("Share Type"),
             required=True,
             template="iwp_website.selection_field",
             choices=self._choices_share_type,
         )
         self.fields["quantity"] = Field(
-            label="Quantity",
+            label=_("Quantity"),
             required=True,
             att={"min": 1},
             validators=[self._validate_quantity],
@@ -34,13 +35,13 @@ class ManualShareForm(Form):
             input_type="number",
         )
         self.fields["total_amount"] = Field(
-            label="Total Amount",
+            label=_("Total Amount"),
             readonly=True,
             template="iwp_website.input_field",
             input_type="text",
         )
         self.fields["date"] = Field(
-            label="Date",
+            label=_("Date"),
             required=True,
             att={"max": date.today().isoformat()},
             validators=[self._validate_date],

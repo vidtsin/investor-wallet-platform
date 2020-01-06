@@ -17,7 +17,7 @@ class SignupForm(Form):
 
     def add_fields(self):
         self.fields["login"] = Field(
-            label="E-mail",
+            label=_("E-mail"),
             required=True,
             att={"autofocus": "autofocus", "autocapitalize": "off"},
             validators=[self._validate_login],
@@ -25,21 +25,21 @@ class SignupForm(Form):
             input_type="email",
         )
         self.fields["confirm_login"] = Field(
-            label="Confirm E-mail",
+            label=_("Confirm E-mail"),
             required=True,
             att={"autocapitalize": "off"},
             template="iwp_website.input_field",
             input_type="email",
         )
         self.fields["password"] = Field(
-            label="Password",
+            label=_("Password"),
             required=True,
             validators=[self._validate_password],
             template="iwp_website.input_field",
             input_type="password",
         )
         self.fields["confirm_password"] = Field(
-            label="Confirm Password",
+            label=_("Confirm Password"),
             required=True,
             template="iwp_website.input_field",
             input_type="password",
@@ -50,7 +50,7 @@ class SignupForm(Form):
             .data_policy_approval_required
         ):
             self.fields["data_policy_approval"] = Field(
-                label="Accept Data Policy",
+                label=_("Accept Data Policy"),
                 required=True,
                 template="iwp_website.checkbox_field",
             )
