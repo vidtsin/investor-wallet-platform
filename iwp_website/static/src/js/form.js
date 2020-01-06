@@ -148,6 +148,65 @@ odoo.define('iwp_website.form', function (require) {
             compute_total_amount();
             compute_max_quantity();
         });
+
+        var loan_issue_form = $(".oe_loan_issue_form");
+
+        loan_issue_form.each(function () {
+            var amount_elem = loan_issue_form.find("#loan_issue");
+            var qty_elem = loan_issue_form.find("#quantity");
+            var total_amount_elem = loan_issue_form
+                .find("#total_amount");
+
+            function compute_total_amount() {
+                var selected_index = amount_elem.prop("selectedIndex")
+                if (selected_index >= 0) {
+                    var face_value = amount_elem[0]
+                        .options[selected_index]
+                        .dataset
+                        .face_value;
+                    var quantity = qty_elem[0].value;
+                    total_amount_elem[0].value = quantity * face_value;
+                }
+            }
+
+            function compute_minmax_quantity() {
+                var selected_index = amount_elem.prop("selectedIndex")
+                if (selected_index >= 0) {
+                    var face_value = amount_elem[0]
+                        .options[selected_index]
+                        .dataset
+                        .face_value;
+                    var min_amount = amount_elem[0]
+                        .options[selected_index]
+                        .dataset
+                        .min_amount;
+                    var max_amount = amount_elem[0]
+                        .options[selected_index]
+                        .dataset
+                        .max_amount;
+                    if (min_amount) {
+                        var min_qty = Math.ceil(min_amount / price);
+                        qty_elem.attr("min", min_qty);
+                    } else {
+                        qty_elem.attr("min", 1);
+                    }
+                    if (max_amount >= 0) {
+                        var max_qty = Math.floor(max_amount / price);
+                        qty_elem.attr("max", max_qty);
+                    } else {
+                        qty_elem.removeAttr("max");
+                    }
+                }
+            }
+
+            amount_elem.change(function() {
+                compute_total_amount();
+                compute_minmax_quantity();
+            });
+            qty_elem.change(compute_total_amount);
+            compute_total_amount();
+            compute_minmax_quantity();
+        });
     });
 
 });
