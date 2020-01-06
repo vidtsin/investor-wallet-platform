@@ -1,3 +1,4 @@
+from . import fields
 from . import res_users
 from . import partner
 from . import coop
