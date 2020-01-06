@@ -19,13 +19,13 @@ class OperationRequestForm(Form):
     def __init__(self, **kw):
         super().__init__(**kw)
         self.fields["share_type"] = Field(
-            label="Share Type",
+            label=_("Share Type"),
             required=True,
             template="iwp_website.selection_field",
             choices=self._choices_share_type,
         )
         self.fields["quantity"] = Field(
-            label="Quantity",
+            label=_("Quantity"),
             required=True,
             att={"min": 1},
             validators=[self._validate_quantity],
@@ -33,7 +33,7 @@ class OperationRequestForm(Form):
             input_type="number",
         )
         self.fields["total_amount"] = Field(
-            label="Total Amount",
+            label=_("Total Amount"),
             readonly=True,
             template="iwp_website.input_field",
             input_type="text",
