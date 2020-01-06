@@ -20,7 +20,7 @@ def convert_to_column(self, value, record, values=None, validate=True):
                 sanitize_style=self.sanitize_style,
                 strip_style=self.strip_style,
                 strip_classes=self.strip_classes)
-    if value == '<p><br></p>':
+    if value == '<p><br></p>' or value == '<p></p>':
         return None
     return value
 
@@ -36,7 +36,7 @@ def convert_to_cache(self, value, record, validate=True):
                 sanitize_style=self.sanitize_style,
                 strip_style=self.strip_style,
                 strip_classes=self.strip_classes)
-    if value == '<p><br></p>':
+    if value == '<p><br></p>' or value == '<p></p>':
         return None
     return value
 
