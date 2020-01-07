@@ -80,13 +80,13 @@
                 </button>
             </p>
 
-            <t t-if="not finproducts">
+            <t t-if="not data">
                 <p>
                     There are currently no finacial product for your account.
                 </p>
             </t>
-            <t t-if="finproducts">
-                <t t-foreach="finproducts" t-as="elem"
+            <t t-if="data">
+                <t t-foreach="data" t-as="elem"
                     t-call="iwp_website.share_wallet_content"/>
             </t>
         </t>
@@ -96,35 +96,35 @@
     <template id="share_wallet_content" name="Share Wallet Content">
         <div class="shareline_head d-flex bg-white rounded mt-4">
             <div class="head_content flex-grow-1 px-3 py-2">
-                <span class="struct_name" t-esc="elem['structure'].name"/>
+                <span class="struct_name" t-esc="elem.structure.name"/>
                 <div class="share_actions mx-2 btn-group" role="group"
                     aria-label="Share Actions">
-                    <a t-att-href="elem['buy_url']"
+                    <a t-att-href="elem.buy_url"
                         class="btn btn-sm btn-secondary">
                         Subscribe
                     </a>
-                    <a t-att-href="elem['sell_url']"
+                    <a t-att-href="elem.sell_url"
                         class="btn btn-sm btn-secondary">
                         Sell Back
                     </a>
                 </div>
                 <span class="amount float-right">
-                    <t t-esc="elem['total_amount']" t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                    <t t-esc="elem.total_amount" t-options="{'widget': 'monetary', 'display_currency': currency}"/>
                 </span>
             </div>
             <div class="head_button">
                 <a class="toggle-collapse px-3 d-flex align-items-center btn-primary"
                     role="button"
                     data-toggle="collapse"
-                    t-attf-href="#sharelist-{{elem['structure'].id}}"
+                    t-attf-href="#sharelist-{{elem.structure.id}}"
                     aria-expanded="false"
-                    t-attf-aria-controls="sharelist-{{elem['structure'].id}}">
+                    t-attf-aria-controls="sharelist-{{elem.structure.id}}">
                     <span class="text-expanded fa fa-angle-up"/>
                     <span class="text-collapsed fa fa-angle-down"/>
                 </a>
             </div>
         </div>
-        <div t-attf-id="sharelist-{{elem['structure'].id}}" class="collapse">
+        <div t-attf-id="sharelist-{{elem.structure.id}}" class="collapse">
             <t t-call="portal.portal_table">
                 <thead>
                     <tr class="active">
@@ -137,7 +137,7 @@
                         <th></th>
                     </tr>
                 </thead>
-                <t t-foreach="elem['lines']" t-as="finprod">
+                <t t-foreach="elem.lines" t-as="finprod">
                     <tr>
                         <td>
                             <span t-field="finprod.share_product_id.name"/>

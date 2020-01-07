@@ -29,39 +29,40 @@ class InvestorPortal(CustomerPortal):
         # Share lines owned by an investor
         sharelines = shareline_mgr.sudo().search(self.shareline_domain)
 
-        # Data structure
-        # [
-        #    {
-        #         'structure': structure_id,
-        #         'buy_url': "/struct/xx/subscription"
-        #         'sell_url': "/struct/xx/sell"
-        #         'total_amount': sum_of_total_amount_line,
-        #         'lines': recordset('share.line'),
-        #     },
-        #     {
-        #         ...
-        #     },
-        # ]
         data = []
-        # Create data structure
+        WalletLine = namedtuple(
+            "WalletLine",
+            [
+                "structure",
+                "total_amount",
+                "buy_url",
+                "sell_url",
+                "lines",
+            ]
+        )
         sharelines = sharelines.sorted(key=lambda r: r.structure.name)
         grouped_sl = groupby(sharelines, lambda r: r.structure)
         for (structure, shares) in grouped_sl:
-            item = {}
-            item['structure'] = structure
-            item['lines'] = shareline_mgr  # New empty recordset
-            item['buy_url'] = "/struct/%d/subscription" % (structure.id,)
-            item['sell_url'] = "/struct/%d/sell" % (structure.id,)
-            item['total_amount'] = 0
+            lines = shareline_mgr  # New empty recordset
+            buy_url = "/struct/%d/subscription" % (structure.id,)
+            sell_url = "/struct/%d/sell" % (structure.id,)
+            total_amount = 0
             for share in shares:
-                item['total_amount'] += share.total_amount_line
-                item['lines'] += share
-            item['lines'] = item['lines'].sorted(
+                total_amount += share.total_amount_line
+                lines += share
+            lines = lines.sorted(
                 key=lambda r: r.sudo().effective_date,
                 reverse=True,
             )
-            item['lines'] = item['lines'].sudo()
-            data.append(item)
+            data.append(
+                WalletLine(
+                    structure=structure,
+                    total_amount=total_amount,
+                    buy_url=buy_url,
+                    sell_url=sell_url,
+                    lines=lines.sudo(),
+                )
+            )
 
         # Manual share suppression
         values["back_from_delete_share"] = False
@@ -73,7 +74,7 @@ class InvestorPortal(CustomerPortal):
             del request.session["delete_share_success"]
 
         values.update({
-            'finproducts': data,
+            'data': data,
             'page_name': 'share_wallet',
             'default_url': '/my/wallet/share',
             'currency': (
