@@ -3,6 +3,7 @@
 #     - Rémy Taymans <remy@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from collections import namedtuple
 from itertools import groupby
 
 from odoo import http
@@ -137,23 +138,30 @@ class InvestorPortal(CustomerPortal):
         values = self._prepare_portal_layout_values()
         loanline_mgr = request.env['loan.issue.line']
 
-        # Order by
-        searchbar_sortings = {
-            'date': {'label': _('Date'), 'order': 'date desc'},
-            'state': {'label': _('State'), 'order': 'state'},
-            'struct': {'label': _('Structure Name'), 'order': 'date desc'},
-        }
-        if not sortby:
-            sortby = 'struct'
-        sort_order = searchbar_sortings[sortby]['order']
+        loan_domain = self.loan_issue_line_domain
+        loan_domain += [("state", "=", "paid")]
 
         # Loan issue lines owned by an investor
-        issuelines = loanline_mgr.sudo().search(
-            self.loan_issue_line_domain, order=sort_order,
-        )
+        issuelines = loanline_mgr.sudo().search(loan_domain)
 
-        if sortby == 'struct':
-            issuelines = issuelines.sorted(key=lambda r: r.structure.name)
+        data = []
+        WalletLine = namedtuple(
+            "WalletLine", ["structure", "total_amount", "lines"]
+        )
+        issuelines = issuelines.sorted(key=lambda r: r.structure.name)
+        grouped_lil = groupby(issuelines, lambda r: r.structure)
+        for (structure, loanlines) in grouped_lil:
+            lines = loanline_mgr  # New empty recordset
+            total_amount = 0
+            for loanline in loanlines:
+                total_amount += loanline.amount
+                lines += loanline
+            lines = lines.sorted(key=lambda r: r.sudo().date, reverse=True)
+            data.append(WalletLine(
+                structure=structure,
+                total_amount=total_amount,
+                lines=lines.sudo()
+            ))
 
         # Manual loan suppression
         values["back_from_delete_loan"] = False
@@ -165,10 +173,11 @@ class InvestorPortal(CustomerPortal):
             del request.session["delete_loan_success"]
 
         values.update({
-            'finproducts': issuelines,
-            'searchbar_sortings': searchbar_sortings,
-            'sortby': sortby,
+            'data': data,
             'page_name': 'loan_wallet',
+            'currency': (
+                request.env['res.company']._company_default_get().currency_id
+            ),
             'default_url': '/my/wallet/loan',
         })
         return request.render(
