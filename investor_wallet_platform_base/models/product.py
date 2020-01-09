@@ -115,9 +115,9 @@ class ProductTemplate(models.Model):
         self.ensure_one()
         company = self.env["res.company"]._company_default_get()
         amount_owned_structure = partner_id.owned_structure_amount(
-            self.structure
+            self.structure, manual=True
         )
-        amount_owned_share = partner_id.owned_amount(self)
+        amount_owned_share = partner_id.owned_amount(self, manual=True)
         max_subscription = (
             self.structure.subscription_maximum_amount
             or company.subscription_maximum_amount
@@ -149,4 +149,6 @@ class ProductTemplate(models.Model):
         Return the minimum amount that a partner have to subscribe.
         """
         self.ensure_one()
-        return max(0, self.minimum_amount - partner_id.owned_amount(self))
+        return max(
+            0, self.minimum_amount - partner_id.owned_amount(self, manual=True)
+        )

@@ -85,7 +85,10 @@ class OperationRequestForm(Form):
         struct = self.context.get("struct")
         share_types = request.env["product.template"].sudo()
         for shareline in user.commercial_partner_id.share_ids:
-            if shareline.share_product_id.structure == struct:
+            if (
+                shareline.share_product_id.structure == struct
+                and shareline.creation_mode != "manual"
+            ):
                 share_types |= shareline.share_product_id.product_tmpl_id
         choices = []
         if struct:
