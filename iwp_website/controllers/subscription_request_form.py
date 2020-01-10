@@ -99,11 +99,15 @@ class SubscriptionRequestForm(Form):
         struct = self.context.get("struct")
         if user.commercial_partner_id.is_company:
             share_types = struct.share_type_ids.filtered(
-                lambda r: r.display_on_website and r.by_company
+                lambda r: r.display_on_website
+                and r.by_company
+                and r.state == "open"
             )
         else:
             share_types = struct.share_type_ids.filtered(
-                lambda r: r.display_on_website and r.by_individual
+                lambda r: r.display_on_website
+                and r.by_individual
+                and r.state == "open"
             )
         choices = []
         if struct:
