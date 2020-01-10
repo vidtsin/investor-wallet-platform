@@ -476,10 +476,43 @@ class InvestorPortal(CustomerPortal):
                 )
             )
         )
+        # Pending loan issue line
+        pending_loan = loanline_mgr.sudo().search_count(
+            self.loan_issue_line_domain
+            + [
+                ("state", "!=", "cancelled"),
+                ("state", "!=", "ended"),
+                ("state", "!=", "paid"),
+            ]
+        )
+        # Pending subscription request
+        subreq_mgr = request.env['subscription.request']
+        opreq_mgr = request.env['operation.request']
+        pending_share = 0
+        pending_share += subreq_mgr.sudo().search_count(
+            self.subscription_request_domain
+            + [
+                ("state", "!=", "cancelled"),
+                ("state", "!=", "paid"),
+                ("state", "!=", "transfer"),
+            ]
+        )
+        pending_share += opreq_mgr.sudo().search_count(
+            self.operation_request_domain
+            + [
+                ("state", "!=", "paid"),
+                ("state", "!=", "cancelled"),
+                ("state", "!=", "refused")
+            ]
+        )
         values.update({
             "invoice_count": 0,  # Hide invoice entry
             'share_amount': share_amount or 0,
             'loan_amount': loanline_amount or 0,
+            'pending_share': "%d pending" % (pending_share,)
+            if pending_share else None,
+            'pending_loan': "%d pending" % (pending_loan,)
+            if pending_loan else None,
             'monetary_to_text': monetary_to_text,
         })
         return values

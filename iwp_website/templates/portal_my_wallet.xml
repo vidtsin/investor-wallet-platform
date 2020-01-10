@@ -20,10 +20,12 @@
             <t t-call="portal.portal_docs_entry">
                 <t t-set="title">Share History</t>
                 <t t-set="url" t-value="'/my/history/share'"/>
+                <t t-set="count" t-value="pending_share"/>
             </t>
             <t t-call="portal.portal_docs_entry">
                 <t t-set="title">Loan History</t>
                 <t t-set="url" t-value="'/my/history/loan'"/>
+                <t t-set="count" t-value="pending_loan"/>
             </t>
         </xpath>
     </template>
