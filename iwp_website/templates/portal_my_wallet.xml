@@ -262,6 +262,46 @@
                 </t>
             </t>
 
+            <h3 t-if="opreqs" class="mt-4">Sell Back Request</h3>
+
+            <t t-if="opreqs" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Structure Name</th>
+                        <th class="text-right">Date</th>
+                        <th class="text-right">Share Name</th>
+                        <th class="text-right">Quantity</th>
+                        <th class="text-right">Amount</th>
+                        <th class="text-right">Total Amount</th>
+                        <th class="text-right">State</th>
+                    </tr>
+                </thead>
+                <t t-foreach="opreqs" t-as="opreq">
+                    <tr>
+                        <td><t t-esc="opreq.structure.name"/></td>
+                        <td class="text-right">
+                            <span t-field="opreq.request_date"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="opreq.share_product_id.name"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="opreq.quantity"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="opreq.share_unit_price"
+                                t-options="{'widget': 'monetary', 'display_currency': opreq.company_id.currency_id}"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="opreq.subscription_amount"/>
+                        </td>
+                        <td class="text-right">
+                            <span t-field="opreq.state"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+
             <h3 class="mt-4">Share History</h3>
 
             <t t-if="not registers">

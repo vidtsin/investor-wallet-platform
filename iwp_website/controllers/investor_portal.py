@@ -91,6 +91,7 @@ class InvestorPortal(CustomerPortal):
         values = self._prepare_portal_layout_values()
         register_mgr = request.env['subscription.register']
         sub_req_mgr = request.env['subscription.request']
+        op_req_mgr = request.env['operation.request']
 
         searchbar_sortings = {
             'name': {'label': _('Structure Name'), 'order': ''},
@@ -111,6 +112,10 @@ class InvestorPortal(CustomerPortal):
             self.subscription_request_domain,
             order='date desc',
         )
+        opreqs = op_req_mgr.sudo().search(
+            self.operation_request_domain,
+            order='request_date desc',
+        )
 
         if sortby == 'name':
             registers = registers.sorted(
@@ -119,10 +124,14 @@ class InvestorPortal(CustomerPortal):
             subreqs = subreqs.sorted(
                 key=lambda r: r.structure.name if r.structure.name else ''
             )
+            opreqs = opreqs.sorted(
+                key=lambda r: r.structure.name if r.structure.name else ''
+            )
 
         values.update({
             'registers': registers.sudo(),
             'subreqs': subreqs.sudo(),
+            'opreqs': opreqs.sudo(),
             'page_name': 'share_history',
             'default_url': '/my/history/share',
             'searchbar_sortings': searchbar_sortings,
@@ -514,5 +523,15 @@ class InvestorPortal(CustomerPortal):
         domain = [
             ('partner_id', 'child_of', [partner.commercial_partner_id.id]),
             ('state', '!=', 'paid'),
+        ]
+        return domain
+
+    @property
+    def operation_request_domain(self):
+        partner = request.env.user.partner_id
+        domain = [
+            ('partner_id', 'child_of', [partner.commercial_partner_id.id]),
+            ('operation_type', '=', 'sell_back'),
+            ('state', '!=', 'done'),
         ]
         return domain
