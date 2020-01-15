@@ -9,7 +9,7 @@
         <xpath expr="//div[hasclass('card-body')]//img" position="after">
             <div class="oe_showcase_website mt-2">
                 <a t-attf-href="{{request.env['res.company']._company_default_get().website}}">
-                    Consulter le site du label
+                    Go to label website
                 </a>
             </div>
         </xpath>
@@ -23,7 +23,7 @@
             <li class="nav-item">
                 <a class="nav-link oe_showcase_website"
                     t-attf-href="{{request.env['res.company']._company_default_get().website}}">
-                    Site du label
+                    Label website
                 </a>
             </li>
         </xpath>
