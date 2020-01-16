@@ -12,13 +12,13 @@
                     <span>Cooperator Certificate</span>
                 </h2>
 
-                <p name="label_coop_number" class="mt16">
+                <t t-set="coop_membership" t-value="o.partner_id_to.coop_membership.filtered(lambda record: record.structure == o.structure)"/>
+                <!--<p name="label_coop_number" class="mt16">
                     <span t-field="o.partner_id_to.name"/>
                     is recorded in the register of cooperators under number
                     <t t-set="coop_membership" t-value="o.partner_id_to.coop_membership.filtered(lambda record: record.structure == o.structure)"/>
                     <span t-esc="coop_membership.cooperator_number"/>.
-                </p>
-
+                </p>-->
 
                 <table class="table table-sm o_main_table mt16" name="invoice_line_table">
                     <thead>

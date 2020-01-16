@@ -1,4 +1,12 @@
 <odoo>
+    <record id="res_partner_view_form_inherit_mail" model="ir.ui.view">
+        <field name="name">res.partner.view.form.inherit.mail</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="mail.res_partner_view_form_inherit_mail"/>
+        <field name="arch" type="xml">
+            <div class="oe_chatter" position="replace"/>
+        </field>
+    </record>
 
     <record id="view_partner_form_wallet_platform" model="ir.ui.view">
         <field name="name">res.partner.form.iwp</field>
