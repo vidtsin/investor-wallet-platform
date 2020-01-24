@@ -359,3 +359,12 @@ class ResPartner(models.Model):
     def refuse(self):
         for partner in self:
             partner.state = 'refused'
+
+    @api.multi
+    def write(self, vals):
+        for partner in self:
+            if partner.is_platform_structure:
+                super(ResPartner, partner).write(vals)
+            else:
+                super(ResPartner, partner.with_context(
+                                            __no_changeset=True)).write(vals)
