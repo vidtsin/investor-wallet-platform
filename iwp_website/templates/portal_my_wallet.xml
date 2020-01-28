@@ -554,10 +554,10 @@
             <t t-set="breadcrumbs_searchbar" t-value="True"/>
             <t t-call="portal.portal_searchbar"/>
 
-            <t t-if="not structures">
+            <t t-if="not data">
                 <p>There are currently no structures.</p>
             </t>
-            <t t-if="structures" t-call="portal.portal_table">
+            <t t-if="data" t-call="portal.portal_table">
                 <thead>
                     <tr class="active">
                         <th>Name</th>
@@ -566,28 +566,30 @@
                         <th class="text-right">Wallet</th>
                     </tr>
                 </thead>
-                <t t-foreach="structures" t-as="struct">
+                <t t-foreach="data" t-as="elem">
                     <tr>
-                        <td><t t-esc="struct.name"/></td>
+                        <td><t t-esc="elem.structure.name"/></td>
                         <td>
-                            <span t-field="struct.structure_type"/>
+                            <span t-field="elem.structure.structure_type"/>
                         </td>
                         <td class="text-right">
-                            <a t-attf-href="/struct/{{ struct.id }}/share/subscription"
+                            <a t-att-style="'visibility: hidden;' if not elem.display_share_action else None"
+                                t-attf-href="/struct/{{ elem.structure.id }}/share/subscription"
                                 class="btn btn-secondary btn-sm">
                                 Shares
                             </a>
-                            <a t-attf-href="/struct/{{ struct.id }}/loan/subscription"
+                            <a t-att-style="'visibility: hidden;' if not elem.display_loan_action else None"
+                                t-attf-href="/struct/{{ elem.structure.id }}/loan/subscription"
                                 class="btn btn-secondary btn-sm">
                                 Loans
                             </a>
                         </td>
                         <td class="text-right">
-                            <a t-attf-href="/struct/{{ struct.id }}/share/manual/new"
+                            <a t-attf-href="/struct/{{ elem.structure.id }}/share/manual/new"
                                 class="btn btn-secondary btn-sm">
                                 Existing shares
                             </a>
-                            <a t-attf-href="/struct/{{ struct.id }}/loan/manual/new"
+                            <a t-attf-href="/struct/{{ elem.structure.id }}/loan/manual/new"
                                 class="btn btn-secondary btn-sm">
                                 Existing loans
                             </a>
