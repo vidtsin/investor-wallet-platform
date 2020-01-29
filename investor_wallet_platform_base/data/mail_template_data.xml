@@ -1,5 +1,5 @@
 <odoo>
-    <data noupdate="0">
+    <data noupdate="1">
         <record id="investor_wallet_platform_base.email_template_release_capital" model="mail.template">
         	<field name="name">Request to Release Capital - Send by Email</field>
             <field name="email_from">${(object.structure.email or object.user_id.email)|safe}</field>
