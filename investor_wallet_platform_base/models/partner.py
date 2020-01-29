@@ -200,6 +200,9 @@ class ResPartner(models.Model):
         store=True,
         help="Used to restrict access in views",
     )
+    last_changes = fields.Html(
+        string="last changes"
+    )
 
     @api.multi
     @api.depends('coop_membership.structure',
@@ -360,11 +363,33 @@ class ResPartner(models.Model):
         for partner in self:
             partner.state = 'refused'
 
+    def send_mail_notif(self):
+        template = self.env.ref(
+           'investor_wallet_platform_base.email_template_structure_updated',
+           False)
+        template.send_mail(self.id)
+        return True
+
     @api.multi
     def write(self, vals):
         for partner in self:
             if partner.is_platform_structure:
-                super(ResPartner, partner).write(vals)
+                keys_to_delete = []
+                for key in vals.keys():
+                    if vals.get(key) == '<p><br></p>':
+                        keys_to_delete.append(key)
+
+                for key in keys_to_delete:
+                    vals.pop(key)
+                origin_vals = partner.read(vals.keys())
+                changes = ''
+                for key in vals.keys():
+                    changes += key + ' => old value : ' + str(origin_vals[0].get(key)) + ' <br> ' + 'new value : ' + vals.get(key) + ' <br>' #noqa
+                if vals:
+                    vals['last_changes'] = changes
+                result = super(ResPartner, partner).write(vals)
+                partner.send_mail_notif()
             else:
-                super(ResPartner, partner.with_context(
+                result = super(ResPartner, partner.with_context(
                                             __no_changeset=True)).write(vals)
+        return result
