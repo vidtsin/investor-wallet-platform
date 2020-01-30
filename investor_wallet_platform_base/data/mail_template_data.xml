@@ -3,7 +3,7 @@
         <record id="investor_wallet_platform_base.email_template_structure_updated" model="mail.template">
             <field name="name">Structure update notification</field>
             <field name="email_from">${object.company_id.email|safe}</field>
-            <field name="subject">${object.name} has updated his information</field>
+            <field name="subject">${object.name} has updated its information</field>
             <field name="email_to">${object.company_id.notification_emails|safe}</field>
             <field name="reply_to">${object.company_id.email|safe}</field>
             <field name="model_id" ref="base.model_res_partner"/>
