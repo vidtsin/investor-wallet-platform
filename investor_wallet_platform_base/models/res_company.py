@@ -23,6 +23,8 @@ class ResCompany(models.Model):
         currency_field="currency_id",
     )
 
+    notification_emails = fields.Char(string="Notification emails")
+
     def _compute_published_financial_product(self):
         """Count financial product that investor can invest in"""
         nb_loans = self.env["loan.issue"].count_published_loans()

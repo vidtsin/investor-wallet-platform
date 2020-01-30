@@ -131,6 +131,9 @@ class ResPartner(models.Model):
     mail_serveur_out = fields.Many2one('ir.mail_server',
                                        string="Mail serveur out")
     industry_char_list = fields.Char(compute='_return_industry_char_list')
+    can_subscribe = fields.Boolean(
+        string="Can be subscribed ?",
+        compute='_can_subscribe_products')
     total_outstanding_amount = fields.Monetary(
         string="Total Outsanding Amount"
     )
@@ -275,6 +278,16 @@ class ResPartner(models.Model):
             )
 
     @api.multi
+    def _can_subscribe_products(self):
+        for partner in self:
+            if partner.share_type_ids.filtered(
+                    lambda r: r.display_on_website and r.state != 'close'):
+                partner.can_subscribe = True
+            if partner.loan_issue_ids.filtered(
+                    lambda r: r.display_on_website and r.state != 'closed'):
+                partner.can_subscribe = True
+
+    @api.multi
     def generate_sequence(self):
         self.ensure_one()
         journal_obj = self.env['account.journal']
@@ -359,6 +372,35 @@ class ResPartner(models.Model):
     def refuse(self):
         for partner in self:
             partner.state = 'refused'
+
+    def send_mail_notif(self):
+        template = self.env.ref(
+           'investor_wallet_platform_base.email_template_structure_updated',
+           False)
+        template.send_mail(self.id)
+        return True
+
+    @api.multi
+    def write(self, vals):
+        for partner in self:
+            if partner.is_platform_structure:
+                # the web client return default html tags for
+                # empty html fields. So we remove it from the vals
+                keys_to_delete = []
+                for key in vals.keys():
+                    if vals.get(key) == '<p><br></p>':
+                        keys_to_delete.append(key)
+
+                for key in keys_to_delete:
+                    vals.pop(key)
+                result = super(ResPartner, partner).write(vals)
+                if vals:
+                    partner.send_mail_notif()
+                    partner.changeset_ids.unlink()
+            else:
+                result = super(ResPartner, partner.with_context(
+                                            __no_changeset=True)).write(vals)
+        return result
 
     @api.multi
     def owned_amount(self, share_type, manual=False):
