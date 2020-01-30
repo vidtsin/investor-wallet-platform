@@ -203,9 +203,6 @@ class ResPartner(models.Model):
         store=True,
         help="Used to restrict access in views",
     )
-    last_changes = fields.Html(
-        string="last changes"
-    )
 
     @api.multi
     @api.depends('coop_membership.structure',
@@ -385,6 +382,8 @@ class ResPartner(models.Model):
     def write(self, vals):
         for partner in self:
             if partner.is_platform_structure:
+                # the web client return default html for
+                # empty html fields. So we remove it from the vals
                 keys_to_delete = []
                 for key in vals.keys():
                     if vals.get(key) == '<p><br></p>':
@@ -392,14 +391,10 @@ class ResPartner(models.Model):
 
                 for key in keys_to_delete:
                     vals.pop(key)
-                origin_vals = partner.read(vals.keys())
-                changes = ''
-                for key in vals.keys():
-                    changes += key + ' => old value : ' + str(origin_vals[0].get(key)) + ' <br> ' + 'new value : ' + vals.get(key) + ' <br>' #noqa
-                if vals:
-                    vals['last_changes'] = changes
                 result = super(ResPartner, partner).write(vals)
-                partner.send_mail_notif()
+                if vals:
+                    partner.send_mail_notif()
+                    partner.changeset_ids.unlink()
             else:
                 result = super(ResPartner, partner.with_context(
                                             __no_changeset=True)).write(vals)
