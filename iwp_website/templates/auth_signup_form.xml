@@ -2,6 +2,16 @@
 <odoo>
 
     <template id="iwp_website.login" inherit_id="auth_signup.login" name="Login: Sign up - Reset Password">
+        <xpath expr="//form[hasclass('oe_login_form')]" position="before">
+            <div id="language-selection">
+                <ul class="nav justify-content-center">
+                    <li t-foreach="request.env['res.lang'].search([])" t-as="lang"
+                        class="nav-item">
+                        <a t-attf-href="/{{ lang.code }}/web/login?redirect={{ request.params.get('redirect', '/') }}" class="nav-link" t-esc="lang.iso_code[:2].upper()"/>
+                    </li>
+                </ul>
+            </div>
+        </xpath>
         <xpath expr="//button[@type='submit']/following-sibling::div" position="replace">
             <div id="signup_title" class="text-center mt-4">
                 Don't have an account ?

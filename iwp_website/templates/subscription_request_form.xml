@@ -2,64 +2,6 @@
 <!-- Copyright 2019-     Coop IT Easy SCRLfs <http://coopiteasy.be>
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
 <odoo>
-
-    <template id="subscription_fields" name="Subscription form fields">
-
-        <div class="form-group field-shareproduct">
-            <label for="shareproduct">Type</label>
-            <select id="shareproduct"
-                class="form-control form-control-sm"
-                name="shareproduct"
-                autofocus="autofocus"
-                onchange="compute_total_amount()"
-                required="required">
-                <option t-foreach="share_products or []" t-as="sp"
-                    t-att-selected="'selected' if sp.id == shareproduct else None"
-                    t-att-data-amount="sp.list_price"
-                    t-att-data-min_qty="sp.minimum_quantity if sp.force_min_qty else 1"
-                    t-att-value="sp.id">
-                    <t t-esc="sp.name"/> - <t t-esc="sp.list_price" t-options="{'widget': 'monetary', 'display_currency': sp.currency_id}"/>
-                </option>
-            </select>
-        </div>
-
-        <div class="form-group field-number">
-            <label for="number">Number</label>
-            <input id="number"
-                class="form-control form-control-sm"
-                type="number"
-                name="number"
-                t-att-value="number"
-                onchange="compute_total_amount()"
-                required="required"/>
-        </div>
-
-        <div class="form-group field-total_amount">
-            <label for="total_amount">Total</label>
-            <input id="total_amount"
-                class="form-control-plaintext form-control-sm"
-                type="text"
-                name="total_amount"
-                t-att-value="str(total_amount)"
-                readonly="readonly"/>
-            <small t-if="total_amount_max" class="form-text text-muted">
-                You cannot subscribe to more than <t t-esc="total_amount_max"/>.
-            </small>
-        </div>
-
-        <script>
-function compute_total_amount() {
-    var sp_elem = document.getElementById('shareproduct')
-    var amount = sp_elem.options[sp_elem.selectedIndex].dataset.amount
-    var number = document.getElementById('number').value;
-    document.getElementById('total_amount').value = number * amount;
-    var min_qty = sp_elem.options[sp_elem.selectedIndex].dataset.min_qty;
-    document.getElementById('number').min = min_qty
-}
-        </script>
-
-    </template>
-
     <template id="subscribe_to_structure" name="Subscribe to Structure">
         <t t-call="portal.portal_layout">
             <t t-set="additional_title">New Subscription</t>

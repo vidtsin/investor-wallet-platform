@@ -3,79 +3,33 @@
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html). -->
 <odoo>
 
-    <template id="operation_fields" name="Subscription form fields">
-
-        <div class="form-group field-shareproduct">
-            <label for="shareproduct">Type</label>
-            <select id="shareproduct"
-                class="form-control form-control-sm"
-                name="shareproduct"
-                autofocus="autofocus"
-                onchange="compute_total_amount()"
-                required="required">
-                <option t-foreach="share_products or []" t-as="sp"
-                    t-att-selected="'selected' if sp.id == shareproduct else None"
-                    t-att-data-amount="sp.list_price"
-                    t-att-value="sp.id">
-                    <t t-esc="sp.name"/> - <t t-esc="sp.list_price" t-options="{'widget': 'monetary', 'display_currency': sp.currency_id}"/>
-                </option>
-            </select>
-        </div>
-
-        <div class="form-group field-number">
-            <label for="number">Quantity</label>
-            <input id="number"
-                class="form-control form-control-sm"
-                type="number"
-                name="number"
-                min="1"
-                t-att-value="number"
-                onchange="compute_total_amount()"
-                required="required"/>
-        </div>
-
-        <div class="form-group field-total_amount">
-            <label for="total_amount">Total</label>
-            <input id="total_amount"
-                class="form-control-plaintext form-control-sm"
-                type="text"
-                name="total_amount"
-                t-att-value="str(total_amount)"
-                readonly="readonly"/>
-        </div>
-
-        <script>
-function compute_total_amount() {
-    var sp_elem = document.getElementById('shareproduct')
-    var amount = sp_elem.options[sp_elem.selectedIndex].dataset.amount
-    var number = document.getElementById('number').value;
-    document.getElementById('total_amount').value = number * amount;
-}
-        </script>
-
-    </template>
-
-    <template id="sell_finproduct" name="Sell Financial Product">
+    <template id="sell_share" name="Sell Share Product">
         <t t-call="portal.portal_layout">
-            <t t-set="additional_title">Sell</t>
+            <t t-set="additional_title">Sell Share</t>
             <t t-set="no_breadcrumbs" t-value="True"/>
             <div class="row justify-content-center">
                 <div class="col-xs-12 col-sm-10  col-md-8 col-lg-6">
-                    <h3 class="text-center">Sell subscription of <t t-esc="struct.name"/></h3>
-                    <form t-if="not success" t-att-action="request.httprequest.path" method="post">
+                    <h3 class="text-center mt-4">
+                        Sell subscription of <t t-esc="struct.name"/>
+                    </h3>
+                    <form class="oe_operation_request_form" method="post">
                         <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
-                        <t t-call="iwp_website.operation_fields"/>
+                        <t t-foreach="form.fields" t-as="field_name">
+                            <t t-call="{{form.fields[field_name].template}}">
+                                <t t-set="name" t-value="field_name"/>
+                                <t t-set="field" t-value="form.fields[field_name]"/>
+                            </t>
+                        </t>
 
-                        <p class="alert alert-danger" t-if="error" role="alert">
-                            <t t-esc="error"/>
+
+                        <p class="alert alert-danger"
+                            t-if="'__all__' in form.errors" role="alert">
+                            <t t-esc="form.errors['__all__']"/>
                         </p>
 
                         <button type="submit" class="btn btn-primary">Envoyer</button>
                     </form>
-                    <p t-else="" class="alert alert-success">
-                        Your operation has been registered.
-                    </p>
                 </div>
             </div>
         </t>

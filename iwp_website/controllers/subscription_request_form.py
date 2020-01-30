@@ -40,19 +40,19 @@ class SubscriptionRequestForm(Form):
             input_type="text",
         )
         self.fields["data_policy_approval"] = Field(
-            label="Data Policy",
+            label=_("Data Policy"),
             content=context["struct"].data_policy_approval_text,
             required=True,
             template="iwp_website.checkbox_field",
         )
         self.fields["internal_rules_approval"] = Field(
-            label="Internal Rules",
+            label=_("Internal Rules"),
             content=context["struct"].internal_rules_approval_text,
             required=True,
             template="iwp_website.checkbox_field",
         )
         self.fields["financial_risk_approval"] = Field(
-            label="Financial Risks",
+            label=_("Financial Risks"),
             content=context["struct"].financial_risk_approval_text,
             required=True,
             template="iwp_website.checkbox_field",
@@ -99,11 +99,15 @@ class SubscriptionRequestForm(Form):
         struct = self.context.get("struct")
         if user.commercial_partner_id.is_company:
             share_types = struct.share_type_ids.filtered(
-                lambda r: r.display_on_website and r.by_company
+                lambda r: r.display_on_website
+                and r.by_company
+                and r.state == "open"
             )
         else:
             share_types = struct.share_type_ids.filtered(
-                lambda r: r.display_on_website and r.by_individual
+                lambda r: r.display_on_website
+                and r.by_individual
+                and r.state == "open"
             )
         choices = []
         if struct:

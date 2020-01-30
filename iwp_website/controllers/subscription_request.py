@@ -136,11 +136,12 @@ class WebsiteSubscriptionRequest(http.Controller):
             "zip_code": user.zip,
             "city": user.city,
             "country_id": user.country_id.id,
-            "iban": user.commercial_partner_id.bank_ids[0].acc_number,
             "share_product_id": share_type.product_variant_id.id,
             "ordered_parts": form.cleaned_data["quantity"],
             "structure": struct.id,
         }
+        if user.commercial_partner_id.bank_ids:
+            vals["iban"] = user.commercial_partner_id.bank_ids[0].acc_number,
         if user.member:
             vals["type"] = "increase"
         if user.commercial_partner_id.is_company:

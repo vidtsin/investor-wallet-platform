@@ -231,10 +231,17 @@ class InvestorPortal(CustomerPortal):
             values
         )
 
-    @http.route('/structure', type='http', auth="user", website=True)
+    @http.route(
+        [
+            '/structure',
+            '/structure/page/<int:page>',
+        ],
+        type='http', auth="user", website=True
+    )
     def structures(self, page=1, sortby=None, **kw):
         values = self._prepare_portal_layout_values()
         struct_mgr = request.env['res.partner']
+        user = request.env.user
 
         searchbar_sortings = {
             'name': {'label': _('Name'), 'order': 'name'},
@@ -266,8 +273,49 @@ class InvestorPortal(CustomerPortal):
             offset=pager['offset']
         )
 
+        data = []
+        StructureLine = namedtuple(
+            "StructureLine",
+            [
+                "structure",
+                "display_share_action",
+                "display_loan_action",
+            ]
+        )
+
+        for struct in structures:
+            display_share_action = bool([
+                share for share in struct.share_type_ids
+                if (
+                    share.state == "open"
+                    and share.display_on_website
+                    and (
+                        (user.is_company and share.by_company)
+                        or (not user.is_company and share.by_individual)
+                    )
+                )
+            ])
+            display_loan_action = bool([
+                loan for loan in struct.loan_issue_ids
+                if (
+                    loan.state == "ongoing"
+                    and loan.display_on_website
+                    and (
+                        (user.is_company and loan.by_company)
+                        or (not user.is_company and loan.by_individual)
+                    )
+                )
+            ])
+            data.append(
+                StructureLine(
+                    structure=struct.sudo(),
+                    display_share_action=display_share_action,
+                    display_loan_action=display_loan_action
+                )
+            )
+
         values.update({
-            'structures': structures.sudo(),
+            'data': data,
             'page_name': 'structures',
             'pager': pager,
             'default_url': '/structure',
@@ -536,7 +584,8 @@ class InvestorPortal(CustomerPortal):
     @property
     def structure_domain(self):
         domain = [
-            ('is_platform_structure', '=', True)
+            ('is_platform_structure', '=', True),
+            ('state', '=', 'validated'),
         ]
         return domain
 

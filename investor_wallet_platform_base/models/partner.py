@@ -399,3 +399,79 @@ class ResPartner(models.Model):
                 result = super(ResPartner, partner.with_context(
                                             __no_changeset=True)).write(vals)
         return result
+
+    @api.multi
+    def owned_amount(self, share_type, manual=False):
+        """
+        Return the amount of share_type owned by this cooperator.
+        If manual is set to True, then manual share lines are taken into
+        account.
+        """
+        self.ensure_one()
+        lines = (
+            sl
+            for sl in self.share_ids
+            if sl.share_product_id == share_type.product_variant_id
+        )
+        if not manual:
+            # Remove manual share lines
+            lines = (sl for sl in lines if sl.creation_mode != "manual")
+        owned = sum(sl.total_amount_line for sl in lines)
+        pending_sub = self.env["subscription.request"].search(
+            [
+                ("partner_id", "=", self.id),
+                ("share_product_id", "=", share_type.product_variant_id.id),
+                ("state", "!=", "paid"),
+                ("state", "!=", "cancelled"),
+                ("state", "!=", "transfer"),
+            ]
+        )
+        pending_op = self.env["operation.request"].search(
+            [
+                ("partner_id", "=", self.id),
+                ("share_product_id", "=", share_type.product_variant_id.id),
+                ("state", "!=", "refused"),
+                ("state", "!=", "cancelled"),
+                "|",
+                ("operation_type", "=", "transfert"),
+                ("operation_type", "=", "sell_back"),
+            ]
+        )
+        amount_pending_sub = sum(sr.subscription_amount for sr in pending_sub)
+        amount_pending_op = sum(op.subscription_amount for op in pending_op)
+        return owned + amount_pending_sub - amount_pending_op
+
+    @api.multi
+    def owned_structure_amount(self, structure, manual=False):
+        """
+        Return the amount owned by this cooperator in the given structure.
+        """
+        self.ensure_one()
+        lines = (sl for sl in self.share_ids if sl.structure == structure)
+        if not manual:
+            # Remove manual share lines
+            lines = (sl for sl in lines if sl.creation_mode != "manual")
+        owned = sum(sl.total_amount_line for sl in lines)
+        pending_sub = self.env["subscription.request"].search(
+            [
+                ("partner_id", "=", self.id),
+                ("structure", "=", structure.id),
+                ("state", "!=", "paid"),
+                ("state", "!=", "cancelled"),
+                ("state", "!=", "transfer"),
+            ]
+        )
+        pending_op = self.env["operation.request"].search(
+            [
+                ("partner_id", "=", self.id),
+                ("structure", "=", structure.id),
+                ("state", "!=", "refused"),
+                ("state", "!=", "cancelled"),
+                "|",
+                ("operation_type", "=", "transfert"),
+                ("operation_type", "=", "sell_back"),
+            ]
+        )
+        amount_pending_sub = sum(sr.subscription_amount for sr in pending_sub)
+        amount_pending_op = sum(op.subscription_amount for op in pending_op)
+        return owned + amount_pending_sub - amount_pending_op
