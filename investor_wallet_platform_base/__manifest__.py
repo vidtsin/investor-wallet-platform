@@ -10,7 +10,6 @@
     "depends": [
         "easy_my_coop",
         "easy_my_coop_loan",
-        "partner_changeset"
     ],
     "author": "Coop IT Easy SCRLfs",
     "category": "Cooperative management",
