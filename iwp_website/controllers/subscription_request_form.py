@@ -66,6 +66,20 @@ class SubscriptionRequestForm(Form):
         if "quantity" not in cleaned_data:
             return cleaned_data
         user = self.context.get("user")
+        # Check that user is well configured
+        if (
+            not user.email
+            or not user.name
+            or not user.street
+            or not user.city
+            or not user.zip
+            or not user.country_id
+            or not user.lang
+        ):
+            raise FormValidationError(
+                _("Please fill in your profile before continuing.")
+            )
+        # Check min and max
         share_type = (
             request.env["product.template"]
             .sudo()
