@@ -280,9 +280,11 @@ class ResPartner(models.Model):
     @api.multi
     def _can_subscribe_products(self):
         for partner in self:
-            if partner.share_type_ids.filtered('display_on_website'):
+            if partner.share_type_ids.filtered(
+                    lambda r: r.display_on_website and r.state != 'close'):
                 partner.can_subscribe = True
-            if partner.loan_issue_ids.filtered('display_on_website'):
+            if partner.loan_issue_ids.filtered(
+                    lambda r: r.display_on_website and r.state != 'closed'):
                 partner.can_subscribe = True
 
     @api.multi
