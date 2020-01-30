@@ -40,19 +40,19 @@ class SubscriptionRequestForm(Form):
             input_type="text",
         )
         self.fields["data_policy_approval"] = Field(
-            label="Data Policy",
+            label=_("Data Policy"),
             content=context["struct"].data_policy_approval_text,
             required=True,
             template="iwp_website.checkbox_field",
         )
         self.fields["internal_rules_approval"] = Field(
-            label="Internal Rules",
+            label=_("Internal Rules"),
             content=context["struct"].internal_rules_approval_text,
             required=True,
             template="iwp_website.checkbox_field",
         )
         self.fields["financial_risk_approval"] = Field(
-            label="Financial Risks",
+            label=_("Financial Risks"),
             content=context["struct"].financial_risk_approval_text,
             required=True,
             template="iwp_website.checkbox_field",
