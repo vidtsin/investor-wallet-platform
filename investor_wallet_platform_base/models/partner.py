@@ -382,7 +382,7 @@ class ResPartner(models.Model):
     def write(self, vals):
         for partner in self:
             if partner.is_platform_structure:
-                # the web client return default html for
+                # the web client return default html tags for
                 # empty html fields. So we remove it from the vals
                 keys_to_delete = []
                 for key in vals.keys():
