@@ -73,7 +73,14 @@ class LoanIssueLineForm(Form):
         )
         amount = loan_issue.face_value * cleaned_data["quantity"]
         max_amount = loan_issue.get_max_amount(user.commercial_partner_id)
-        if 0 <= max_amount < amount:
+        if max_amount == 0:
+            raise FormValidationError(
+                _(
+                    "You have reached the maximum amount that can be taken "
+                    "for this structure."
+                )
+            )
+        if 0 < max_amount < amount:
             raise FormValidationError(
                 _(
                     "You cannot request so much loans. The maximum amount"

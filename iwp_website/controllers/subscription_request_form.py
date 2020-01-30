@@ -73,6 +73,13 @@ class SubscriptionRequestForm(Form):
         )
         amount = share_type.list_price * cleaned_data["quantity"]
         max_amount = share_type.can_buy_max_amount(user.commercial_partner_id)
+        if max_amount == 0:
+            raise FormValidationError(
+                _(
+                    "You have reached the maximum amount that can be taken "
+                    "for this structure."
+                )
+            )
         if 0 < max_amount < amount:
             raise FormValidationError(
                 _(
