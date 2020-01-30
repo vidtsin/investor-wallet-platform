@@ -16,8 +16,14 @@
     <p>Hello Synergie Manager,</p>
 
     <p>You will find the modification that has been done on ${object.name}.</p>
-
-    <p>${object.last_changes}</p>
+    % for changeset in object.changeset_ids:
+        % for changes in changeset.change_ids:
+            <ul>${ changes.field_id.field_description } :  
+                <li> old value : ${changes.origin_value_display}</li>
+                <li> new value : ${changes.new_value_display}</li>
+            </ul>
+        % endfor
+    % endfor
 
     <p>Sustainably your,</p>
     <p>The Synergie bot</p>
