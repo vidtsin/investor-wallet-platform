@@ -131,6 +131,9 @@ class ResPartner(models.Model):
     mail_serveur_out = fields.Many2one('ir.mail_server',
                                        string="Mail serveur out")
     industry_char_list = fields.Char(compute='_return_industry_char_list')
+    can_subscribe = fields.Boolean(
+        string="Can be subscribed ?",
+        compute='_can_subscribe_products')
     total_outstanding_amount = fields.Monetary(
         string="Total Outsanding Amount"
     )
@@ -276,6 +279,14 @@ class ResPartner(models.Model):
                     .industry_id
                     .mapped('full_name')
             )
+
+    @api.multi
+    def _can_subscribe_products(self):
+        for partner in self:
+            if partner.share_type_ids.filtered('display_on_website'):
+                partner.can_subscribe = True
+            if partner.loan_issue_ids.filtered('display_on_website'):
+                partner.can_subscribe = True
 
     @api.multi
     def generate_sequence(self):

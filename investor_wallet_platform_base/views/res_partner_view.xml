@@ -33,6 +33,7 @@
                     <field name="representative" position="before">
                         <field name="cover_image" widget='image'/>
                         <field name="is_platform_structure" groups="investor_wallet_platform_base.group_platform_wallet_manager"/>
+                        <field name="can_subscribe" readonly="True" groups="investor_wallet_platform_base.group_platform_wallet_manager"/>
                         <field name="structure_type" attrs="{'invisible': [('is_platform_structure', '=', False)]}"/>
                     </field>
 
