@@ -25,6 +25,7 @@ class InvestorPortal(CustomerPortal):
         """Wallet of share owned by the connected user."""
         values = self._prepare_portal_layout_values()
         shareline_mgr = request.env['share.line']
+        user = request.env.user
 
         # Share lines owned by an investor
         sharelines = shareline_mgr.sudo().search(self.shareline_domain)
@@ -35,6 +36,7 @@ class InvestorPortal(CustomerPortal):
             [
                 "structure",
                 "total_amount",
+                "display_buy_url",
                 "buy_url",
                 "sell_url",
                 "lines",
@@ -58,6 +60,7 @@ class InvestorPortal(CustomerPortal):
                 WalletLine(
                     structure=structure,
                     total_amount=total_amount,
+                    display_buy_url=self.display_share_action(user, structure),
                     buy_url=buy_url,
                     sell_url=sell_url,
                     lines=lines.sudo(),
@@ -284,33 +287,15 @@ class InvestorPortal(CustomerPortal):
         )
 
         for struct in structures:
-            display_share_action = bool([
-                share for share in struct.share_type_ids
-                if (
-                    share.state == "open"
-                    and share.display_on_website
-                    and (
-                        (user.is_company and share.by_company)
-                        or (not user.is_company and share.by_individual)
-                    )
-                )
-            ])
-            display_loan_action = bool([
-                loan for loan in struct.loan_issue_ids
-                if (
-                    loan.state == "ongoing"
-                    and loan.display_on_website
-                    and (
-                        (user.is_company and loan.by_company)
-                        or (not user.is_company and loan.by_individual)
-                    )
-                )
-            ])
             data.append(
                 StructureLine(
                     structure=struct.sudo(),
-                    display_share_action=display_share_action,
-                    display_loan_action=display_loan_action
+                    display_share_action=self.display_share_action(
+                        user, struct
+                    ),
+                    display_loan_action=self.display_loan_action(
+                        user, struct
+                    )
                 )
             )
 
@@ -564,6 +549,34 @@ class InvestorPortal(CustomerPortal):
             'monetary_to_text': monetary_to_text,
         })
         return values
+
+    def display_share_action(self, user, structure):
+        """Return True if the user can take share for the structure."""
+        return bool([
+            share for share in structure.share_type_ids
+            if (
+                share.state != "close"
+                and share.display_on_website
+                and (
+                    (user.is_company and share.by_company)
+                    or (not user.is_company and share.by_individual)
+                )
+            )
+        ])
+
+    def display_loan_action(self, user, structure):
+        """Return True if the user can take loan for the structure."""
+        return bool([
+            loan for loan in structure.loan_issue_ids
+            if (
+                loan.state == "ongoing"
+                and loan.display_on_website
+                and (
+                    (user.is_company and loan.by_company)
+                    or (not user.is_company and loan.by_individual)
+                )
+            )
+        ])
 
     @property
     def shareline_domain(self):
