@@ -43,6 +43,8 @@ class ResPartner(models.Model):
                                        ('association', 'Association'),
                                        ('limited_company', 'Limited Company')],
                                       string="Structure type")
+    structure_type_value = fields.Char(compute='_return_structure_type_value',
+                                       string="Structure type")
     structure = fields.Many2one(comodel_name='res.partner',
                                 string="Platform Structure",
                                 domain=[('is_platform_structure', '=', True)],
@@ -262,6 +264,21 @@ class ResPartner(models.Model):
                 .ids
             )
             partner.loan_structure_ids = loan_structure_ids
+
+    def _get_structure_type_value(self, field_desc, structure_type):
+        for desc in field_desc:
+            if desc[0] == structure_type:
+                return desc[1]
+        return False
+
+    @api.multi
+    def _return_structure_type_value(self):
+        desc = self.env['res.partner'].sudo().fields_get(['structure_type'])
+        field_desc = desc['structure_type']['selection']
+        for partner in self:
+            value = self._get_structure_type_value(field_desc,
+                                                   partner.structure_type)
+            partner.structure_type_value = value
 
     @api.multi
     def _return_area_char_list(self):
