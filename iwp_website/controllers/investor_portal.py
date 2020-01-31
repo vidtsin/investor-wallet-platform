@@ -346,8 +346,10 @@ class InvestorPortal(CustomerPortal):
                 context=context,
             )
             # Set the bank account readonly
+            # No check should be performed on this field
             form.fields["bank_account"].readonly = True
             form.fields["bank_account"].required = False
+            form.fields["bank_account"].validators = []
         else:
             form = InvestorPersonForm(
                 initial=self.user_form_initial(context=context),
@@ -355,8 +357,10 @@ class InvestorPortal(CustomerPortal):
                 context=context,
             )
             # Set the bank account readonly
+            # No check should be performed on this field
             form.fields["bank_account"].readonly = True
             form.fields["bank_account"].required = False
+            form.fields["bank_account"].validators = []
         return form
 
     def user_form_initial(self, context=None):
