@@ -375,14 +375,16 @@ class InvestorPortal(CustomerPortal):
                     "lastname": user.lastname,
                     "gender": str(user.gender),
                     "birthdate": (
-                        user.birthdate_date and user.birthdate_date.isoformat()
+                        user.birthdate_date.isoformat()
+                        if user.birthdate_date
+                        else ""
                     ),
                     "phone": user.phone,
                     "lang": user.lang,
                     "street": user.street,
                     "zip_code": user.zip,
                     "city": user.city,
-                    "country": user.country_id and str(user.country_id.id),
+                    "country": user.country_id.id if user.country_id else "",
                 }
             )
             if user.bank_ids:
