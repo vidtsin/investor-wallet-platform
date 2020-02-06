@@ -13,17 +13,17 @@ from .form import Choice, Field, Form, FormValidationError
 from .tools import monetary_to_text
 
 
-class SubscriptionRequestForm(Form):
-    """Form to create new Subscription Request for a user"""
+class LoanIssueLineForm(Form):
+    """Form to create new Loan Issue Line for a user"""
 
     def __init__(self, **kw):
         super().__init__(**kw)
         context = kw["context"]
-        self.fields["share_type"] = Field(
-            label=_("Share Type"),
+        self.fields["loan_issue"] = Field(
+            label=_("Loan Issue"),
             required=True,
             template="iwp_website.selection_field",
-            choices=self._choices_share_type,
+            choices=self._choices_loan_issue,
         )
         self.fields["quantity"] = Field(
             label=_("Quantity"),
@@ -61,32 +61,18 @@ class SubscriptionRequestForm(Form):
     def clean(self):
         """Check that user does not buy to much shares."""
         cleaned_data = super().clean()
-        if "share_type" not in cleaned_data:
+        if "loan_issue" not in cleaned_data:
             return cleaned_data
         if "quantity" not in cleaned_data:
             return cleaned_data
         user = self.context.get("user")
-        # Check that user is well configured
-        if (
-            not user.email
-            or not user.name
-            or not user.street
-            or not user.city
-            or not user.zip
-            or not user.country_id
-            or not user.lang
-        ):
-            raise FormValidationError(
-                _("Please fill in your profile before continuing.")
-            )
-        # Check min and max
-        share_type = (
-            request.env["product.template"]
+        loan_issue = (
+            request.env["loan.issue"]
             .sudo()
-            .browse(int(cleaned_data["share_type"]))
+            .browse(int(cleaned_data["loan_issue"]))
         )
-        amount = share_type.list_price * cleaned_data["quantity"]
-        max_amount = share_type.can_buy_max_amount(user.commercial_partner_id)
+        amount = loan_issue.face_value * cleaned_data["quantity"]
+        max_amount = loan_issue.get_max_amount(user.commercial_partner_id)
         if max_amount == 0:
             raise FormValidationError(
                 _(
@@ -97,15 +83,16 @@ class SubscriptionRequestForm(Form):
         if 0 < max_amount < amount:
             raise FormValidationError(
                 _(
-                    "You cannot buy so much shares. The maximum amount is %d."
+                    "You cannot request so much loans. The maximum amount"
+                    " is %d."
                     % max_amount
                 )
             )
-        min_amount = share_type.can_buy_min_amount(user.commercial_partner_id)
-        if min_amount > amount:
+        min_amount = loan_issue.get_min_amount(user.commercial_partner_id)
+        if amount < min_amount:
             raise FormValidationError(
                 _(
-                    "You have to buy more shares. Minimum amount is %d."
+                    "You have to request more loans. Minimum amount is %d."
                     % min_amount
                 )
             )
@@ -115,39 +102,33 @@ class SubscriptionRequestForm(Form):
         if value <= 0:
             raise FormValidationError("Quantity can not be nul or negative.")
 
-    def _choices_share_type(self):
+    def _choices_loan_issue(self):
         user = self.context.get("user")
         struct = self.context.get("struct")
-        if user.commercial_partner_id.is_company:
-            share_types = struct.share_type_ids.filtered(
-                lambda r: r.display_on_website
-                and r.by_company
-                and r.state == "open"
-            )
-        else:
-            share_types = struct.share_type_ids.filtered(
-                lambda r: r.display_on_website
-                and r.by_individual
-                and r.state == "open"
-            )
+        loan_issues = (
+            request.env["loan.issue"]
+            .sudo()
+            .get_web_issues(user.commercial_partner_id.is_company)
+            .filtered(lambda r: r.structure == struct)
+        )
         choices = []
         if struct:
-            for st in share_types:
+            for issue in loan_issues:
                 choices.append(
                     Choice(
-                        value=st.id,
+                        value=issue.id,
                         display="%s - %s"
-                        % (st.name, monetary_to_text(st.list_price)),
+                        % (issue.name, monetary_to_text(issue.face_value)),
                         att={
-                            "data-price": st.list_price,
-                            "data-max_amount": st.can_buy_max_amount(
+                            "data-face_value": issue.face_value,
+                            "data-max_amount": issue.get_max_amount(
                                 user.commercial_partner_id
                             ),
-                            "data-min_amount": st.can_buy_min_amount(
+                            "data-min_amount": issue.get_min_amount(
                                 user.commercial_partner_id
                             ),
                         },
-                        obj=st,
+                        obj=issue,
                     )
                 )
         return choices

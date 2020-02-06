@@ -22,7 +22,7 @@
         'templates/investor_portal_form.xml',
         'templates/subscription_request_form.xml',
         'templates/operation_request.xml',
-        'templates/loan_issue.xml',
+        'templates/loan_issue_form.xml',
         'templates/manual_share_form.xml',
         'templates/manual_loan_form.xml',
     ],

@@ -109,11 +109,13 @@
                 <span class="struct_name" t-esc="elem.structure.name"/>
                 <div class="share_actions mx-2 btn-group" role="group"
                     aria-label="Share Actions">
-                    <a t-att-href="elem.buy_url"
+                    <a t-if="elem.display_buy_url"
+                        t-att-href="elem.buy_url"
                         class="btn btn-sm btn-secondary">
                         Subscribe
                     </a>
-                    <a t-att-href="elem.sell_url"
+                    <!-- Hide "Sell back" button temporarily -->
+                    <a t-if="False" t-att-href="elem.sell_url"
                         class="btn btn-sm btn-secondary">
                         Sell Back
                     </a>

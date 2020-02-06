@@ -9,138 +9,104 @@ from odoo.http import request
 from odoo.tools.translate import _
 import logging
 
+from .loan_issue_form import LoanIssueLineForm
 
 _logger = logging.getLogger(__name__)
 
 
 class WebsiteLoanIssue(http.Controller):
-
     @http.route(
         [
-            '/struct/<int:struct_id>/loan/subscription',
-            '/struct/<int:struct_id>/loan/<int:loan_id>/subscription',
+            "/struct/<int:struct_id>/loan/subscription",
+            "/struct/<int:struct_id>/loan/<int:loan_id>/subscription",
         ],
-        type='http',
-        auth='user',
+        type="http",
+        auth="user",
         website=True,
     )
     def subscribe_to_loan_issue(self, struct_id=None, loan_id=None, **post):
-        # self.reqargs contains request arguments but only if they pass
-        # checks.
-        self.reqargs = {}
+        """Route for form to subscribe to a new loan issue."""
         # Get structure and perform access check
-        struct = request.env['res.partner'].sudo().browse(struct_id)
-        if not struct:
+        struct = request.env["res.partner"].sudo().browse(struct_id)
+        if not struct or not struct.is_platform_structure:
             raise NotFound
-        if not struct.is_platform_structure:
-            raise NotFound
-        post['struct'] = struct
-        self.reqargs['struct'] = struct
-        # Get loan if given
-        loan = (
-            request.env['loan.issue']
-            .sudo()
-            .browse(loan_id)
-        )
-        if loan:
-            self.reqargs['loan'] = loan
-        self.init_form_data(qcontext=post)
-        self.set_form_defaults(qcontext=post)
-        self.normalize_form_data(qcontext=post)
-        if post and request.httprequest.method == 'POST':
-            self.validate_form(qcontext=post)
-            if 'error' not in post:
-                values = self.loan_issue_line_value(qcontext=post)
-                request.env['loan.issue.line'].sudo().create(values)
-                post['success'] = True
-        # Populate template value
-        qcontext = post.copy()
-        return request.render(
-            'iwp_website.subscribe_to_loan_issue',
-            qcontext
-        )
-
-    def loan_issue_line_value(self, qcontext=None):
-        if qcontext is None:
-            qcontext = request.params
-        partner = request.env.user.partner_id
-        loan_issue = request.env['loan.issue'].browse(qcontext['loan_issue'])
-        values = {
-            'loan_issue_id': loan_issue.id,
-            'partner_id': partner.id,
-            'quantity': qcontext['quantity'],
-        }
-        return values
-
-    def validate_form(self, qcontext=None):
-        """
-        Populate request.parms with errors if the params from the form
-        are not correct. If a qcontext is given, this function works on
-        this qcontext.
-        """
-        if qcontext is None:
-            qcontext = request.params
-        selected_issue = qcontext.get('loan_issue', None)
-        if not selected_issue:
-            qcontext['error'] = _("You must select a financial product.")
-            return qcontext
-        if qcontext.get('quantity', 0) < 1:
-            qcontext['error'] = _("You must order at least 1 financial"
-                                  " product.")
-            return qcontext
-        return qcontext
-
-    def init_form_data(self, qcontext=None):
-        """
-        Populate qcontext if given, else populate request.params with
-        defalut data needed to render the form.
-        """
-        if qcontext is None:
-            qcontext = request.params
-        # Loan issues
-        is_company = request.env.user.type == 'company'
-        loan_issues = (
-            request.env['loan.issue'].sudo().get_web_issues(is_company)
-        )
-        loan_issues = loan_issues.filtered(
-            lambda r: r.structure == self.reqargs['struct']
-        )
-        qcontext.update({
-            'loan_issues': loan_issues,
-        })
-        return qcontext
-
-    def set_form_defaults(self, qcontext=None, force=False):
-        """
-        Populate the given qcontext or request.parms if empty with the
-        default value for the form.
-        """
-        if qcontext is None:
-            qcontext = request.params
-        # Find default loan
-        if 'loan' in self.reqargs:
-            default_loan = self.reqargs['loan']
+        loan_issue = struct.loan_issue_ids.filtered(lambda r: r.id == loan_id)
+        form_context = {"struct": struct, "user": request.env.user}
+        if loan_issue:
+            form_context["loan_issue"] = loan_issue
+        if request.httprequest.method == "POST":
+            form = self.loan_issue_line_form(
+                data=request.params, context=form_context
+            )
+            if form.is_valid():
+                self.process_loan_issue_line_form(form, context=form_context)
+                return request.redirect(request.params.get("redirect", ""))
         else:
-            default_loans = qcontext['loan_issues'].filtered('default_issue')
-            default_loan = default_loans[0] if default_loans else None
-        if 'loan_issue' not in qcontext or force:
-            if default_loan:
-                qcontext['loan_issue'] = default_loan.id
-        if 'quantity' not in qcontext or force:
-            qcontext['quantity'] = 0
-        if 'total_amount' not in qcontext or force:
-            qcontext['total_amount'] = 0
-        return qcontext
+            form = self.loan_issue_line_form(context=form_context)
+        qcontext = {"form": form, "struct": struct}
+        return request.render("iwp_website.subscribe_to_loan_issue", qcontext)
 
-    def normalize_form_data(self, qcontext=None):
-        """
-        Normalize data encoded by the user.
-        """
-        if qcontext is None:
-            qcontext = request.params
-        # Convert to int when needed
-        if 'quantity' in qcontext:
-            qcontext['quantity'] = int(qcontext['quantity'])
-        if 'loan_issue' in qcontext:
-            qcontext['loan_issue'] = int(qcontext['loan_issue'])
-        return qcontext
+    def loan_issue_line_form(self, data=None, context=None):
+        """Return Form object."""
+        form = LoanIssueLineForm(
+            initial=self.loan_issue_line_form_initial(context=context),
+            data=data or None,
+            context=context,
+        )
+        return form
+
+    def loan_issue_line_form_initial(self, context=None):
+        """Return initial for loan issue line form."""
+        context = {} if context is None else context
+        initial = {}
+        user = context.get("user")
+        struct = context.get("struct")
+        loan_issue = context.get("loan_issue")
+        if struct:
+            if loan_issue:
+                default_loan_issue = loan_issue
+            else:
+                default_loan_issues = (
+                    request.env["loan.issue"]
+                    .sudo()
+                    .get_web_issues(user.commercial_partner_id.is_company)
+                    .filtered(
+                        lambda r: r.structure == struct and r.default_issue
+                    )
+                )
+                default_loan_issue = (
+                    default_loan_issues[0] if default_loan_issues else None
+                )
+            if default_loan_issue:
+                initial["loan_issue"] = str(default_loan_issue.id)
+                initial["quantity"] = max(
+                    1,
+                    round(
+                        default_loan_issue.get_min_amount(
+                            user.commercial_partner_id
+                        )
+                        / default_loan_issue.face_value
+                    ),
+                )
+                initial["total_amount"] = (
+                    default_loan_issue.face_value * initial["quantity"]
+                )
+        return initial
+
+    def process_loan_issue_line_form(self, form, context=None):
+        """Process loan issue line form."""
+        vals = self.loan_issue_line_vals(form, context=context)
+        request.env["loan.issue.line"].sudo().create(vals)
+
+    def loan_issue_line_vals(self, form, context=None):
+        """Reutrn vals to create a new loan issue line."""
+        user = context.get("user")
+        loan_issue = request.env["loan.issue"].browse(
+            int(form.cleaned_data["loan_issue"])
+        )
+        vals = {
+            "loan_issue_id": loan_issue.id,
+            "partner_id": user.commercial_partner_id.id,
+            "quantity": form.cleaned_data["quantity"],
+        }
+        return vals
