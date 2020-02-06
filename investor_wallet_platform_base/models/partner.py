@@ -411,7 +411,7 @@ class ResPartner(models.Model):
                 for key in keys_to_delete:
                     vals.pop(key)
                 result = super(ResPartner, partner).write(vals)
-                if vals:
+                if partner.changeset_ids:
                     partner.send_mail_notif()
                     partner.changeset_ids.unlink()
             else:
