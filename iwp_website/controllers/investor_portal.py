@@ -605,6 +605,7 @@ class InvestorPortal(CustomerPortal):
         domain = [
             ('is_platform_structure', '=', True),
             ('state', '=', 'validated'),
+            ('display_on_website', '=', True),
         ]
         return domain
 
