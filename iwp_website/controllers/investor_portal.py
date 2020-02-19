@@ -548,9 +548,9 @@ class InvestorPortal(CustomerPortal):
             "invoice_count": 0,  # Hide invoice entry
             'share_amount': share_amount or 0,
             'loan_amount': loanline_amount or 0,
-            'pending_share': "%d pending" % (pending_share,)
+            'pending_share': "%d " % (pending_share,) + _("pending")
             if pending_share else None,
-            'pending_loan': "%d pending" % (pending_loan,)
+            'pending_loan': "%d " % (pending_loan,) + _("pending")
             if pending_loan else None,
             'monetary_to_text': monetary_to_text,
         })
