@@ -96,6 +96,7 @@
                                     <field name="description"/>
                                     <field name="about_us"/>
                                     <field name="projects"/>
+                                    <field name="area_char_list" readonly="True" groups="base.group_system"/>
                                 </group>
                                 <group>
                                     <field name="activity_areas" widget="many2many_tags" options="{'no_create': True}"/>
