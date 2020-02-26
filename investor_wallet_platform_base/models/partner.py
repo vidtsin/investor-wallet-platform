@@ -394,7 +394,7 @@ class ResPartner(models.Model):
         template = self.env.ref(
            'investor_wallet_platform_base.email_template_structure_updated',
            False)
-        template.send_mail(self.id)
+        template.sudo().send_mail(self.id)
         return True
 
     @api.multi

@@ -6,7 +6,7 @@
 
 {
     "name": "Investor Wallet Platform Base",
-    "version": "12.0.1.2.4",
+    "version": "12.0.1.2.5",
     "depends": [
         "easy_my_coop",
         "easy_my_coop_loan",
