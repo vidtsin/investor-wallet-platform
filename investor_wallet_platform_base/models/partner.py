@@ -392,8 +392,9 @@ class ResPartner(models.Model):
 
     def send_mail_notif(self):
         template = self.env.ref(
-           'investor_wallet_platform_base.email_template_structure_updated',
-           False)
+            'investor_wallet_platform_base.email_template_structure_updated',
+            False
+        )
         template.sudo().send_mail(self.id)
         return True
 
@@ -415,8 +416,9 @@ class ResPartner(models.Model):
                     partner.send_mail_notif()
                     partner.changeset_ids.unlink()
             else:
-                result = super(ResPartner, partner.with_context(
-                                            __no_changeset=True)).write(vals)
+                result = super(
+                    ResPartner, partner.with_context(__no_changeset=True)
+                ).write(vals)
         return result
 
     @api.multi
