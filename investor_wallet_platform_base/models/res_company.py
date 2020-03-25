@@ -32,5 +32,17 @@ class ResCompany(models.Model):
         self.published_financial_product = nb_loans + nb_shares
 
     def _compute_nb_investor(self):
-        """Count number users that are not internal user."""
-        self.nb_investor = len(self.env.ref("base.group_portal").users)
+        """Count number of partners that owns share or loan."""
+        partners = self.env["res.partner"]  # Empty set of partner
+        # Will be filled by partner that owns a share or a loan
+        shares = self.env["share.line"].search(
+            [("creation_mode", "!=", "manual")]
+        )
+        loans = self.env["loan.issue.line"].search(
+            [("creation_mode", "!=", "manual")]
+        )
+        for share in shares:
+            partners |= share.partner_id
+        for loan in loans:
+            partners |= loan.partner_id
+        self.nb_investor = len(partners)
