@@ -384,7 +384,9 @@ class InvestorPortal(CustomerPortal):
                     "street": user.street,
                     "zip_code": user.zip,
                     "city": user.city,
-                    "country": user.country_id.id if user.country_id else "",
+                    "country": (
+                        str(user.country_id.id) if user.country_id else ""
+                    ),
                 }
             )
             if user.bank_ids:
