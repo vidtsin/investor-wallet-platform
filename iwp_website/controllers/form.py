@@ -1,4 +1,4 @@
-# Copyright 2019 Coop IT Easy SCRLfs <http://coopiteasy.be>
+# Copyright 2019-2020 Coop IT Easy SCRLfs <http://coopiteasy.be>
 #   - Rémy Taymans <remy@coopiteasy.be>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -8,12 +8,18 @@
 
 """Form factory for Odoo website"""
 
+import logging
+
 from collections import OrderedDict
 from datetime import date, datetime
 from inspect import signature
 
 
-class FormValidationError(Exception):
+class FormError(Exception):
+    """General exception that can be raise when an error occurs."""
+
+
+class FormValidationError(FormError):
     """Error raised when a value cannot be validated."""
 
 
@@ -57,9 +63,19 @@ class Field:
     def to_python(self, value):
         """Transform the value to a python type value"""
         if self.input_type == "number" and value:
-            return int(value)  # TODO: protect this by try except
+            try:
+                return int(value)  # TODO: protect this by try except
+            except ValueError as err:
+                raise FormError(
+                    "Error when converting '%s' to int - %s" % (value, err)
+                )
         if self.input_type == "date" and value:
-            return datetime.strptime(value, "%Y-%m-%d").date()
+            try:
+                return datetime.strptime(value, "%Y-%m-%d").date()
+            except ValueError as err:
+                raise FormError(
+                    "Error when converting '%s' to date - %s" % (value, err)
+                )
         return value
 
     def clean(self, value):

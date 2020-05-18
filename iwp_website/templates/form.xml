@@ -46,6 +46,7 @@
             <label t-attf-for="{{name}}"><t t-esc="field.label" /></label>
             <input t-attf-id="{{name}}"
                 class="form-control form-control-sm"
+                t-att-pattern="'\d{4}-\d{2}-\d{2}' if field.input_type == 'date' else None"
                 t-att="field.att or {}"
                 t-attf-type="{{field.input_type}}"
                 t-attf-name="{{name}}"
@@ -74,10 +75,10 @@
             t-att-style="'display: none;' if field.hidden else None">
             <input t-attf-id="{{name}}"
                 class="form-check-input"
+                t-att="field.att or {}"
                 type="checkbox"
                 t-attf-name="{{name}}"
                 t-att-checked="'checked' if form.data.get(name, form.initial.get(name)) else None"
-                t-att="field.att or {}"
                 t-att-autofocus="'autofocus' if autofocus else None"
                 t-att-required="'required' if field.required else None"
                 t-att-readonly="'readonly' if field.readonly else None"/>

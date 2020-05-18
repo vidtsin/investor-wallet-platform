@@ -121,7 +121,10 @@ class PersonForm(Form):
         self.fields[prefix + "birthdate"] = Field(
             label=_("Birthdate"),
             required=True,
-            att={"max": date.today().isoformat()},
+            att={
+                "max": date.today().isoformat(),
+                "placeholder": "YYYY-MM-DD",
+            },
             validators=[self._validate_birthdate],
             template="iwp_website.input_field",
             input_type="date",
