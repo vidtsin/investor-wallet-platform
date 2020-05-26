@@ -400,6 +400,11 @@ class ResPartner(models.Model):
 
     @api.multi
     def write(self, vals):
+        if not self:  # empty recordset
+            result = super(
+                    ResPartner, self.with_context(__no_changeset=True)
+                ).write(vals)
+
         for partner in self:
             if partner.is_platform_structure:
                 # the web client return default html tags for
