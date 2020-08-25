@@ -9,6 +9,7 @@
     "version": "12.0.1.2.5",
     "depends": [
         "easy_my_coop",
+        "easy_my_coop_api",
         "easy_my_coop_loan",
         "partner_changeset",
     ],
@@ -37,12 +38,13 @@
         'views/ir_mail_server_view.xml',
         'views/mail_template.xml',
         'views/menus.xml',
+        'views/api_page_views.xml',
         'report/report_templates.xml',
         'report/cooperator_certificat.xml',
         'report/cooperator_to_certificat.xml',
         'report/easy_my_coop_report.xml',
         'report/cooperator_invoice.xml',
-        'data/mail_template_data.xml'
+        'data/mail_template_data.xml',
         ],
     'demo': [
         'demo/account.xml',
