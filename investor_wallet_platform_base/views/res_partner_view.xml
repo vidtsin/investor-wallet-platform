@@ -4,7 +4,9 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="mail.res_partner_view_form_inherit_mail"/>
         <field name="arch" type="xml">
-            <div class="oe_chatter" position="replace"/>
+            <div class="oe_chatter" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </div>
         </field>
     </record>
 
@@ -37,12 +39,24 @@
                         <field name="structure_type" attrs="{'invisible': [('is_platform_structure', '=', False)]}"/>
                     </field>
 
-                    <field name="cooperator_register_number" position="replace"/>
-                    <field name="coop_candidate" position="replace"/>
-                    <field name="member" position="replace"/>
-                    <field name="cooperator_type" position="replace"/>
-                    <field name="effective_date" position="replace"/>
-                    <field name="industry_id" position="replace"/>
+                    <field name="cooperator_register_number" position="attributes">
+                        <attribute name="invisible">True</attribute>
+                    </field>
+                    <field name="coop_candidate" position="attributes">
+                        <attribute name="invisible">True</attribute>
+                    </field>
+<!--                    <field name="member" position="attributes">-->
+<!--                        <attribute name="invisible">True</attribute>-->
+<!--                    </field>-->
+                    <field name="cooperator_type" position="attributes">
+                        <attribute name="invisible">True</attribute>
+                    </field>
+                    <field name="effective_date" position="attributes">
+                        <attribute name="invisible">True</attribute>
+                    </field>
+                    <field name="industry_id" position="attributes">
+                        <attribute name="invisible">True</attribute>
+                    </field>
                     <field name="company_register_number" position="after">
                         <field name="subscription_maximum_amount" widget='monetary' options="{'currency_field': 'currency_id', 'field_digits': True}" attrs="{'invisible':[('is_platform_structure','=',False)]}"/>
                     </field>
